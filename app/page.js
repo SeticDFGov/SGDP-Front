@@ -5,10 +5,10 @@ import { getMicrosoftGraphToken } from "./services/tokenService";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 
-// Register Chart.js components
+// Registrar componentes do Chart.js
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-// URL da API
+// URL da API do Microsoft Graph
 const API_URL =
   "https://graph.microsoft.com/v1.0/sites/685aff9c-79e6-43fb-b9dd-affa07528c81/lists/82008320-2414-4740-a1eb-04e68d021fa2/items?$expand=fields";
 
@@ -16,118 +16,102 @@ const App = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [total, setTotal] = useState(0);
-  const [token, setToken] = useState(null);
+  
+  // Estados para contagem de demandas por status
+  const [concluidas, setConcluidas] = useState(0);
+  const [emAndamento, setEmAndamento] = useState(0);
+  const [atrasadas, setAtrasadas] = useState(0);
 
-  // // useEffect(() => {
-  // //   const fetchData = async () => {
-  // //     try {
-  //       // Obtendo o token primeiro
-  //       const TOKEN = await getMicrosoftGraphToken();
-  //       setToken(TOKEN); // Armazena o token no estado
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const TOKEN = await getMicrosoftGraphToken();
+        if (!TOKEN) throw new Error("Token não encontrado!");
 
-  //       const headers = {
-  //         Authorization: `Bearer ${TOKEN}`,
-  //         Accept: "application/json",
-  //       };
+        const headers = {
+          Authorization: `Bearer ${TOKEN}`,
+          Accept: "application/json",
+        };
 
-  //       const response = await fetch(API_URL, { headers });
-
-  //       if (!response.ok) {
-  //         throw new Error(`Erro ${response.status}: ${response.statusText}`);
-  //       }
-
-  //       const data = await response.json();
-  //       console.log("Dados recebidos:", data.value);
-
-  //       setTotal(data.value.length);
-  //       setItems(data.value || []);
-  //     } catch (err) {
-  //       console.error("Erro ao buscar os dados:", err);
-  //       setError(err.message);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
-      useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const TOKEN = await getMicrosoftGraphToken();
-          if (!TOKEN) throw new Error("Token não encontrado!");
-
-          const headers = {
-            Authorization: `Bearer ${TOKEN}`,
-            Accept: "application/json",
-          };
-
-          const response = await fetch(API_URL, { headers });
-          if (!response.ok) {
-            throw new Error("Erro ao buscar os dados");
-          }
-
-          const data = await response.json();
-          setItems(data.value || []);
-          setTotal(data.value.length)
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
+        const response = await fetch(API_URL, { headers });
+        if (!response.ok) {
+          throw new Error("Erro ao buscar os dados");
         }
-      };
 
-      fetchData();
-    }, []);
+        const data = await response.json();
+        setItems(data.value || []);
 
-  // Data for the speedometer graphs
-  const speedometerData = {
+        // Contagem dos registros por status
+        const concluidasCount = data.value.filter(item => item.fields?.statusDemanda === "Concluído").length;
+        const andamentoCount = data.value.filter(item => item.fields?.statusDemanda === "Em andamento").length;
+        const atrasadasCount = data.value.filter(item => item.fields?.statusDemanda === "Atrasado").length;
+
+        setConcluidas(concluidasCount);
+        setEmAndamento(andamentoCount);
+        setAtrasadas(atrasadasCount);
+
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Configuração dos gráficos Doughnut
+  const createChartData = (value, color) => ({
     labels: ["Total"],
     datasets: [
       {
-        data: [total],
-        backgroundColor: ["black"],
-        borderWidth: 0,
+        data: [value],
+        backgroundColor: [color],
+        borderWidth: 8, // Deixa a borda do velocímetro mais grossa
       },
     ],
-  };
+  });
 
   const options = {
     circumference: 180,
     rotation: -90,
-    cutout: "90%",
+    cutout: "70%", // Ajusta a espessura do gráfico
     plugins: {
       legend: { display: false },
-      tooltip: { enabled: false },
+      tooltip: { enabled: true },
     },
   };
 
   return (
     <div className="p-4 bg-white h-screen">
-      {/* Cabeçalho estilizado */}
+      {/* Cabeçalho */}
       <header className="bg-blue-600 text-white py-4 px-6 rounded-lg shadow-lg flex items-center space-x-3">
         <h1 className="text-3xl font-semibold">SUBTDCR</h1>
       </header>
 
-      {/* Speedometer Graphs */}
+      {/* Gráficos de velocidade */}
       <div className="flex justify-between mt-6">
-        <div className="w-1/3 p-4">
+        <div className="w-1/3 p-4 flex flex-col items-center">
           <h2 className="text-center font-semibold mb-2">Demandas Concluídas</h2>
-          <Doughnut data={speedometerData} options={options} />
+          <div className="h-48">
+            <Doughnut data={createChartData(concluidas, "green")} options={options} />
+          </div>
         </div>
-        <div className="w-1/3 p-4">
-          <h2 className="text-center font-semibold mb-2">Demandas em Progresso</h2>
-          <Doughnut data={speedometerData} options={options} />
+        <div className="w-1/3 p-4 flex flex-col items-center">
+          <h2 className="text-center font-semibold mb-2">Demandas em Andamento</h2>
+          <div className="h-48">
+            <Doughnut data={createChartData(emAndamento, "blue")} options={options} />
+          </div>
         </div>
-        <div className="w-1/3 p-4">
-          <h2 className="text-center font-semibold mb-2">Demandas Pendentes</h2>
-          <Doughnut data={speedometerData} options={options} />
+        <div className="w-1/3 p-4 flex flex-col items-center">
+          <h2 className="text-center font-semibold mb-2">Demandas Atrasadas</h2>
+          <div className="h-48">
+            <Doughnut data={createChartData(atrasadas, "red")} options={options} />
+          </div>
         </div>
       </div>
 
-      {/* Corpo principal */}
+      {/* Corpo principal - Tabela */}
       <div className="mt-6">
         {loading ? (
           <p className="text-gray-500">Carregando...</p>
@@ -156,11 +140,10 @@ const App = () => {
                       <div
                         className="w-4 h-4 rounded-full mr-2"
                         style={{
-                          backgroundColor:
-                            item.fields?.["farol"] || "rgb(200, 200, 200)",
+                          backgroundColor: item.fields?.farol || "rgb(200, 200, 200)",
                         }}
                       ></div>
-                      <span>{item.fields?.["statusDemanda"] || "-"}</span>
+                      <span>{item.fields?.statusDemanda || "-"}</span>
                     </div>
                   </td>
                 </tr>
