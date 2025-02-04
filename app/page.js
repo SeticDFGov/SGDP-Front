@@ -65,15 +65,15 @@ const App = () => {
     labels: ["Total"],
     datasets: [
       {
-        data: [value],
-        backgroundColor: [color],
+        data: value,
+        backgroundColor: color,
         borderWidth: 8, // Deixa a borda do velocímetro mais grossa
       },
     ],
   });
 
   const options = {
-    circumference: 180,
+    circumference: 360,
     rotation: -90,
     cutout: "70%", // Ajusta a espessura do gráfico
     plugins: {
@@ -90,25 +90,16 @@ const App = () => {
       </header>
 
       {/* Gráficos de velocidade */}
-      <div className="flex justify-between mt-6">
+      <div className="flex justify-center mt-6">
+        
         <div className="w-1/3 p-4 flex flex-col items-center">
-          <h2 className="text-center font-semibold mb-2">Demandas Concluídas</h2>
+          <h2 className="text-center font-semibold mb-2 text-black">Percentual de execução das demandas</h2>
           <div className="h-48">
-            <Doughnut data={createChartData(concluidas, "green")} options={options} />
+            <Doughnut data={createChartData([concluidas, emAndamento, atrasadas], ["green","yellow","red"])} options={options} />
           </div>
+          
         </div>
-        <div className="w-1/3 p-4 flex flex-col items-center">
-          <h2 className="text-center font-semibold mb-2">Demandas em Andamento</h2>
-          <div className="h-48">
-            <Doughnut data={createChartData(emAndamento, "blue")} options={options} />
-          </div>
-        </div>
-        <div className="w-1/3 p-4 flex flex-col items-center">
-          <h2 className="text-center font-semibold mb-2">Demandas Atrasadas</h2>
-          <div className="h-48">
-            <Doughnut data={createChartData(atrasadas, "red")} options={options} />
-          </div>
-        </div>
+       
       </div>
 
       {/* Corpo principal - Tabela */}
