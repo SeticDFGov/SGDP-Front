@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { getMicrosoftGraphToken } from "./services/tokenService";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
+import Modal from "./components/modal";
 
 // Registrar componentes do Chart.js
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -16,12 +17,12 @@ const App = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
-  // Estados para contagem de demandas por status
   const [concluidas, setConcluidas] = useState(0);
   const [emAndamento, setEmAndamento] = useState(0);
   const [atrasadas, setAtrasadas] = useState(0);
-
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,15 +60,20 @@ const App = () => {
 
     fetchData();
   }, []);
-
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("pt-BR"); // Formato: DD/MM/AAAA
+  };
+ 
+  
   // Configuração dos gráficos Doughnut
   const createChartData = (value, color) => ({
-    labels: ["Total"],
+    labels: ["Concluídas", "Em andamento", "Atrasados"],
     datasets: [
       {
         data: value,
         backgroundColor: color,
-        borderWidth: 8, // Deixa a borda do velocímetro mais grossa
+        borderWidth: 8,
       },
     ],
   });
@@ -75,7 +81,7 @@ const App = () => {
   const options = {
     circumference: 360,
     rotation: -90,
-    cutout: "70%", // Ajusta a espessura do gráfico
+    cutout: "70%", 
     plugins: {
       legend: { display: false },
       tooltip: { enabled: true },
@@ -127,7 +133,8 @@ const App = () => {
                     {item.fields?.nomeDemanda || "-"}
                   </td>
                   <td className="border border-gray-300 px-6 py-4 text-sm text-gray-600">
-                    <div className="flex items-center">
+                    <div className="flex justify-between">
+                        <div className="flex ">
                       <div
                         className="w-4 h-4 rounded-full mr-2"
                         style={{
@@ -136,6 +143,17 @@ const App = () => {
                       ></div>
                       <span>{item.fields?.statusDemanda || "-"}</span>
                     </div>
+                    <button
+                      className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                      onClick={() => {
+                        setSelectedItem(item); 
+                        setIsOpen(true); 
+                      }}
+                    >
+                      Ver Detalhes
+                    </button>
+                    </div>
+                    
                   </td>
                 </tr>
               ))}
@@ -143,6 +161,22 @@ const App = () => {
           </table>
         )}
       </div>
+      {isOpen && (
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Detalhes sobre a demanda">
+          {selectedItem ? (
+            <div className="p-4">
+              <p><strong>Nome:</strong> {selectedItem.fields?.nomeDemanda || "Não informado"}</p><br></br>
+              <p><strong>Status:</strong> {selectedItem.fields?.statusDemanda || "Não informado"}</p><br></br>
+              <p><strong>Data de Abertura:</strong> {formatDate(selectedItem.fields?.dataAbertura) || "Não informado"}</p><br></br>
+              <p><strong>Percentual de execução:</strong> {selectedItem.fields?.percentualExec + "%" || "Não informado"}</p><br></br>
+              <p><strong>Responsável SUBTDCR:</strong> {selectedItem.fields?.POSUBTDCR || "Não informado"}</p><br></br>
+              <p><strong>Responsável Central:</strong> {selectedItem.fields?.POCENTRAL || "Não informado"}</p><br></br>
+            </div>
+          ) : (
+            <p>Carregando detalhes...</p>
+          )}
+        </Modal>
+      )}
     </div>
   );
 };
