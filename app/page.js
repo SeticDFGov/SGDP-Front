@@ -1,184 +1,154 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getMicrosoftGraphToken } from "./services/tokenService";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
-import Modal from "./components/modal";
+import { getAllItems, createItem, updateItem, deleteItem } from "./services/apiService";
+import Modal from "./components/Modal";
 
-// Registrar componentes do Chart.js
-ChartJS.register(ArcElement, Tooltip, Legend);
-
-// URL da API do Microsoft Graph
-const API_URL =
-  "https://graph.microsoft.com/v1.0/sites/685aff9c-79e6-43fb-b9dd-affa07528c81/lists/82008320-2414-4740-a1eb-04e68d021fa2/items?$expand=fields";
-
-const App = () => {
+const Home = () => {
   const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [concluidas, setConcluidas] = useState(0);
-  const [emAndamento, setEmAndamento] = useState(0);
-  const [atrasadas, setAtrasadas] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-  
+  const [modalOpen, setModalOpen] = useState(false);
+  const [newItem, setNewItem] = useState({ nomeDemanda: "", statusDemanda: "" });
+  const [isLoading, setIsLoading] = useState(false); // Para controle de carregamento
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const TOKEN = await getMicrosoftGraphToken();
-        if (!TOKEN) throw new Error("Token não encontrado!");
-
-        const headers = {
-          Authorization: `Bearer ${TOKEN}`,
-          Accept: "application/json",
-        };
-
-        const response = await fetch(API_URL, { headers });
-        if (!response.ok) {
-          throw new Error("Erro ao buscar os dados");
-        }
-
-        const data = await response.json();
-        setItems(data.value || []);
-
-        // Contagem dos registros por status
-        const concluidasCount = data.value.filter(item => item.fields?.statusDemanda === "Concluído").length;
-        const andamentoCount = data.value.filter(item => item.fields?.statusDemanda === "Em andamento").length;
-        const atrasadasCount = data.value.filter(item => item.fields?.statusDemanda === "Atrasado").length;
-
-        setConcluidas(concluidasCount);
-        setEmAndamento(andamentoCount);
-        setAtrasadas(atrasadasCount);
-
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    fetchItems();
   }, []);
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("pt-BR"); // Formato: DD/MM/AAAA
-  };
- 
-  
-  // Configuração dos gráficos Doughnut
-  const createChartData = (value, color) => ({
-    labels: ["Concluídas", "Em andamento", "Atrasados"],
-    datasets: [
-      {
-        data: value,
-        backgroundColor: color,
-        borderWidth: 8,
-      },
-    ],
-  });
 
-  const options = {
-    circumference: 360,
-    rotation: -90,
-    cutout: "70%", 
-    plugins: {
-      legend: { display: false },
-      tooltip: { enabled: true },
-    },
+  const fetchItems = async () => {
+    setIsLoading(true);
+    try {
+      const data = await getAllItems();
+      setItems(data);
+    } catch (error) {
+      console.error("Erro ao buscar itens", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCreate = async () => {
+    setIsLoading(true);
+    try {
+      await createItem({ ...newItem });
+      fetchItems();
+      setModalOpen(false);
+    } catch (error) {
+      console.error("Erro ao criar item", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEdit = async () => {
+    setIsLoading(true);
+    try {
+      await updateItem(selectedItem.id, { fields: newItem });
+      fetchItems();
+      setModalOpen(false);
+    } catch (error) {
+      console.error("Erro ao editar item", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    setIsLoading(true);
+    try {
+      await deleteItem(id);
+      fetchItems();
+    } catch (error) {
+      console.error("Erro ao excluir item", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="p-4 bg-white h-screen">
-      {/* Cabeçalho */}
-      <header className="bg-blue-600 text-white py-4 px-6 rounded-lg shadow-lg flex items-center space-x-3">
+      <header className="bg-white text-black py-4 px-6 rounded-lg shadow-lg flex items-center justify-between">
         <h1 className="text-3xl font-semibold">SUBTDCR</h1>
+        <button
+          className="bg-black text-white px-4 py-2 rounded hover:bg-pink-700 transition-colors"
+          onClick={() => {
+            setNewItem({ nomeDemanda: "", statusDemanda: "" });
+            setModalOpen(true);
+          }}
+        >
+          Acesso Interno
+        </button>
       </header>
 
-      {/* Gráficos de velocidade */}
-      <div className="flex justify-center mt-6">
-        
-        <div className="w-1/3 p-4 flex flex-col items-center">
-          <h2 className="text-center font-semibold mb-2 text-black">Percentual de execução das demandas</h2>
-          <div className="h-48">
-            <Doughnut data={createChartData([concluidas, emAndamento, atrasadas], ["green","yellow","red"])} options={options} />
-          </div>
-          
-        </div>
-       
+      {/* Mensagem de boas-vindas */}
+      <div className="mt-8 mb-6 text-center text-xl font-semibold text-gray-700">
+        Bem-vindo ao controle de demandas da SUBTDCR
       </div>
 
-      {/* Corpo principal - Tabela */}
-      <div className="mt-6">
-        {loading ? (
-          <p className="text-gray-500">Carregando...</p>
-        ) : error ? (
-          <p className="text-red-500">Erro: {error}</p>
+      {/* Exibição dos Itens - divs ao invés de tabela */}
+      <div className="mt-6 space-y-4">
+        {isLoading ? (
+          <div className="text-center">Carregando...</div>
         ) : (
-          <table className="table-auto w-full border-collapse border border-gray-200 mt-4 shadow-lg">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="border border-gray-300 px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                  Nome da Demanda
-                </th>
-                <th className="border border-gray-300 px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                  Status da Demanda
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50">
-                  <td className="border border-gray-300 px-6 py-4 text-sm text-gray-600">
-                    {item.fields?.nomeDemanda || "-"}
-                  </td>
-                  <td className="border border-gray-300 px-6 py-4 text-sm text-gray-600">
-                    <div className="flex justify-between">
-                        <div className="flex ">
-                      <div
-                        className="w-4 h-4 rounded-full mr-2"
-                        style={{
-                          backgroundColor: item.fields?.farol || "rgb(200, 200, 200)",
-                        }}
-                      ></div>
-                      <span>{item.fields?.statusDemanda || "-"}</span>
-                    </div>
-                    <button
-                      className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                      onClick={() => {
-                        setSelectedItem(item); 
-                        setIsOpen(true); 
-                      }}
-                    >
-                      Ver Detalhes
-                    </button>
-                    </div>
-                    
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          items.map((item) => (
+            <div
+              key={item.ID}
+              className="flex justify-between items-center p-4 border border-gray-300 rounded-lg shadow-md"
+            >
+              <div className="flex flex-col text-left">
+                <span className="font-semibold">{item.nomeDemanda}</span>
+                <span>{item.statusDemanda}</span>
+              </div>
+              <div className="flex space-x-4">
+                <button
+                  className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition-colors"
+                  onClick={() => {
+                    setSelectedItem(item);
+                    setNewItem(item.fields);
+                    setModalOpen(true);
+                  }}
+                >
+                  Editar
+                </button>
+                <button
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
+                  onClick={() => handleDelete(item.id)}
+                >
+                  Excluir
+                </button>
+              </div>
+            </div>
+          ))
         )}
       </div>
-      {isOpen && (
-        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Detalhes sobre a demanda">
-          {selectedItem ? (
-            <div className="p-4">
-              <p><strong>Nome:</strong> {selectedItem.fields?.nomeDemanda || "Não informado"}</p><br></br>
-              <p><strong>Status:</strong> {selectedItem.fields?.statusDemanda || "Não informado"}</p><br></br>
-              <p><strong>Data de Abertura:</strong> {formatDate(selectedItem.fields?.dataAbertura) || "Não informado"}</p><br></br>
-              <p><strong>Percentual de execução:</strong> {selectedItem.fields?.percentualExec + "%" || "Não informado"}</p><br></br>
-              <p><strong>Responsável SUBTDCR:</strong> {selectedItem.fields?.POSUBTDCR || "Não informado"}</p><br></br>
-              <p><strong>Responsável Central:</strong> {selectedItem.fields?.POCENTRAL || "Não informado"}</p><br></br>
-            </div>
-          ) : (
-            <p>Carregando detalhes...</p>
-          )}
+
+      {/* Modal para criar ou editar item */}
+      {modalOpen && (
+        <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title={selectedItem ? "Editar Demanda" : "Criar Demanda"}>
+          <input
+            type="text"
+            className="w-full p-2 border rounded"
+            placeholder="Nome da Demanda"
+            value={newItem.nomeDemanda}
+            onChange={(e) => setNewItem({ ...newItem, nomeDemanda: e.target.value })}
+          />
+          <input
+            type="text"
+            className="w-full p-2 border rounded mt-2"
+            placeholder="Status"
+            value={newItem.statusDemanda}
+            onChange={(e) => setNewItem({ ...newItem, statusDemanda: e.target.value })}
+          />
+          <button
+            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+            onClick={selectedItem ? handleEdit : handleCreate}
+          >
+            {selectedItem ? "Salvar Alterações" : "Criar"}
+          </button>
         </Modal>
       )}
     </div>
   );
 };
 
-export default App;
+export default Home;
