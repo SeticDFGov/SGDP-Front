@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { getAllItems, createItem, updateItem, deleteItem } from "./services/apiService";
 import Modal from "./components/Modal";
+import Dropdown from "./components/Dropdown";
+import SearchField from "./components/Search";
 
 const Home = () => {
   const [items, setItems] = useState([]);
@@ -67,10 +69,11 @@ const Home = () => {
 
   return (
     <div className="p-4 bg-white h-screen">
-      <header className="bg-white text-black py-4 px-6 rounded-lg shadow-lg flex items-center justify-between">
-        <h1 className="text-3xl font-semibold">SUBTDCR</h1>
+      <header className=" text-white bg-gray-800 py-4 px-6 rounded-lg shadow-lg flex items-center justify-between">
+        <img src="/header.png" width={75} height={75} alt="imagem"></img>
+        <h1 className="text-lg">Transformação Digital</h1>
         <button
-          className="bg-black text-white px-4 py-2 rounded hover:bg-pink-700 transition-colors"
+          className="bg-gray-800 text-white px-4 py-2  border rounded  border-white"
           onClick={() => {
             setNewItem({ nomeDemanda: "", statusDemanda: "" });
             setModalOpen(true);
@@ -84,41 +87,59 @@ const Home = () => {
       <div className="mt-8 mb-6 text-center text-xl font-semibold text-gray-700">
         Bem-vindo ao controle de demandas da SUBTDCR
       </div>
+      <div className="flex justify-between space-x-2 pt-10">
+          <Dropdown name={"Selecione uma Categoria"}>
+             <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Opção 1</li>
+            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Opção 2</li>
+            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Opção 3</li>
+          </Dropdown>
+          <Dropdown name={"Selecione a unidade"}>
+             <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Opção 1</li>
+            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Opção 2</li>
+            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Opção 3</li>
+          </Dropdown>
+          <Dropdown name={"Selecione o status"}>
+             <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Opção 1</li>
+            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Opção 2</li>
+            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Opção 3</li>
+          </Dropdown>
+          <SearchField></SearchField>
+      </div>
 
       {/* Exibição dos Itens - divs ao invés de tabela */}
-      <div className="mt-6 space-y-4">
+      <div className="pt-10 text-black">
+
         {isLoading ? (
-          <div className="text-center">Carregando...</div>
+          <p className="text-center">Carregando...</p>
         ) : (
-          items.map((item) => (
-            <div
-              key={item.ID}
-              className="flex justify-between items-center p-4 border border-gray-300 rounded-lg shadow-md"
-            >
-              <div className="flex flex-col text-left">
-                <span className="font-semibold">{item.nomeDemanda}</span>
-                <span>{item.statusDemanda}</span>
-              </div>
-              <div className="flex space-x-4">
-                <button
-                  className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition-colors"
-                  onClick={() => {
-                    setSelectedItem(item);
-                    setNewItem(item.fields);
-                    setModalOpen(true);
-                  }}
-                >
-                  Editar
-                </button>
-                <button
-                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
-                  onClick={() => handleDelete(item.id)}
-                >
-                  Excluir
-                </button>
-              </div>
-            </div>
-          ))
+          <table className="w-full border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="border p-2">Nome Demanda</th>
+                <th className="border p-2">Data de Abertura</th>
+                <th className="border p-2">Status</th>
+                <th className="border p-2">Categoria</th>
+                <th className="border p-2">Demandante</th>
+                <th className="border p-2">Data da Conclusão</th>
+                <th className="border p-2">Responsável</th>
+                <th className="border p-2">Detalhes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item, index) => (
+                <tr key={index} className="text-center">
+                  <td className="border p-2">{item.nomeDemanda}</td>
+                  <td className="border p-2">{item.dataAbertura}</td>
+                  <td className="border p-2">{item.status}</td>
+                  <td className="border p-2">{item.categoria}</td>
+                  <td className="border p-2">{item.POCENTRAL}</td>
+                  <td className="border p-2">{item.dataConcl}</td>
+                  <td className="border p-2">{item.POSUBTDCR}</td>
+                  <td className="border p-2">{item.detalhes}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
 
