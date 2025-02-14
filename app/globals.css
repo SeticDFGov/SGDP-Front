@@ -14,6 +14,14 @@
   }
 }
 
+.my-icon::before {
+  font-family: 'Material Icons';
+  content: 'home'; /* Nome do ícone */
+  font-size: 24px;
+  color: red;
+}
+
+
 body {
   color: var(--foreground);
   background: var(--background);
