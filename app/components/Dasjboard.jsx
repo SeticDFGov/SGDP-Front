@@ -1,12 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 import 'material-icons/iconfont/material-icons.css';
 import Chart from "chart.js/auto";
-import { getAllItems } from "../services/apiService";
+import { deleteItem, getAllItems } from "../services/apiService";
+import { FaTrash, FaEdit , FaPlus} from 'react-icons/fa';
+import Modal from "./Modal";
+import CadastroDemanda from "./DemandaForm";
+import EditFormModal from "./EditDemandaForm";
 
 const Dashboard = () => {
   const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const barChartRef = useRef(null);
+    const barChartRef = useRef(null);const [isModalOpen, setIsModalOpen] = useState(false);
     const doughnutChartRef = useRef(null);
     const demandanteChartRef = useRef(null);
     const lineChartRef = useRef(null);
@@ -14,12 +18,67 @@ const Dashboard = () => {
     const [atrasado, setAtrasado] = useState(0);
     const [concluido, setConcluido] = useState(0);
     const [nao, setNao] = useState(0);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isModalEditOpen, setIsModalEditOpen] = useState(false)
     
+   const [selectedItemId, setSelectedItemId] = useState(null);
+   const handleOpenEditModal = (id) => {
+    setSelectedItemId(id);
+    setIsModalEditOpen(true);
+    };
+
+    const handleCloseEditModal = () => {
+    setIsModalEditOpen(false);
+    setSelectedItemId(null);
+    };
+
+    const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleCloseModal = () => setIsModalOpen(false);
+    const handleDelete = (id) => {
+    if (window.confirm('Tem certeza que deseja excluir este item?')) {
+      console.log(`Excluindo item com ID: ${id}`);
+      // Adicione a lógica para excluir aqui
+    }
+  };
+
+    useEffect(() => {
+    const authStatus = localStorage.getItem("authenticated") === "true";
+    setIsAuthenticated(authStatus);
+  }, []);
+
+   const handleAuthenticate = () => {
+    localStorage.removeItem("authenticated");
+     setIsAuthenticated(false)
+     window.location.reload()
+   }
+
     const destroyChart = (chartRef) => {
     if (chartRef.current && chartRef.current.chartInstance) {
         chartRef.current.chartInstance.destroy();
     }
     };
+    const handleDeleteItem = async (id) => {
+  // Exibe um alerta de confirmação
+  const confirmDelete = window.confirm("Tem certeza que deseja excluir esta demanda?");
+  
+  if (!confirmDelete) return;
+
+  try {
+    const response = await deleteItem(id);
+
+    if (response) {
+      alert("demanda excluída com sucesso!");
+      window.location.reload(); // Recarrega a página após a exclusão
+    } else {
+      alert("Erro ao excluir a demanda.");
+    }
+  } catch (error) {
+    console.error("Erro ao excluir a demanda:", error);
+    alert("Falha ao excluir a demanda.");
+  }
+};
 
     const fetchItems = async () => {
     setIsLoading(true);
@@ -129,7 +188,7 @@ const updateCharts = (data) => {
       labels: demandanteLabels,
       datasets: [
         {
-          label: "Quantidade de CA PO por Demandante",
+          label: "Quantidade de demandas por Demandante",
           data: demandanteValues,
           backgroundColor: "#1c2c34",
         },
@@ -191,26 +250,32 @@ return (
                    
                 </div>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-
-                    <div className="hidden sm:ml-6 sm:block">
+                {!isAuthenticated &&
+                    ( <div className="hidden sm:ml-6 sm:block">
                         <div className="flex space-x-4">
-                            <a href="#"
+                            <a href="/login"
                                 className="text-gray-300 hover:bg-gray-700 hover:text-white block border-2 rounded-md px-3 py-2 text-base font-medium">Área
                                 logada</a>
                         </div>
-                    </div>
+                    </div>)
+                }
+                   
                    
                 </div>
             </div>
         </div>
-       
-        <div className="hidden sm:hidden" id="mobile-menu">
-            <div className="space-y-1 px-2 pb-3 pt-2">
-                <a href="#"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Área
-                    logada</a>
+       {isAuthenticated && (
+         <div className="sm:block" id="mobile-menu">
+            <div className="flex space-x-4 pb-2">
+                <a 
+                    className="text-gray-300 block border-2 rounded-md px-3 py-2 text-base font-medium">logado como: Administrador</a>
             </div>
-        </div>
+          <button onClick={() => handleAuthenticate()}>
+            logout
+          </button>
+        </div>)
+       }
+       
     </nav>
     
     <div className="mx-auto bg-white ">
@@ -274,7 +339,7 @@ return (
                             fill="currentColor">
                             <path fillRule="evenodd"
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                clip-rule="evenodd" />
+                                clipRule="evenodd" />
                         </svg>
                     </div>
                 </div>
@@ -291,7 +356,7 @@ return (
                             fill="currentColor">
                             <path fillRule="evenodd"
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                clip-rule="evenodd" />
+                                clipRule="evenodd" />
                         </svg>
                     </div>
                 </div>
@@ -307,9 +372,9 @@ return (
     </div>
   </div>
 
-  <div className="bg-white shadow-lg rounded-2xl p-4">
+  <div className="bg-white shadow-lg rounded-2xl p-4 ">
     <h3 className="text-xl font-semibold mb-2 ">Status de demandas</h3>
-    <div className="w-full h-[300px]">
+    <div className="w-full h-[300px] flex justify-center">
       <canvas ref={doughnutChartRef} />
     </div>
   </div>
@@ -346,7 +411,7 @@ return (
                             fill="currentColor">
                             <path fillRule="evenodd"
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                clip-rule="evenodd" />
+                                clipRule="evenodd" />
                         </svg>
                     </div>
                 </div>
@@ -364,7 +429,7 @@ return (
                             fill="currentColor">
                             <path fillRule="evenodd"
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                clip-rule="evenodd" />
+                                clipRule="evenodd" />
                         </svg>
                     </div>
                 </div>
@@ -381,7 +446,7 @@ return (
                             fill="currentColor">
                             <path fillRule="evenodd"
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                clip-rule="evenodd" />
+                                clipRule="evenodd" />
                         </svg>
                     </div>
                 </div>
@@ -394,16 +459,27 @@ return (
                             fill="currentColor">
                             <path fillRule="evenodd"
                                 d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1111.32 3.906l4.387 4.387a1 1 0 01-1.414 1.414l-4.387-4.387A6 6 0 012 8z"
-                                clip-rule="evenodd" />
+                                clipRule="evenodd" />
                         </svg>
                     </div>
                 </div>
 
             </div>
 
+            {isAuthenticated && (<div onClick={handleOpenModal} className="flex items-center space-x-2 bg-gray-100 p-4 rounded-lg shadow-md">
+            <FaPlus className="text-blue-500 text-xl" />
+            <span className="text-gray-700">Inserir demanda</span>
+            </div>)}
+            
+           <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+            <CadastroDemanda onClose = {handleCloseModal} ></CadastroDemanda>
+           </Modal>
+
+           <Modal isOpen={isModalEditOpen} onClose={handleCloseEditModal}>
+            <EditFormModal itemId = {selectedItemId} onClose={handleCloseEditModal}></EditFormModal>
+           </Modal>
 
 
-           
             <div className="flex gap-4 text-black">
               
                 <div className="flex-1 overflow-x-auto mt-2">
@@ -418,6 +494,7 @@ return (
                                 <th className="border p-2 text-left">Data da Conclusão</th>
                                 <th className="border p-2 text-left">Responsável</th>
                                 <th className="border p-2 text-left">Detalhes</th>
+                                {isAuthenticated && <th className="border p-2">Ações</th>}
                             </tr>
                         </thead>
                         <tbody>
@@ -439,10 +516,37 @@ return (
                                 <td className="border p-2">{item.STATUS}</td>
                                 <td className="border p-2">{item.CATEGORIA}</td>
                                 <td className="border p-2">{item.NM_PO_DEMANDANTE}</td>
-                                <td className="border p-2">{item.DT_CONCLUSAO}</td>
+                                <td className="border p-2">
+                                    {
+                                         (() => {
+                                    try {
+                                    const data = new Date(item.DT_CONCLUSAO);
+                                    if (isNaN(data)) throw new Error("Data inválida");
+                                    return data.toLocaleDateString("pt-BR");
+                                    } catch {
+                                    return "";
+                                    }
+                                })()
+                                    }
+                                </td>
                                 <td className="border p-2">{item.PO_SUBTDCR}</td>
                                 <td className="border p-2">{item.NM_PO_SUBTDCR}</td>
-
+                                {isAuthenticated && (
+                                <td className="border p-2 flex gap-2 justify-center">
+                                <button
+                                    className="text-red-500 hover:text-red-700"
+                                    onClick={() => handleDeleteItem(item.ID)}
+                                >
+                                    <FaTrash />
+                                </button>
+                                <button
+                                    className="text-blue-500 hover:text-blue-700"
+                                    onClick={() => handleOpenEditModal(item.ID)}
+                                >
+                                    <FaEdit />
+                                </button>
+                                </td>
+                            )}
                                 </tr>
                             ))}
                            

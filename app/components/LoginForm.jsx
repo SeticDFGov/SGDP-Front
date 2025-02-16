@@ -1,25 +1,27 @@
+"use client";
+
 import React, { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const router = useRouter();
+  const router = useRouter(); // Obtém o objeto do roteador
 
   const handleLogin = () => {
     if (username === "admin" && password === "@admin") {
       localStorage.setItem("authenticated", "true"); // Guarda o estado de login
-      router.push("/"); // Redireciona para a página principal
+      router.push("/"); // Redireciona para a página raiz após login bem-sucedido
     } else {
       setError("Usuário ou senha incorretos!");
     }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex justify-center items-center h-screen text-black bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-semibold mb-4 text-center">Login</h2>
+        <h2 className="text-2xl font-semibold mb-4 text-center ">Login</h2>
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <input
           type="text"
