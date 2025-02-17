@@ -325,14 +325,20 @@ return (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 mb-4">
 
                 <div className="flex-1 relative">
-                    <select defaultValue={"todos"} className="w-full border rounded-full p-2 pl-4 pr-10 bg-white text-gray-900 appearance-none">
-                        <option  disabled >Selecione o período</option>
-                        <option value={"todos"}>Todos</option>
-                        <option>Última semana</option>
-                        <option>Último mês</option>
-                        <option>Últimos 6 meses</option>
-                        <option>Último ano</option>
+                  <select
+                    defaultValue="todos"
+                    className="w-full border rounded-full p-2 pl-4 pr-10 bg-white text-gray-900 appearance-none"
+                    >
+                    <option value="" disabled>
+                        Selecione o período
+                    </option>
+                    <option value="todos">Todos</option>
+                    <option value="semana">Última semana</option>
+                    <option value="mes">Último mês</option>
+                    <option value="6meses">Últimos 6 meses</option>
+                    <option value="ano">Último ano</option>
                     </select>
+ 
                     
                     <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-900" viewBox="0 0 20 20"
@@ -344,12 +350,17 @@ return (
                     </div>
                 </div>
                 <div className="flex-1 relative">
-                    <select defaultValue={"todas"} className="w-full border rounded-full p-2 pl-4 pr-10 bg-white text-gray-900 appearance-none">
-                        <option  disabled >Selecione uma categoria</option>
-                        <option value={"todas"}>Todas</option>
-                        <option>Categoria</option>
+                   <select
+                        defaultValue="todas"
+                        className="w-full border rounded-full p-2 pl-4 pr-10 bg-white text-gray-900 appearance-none"
+                        >
+                        <option value="" disabled>
+                            Selecione uma categoria
+                        </option>
+                        <option value="todas">Todas</option>
+                        <option value="categoria">Categoria</option>
+                        </select>
 
-                    </select>
                    
                     <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-900" viewBox="0 0 20 20"
@@ -400,11 +411,17 @@ return (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
 
                 <div className="flex-1 relative">
-                    <select defaultValue={"todas"} className="w-full border rounded-full p-2 pl-4 pr-10 bg-gray-900 text-white appearance-none">
-                        <option  disabled >Selecione uma categoria</option>
-                        <option value={"todas"}>Todas</option>
-                        <option>Categoria</option>
+                   <select
+                    defaultValue="todas"
+                    className="w-full border rounded-full p-2 pl-4 pr-10 bg-gray-900 text-white appearance-none"
+                    >
+                    <option value="" disabled>
+                        Selecione uma categoria
+                    </option>
+                    <option value="todas">Todas</option>
+                    <option value="categoria">Categoria</option>
                     </select>
+
                    
                     <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20"
@@ -416,13 +433,19 @@ return (
                     </div>
                 </div>
                 <div className="flex-1 relative">
-                    <select defaultValue={"todas"} className="w-full border rounded-full p-2 pl-4 pr-10 bg-gray-900 text-white appearance-none">
-                        <option disabled>Selecione a unidade</option>
-                        <option value={"todas"} >Todas</option>
-                        <option>CGOV</option>
-                        <option>UCR</option>
-                        <option>UPTD</option>
-                    </select>
+                    <select
+  defaultValue="todas"
+  className="w-full border rounded-full p-2 pl-4 pr-10 bg-gray-900 text-white appearance-none"
+>
+  <option value="" disabled>
+    Selecione a unidade
+  </option>
+  <option value="todas">Todas</option>
+  <option value="CGOV">CGOV</option>
+  <option value="UCR">UCR</option>
+  <option value="UPTD">UPTD</option>
+</select>
+
                    
                     <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20"
@@ -434,12 +457,18 @@ return (
                     </div>
                 </div>
                 <div className="flex-1 relative">
-                    <select defaultValue={""} className="w-full border rounded-full p-2 pl-4 pr-10 bg-gray-900 text-white appearance-none">
-                        <option value="" disabled selected>Selecione o status</option>
-                        <option>Atrasado</option>
-                        <option>Em andamento</option>
-                        <option>Concluído</option>
-                    </select>
+                    <select
+  defaultValue=""
+  className="w-full border rounded-full p-2 pl-4 pr-10 bg-gray-900 text-white appearance-none"
+>
+  <option value="" disabled>
+    Selecione o status
+  </option>
+  <option value="Atrasado">Atrasado</option>
+  <option value="Em andamento">Em andamento</option>
+  <option value="Concluído">Concluído</option>
+</select>
+
                   
                     <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20"
