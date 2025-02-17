@@ -265,16 +265,22 @@ return (
             </div>
         </div>
        {isAuthenticated && (
-         <div className="sm:block" id="mobile-menu">
-            <div className="flex space-x-4 pb-2">
-                <a 
-                    className="text-gray-300 block border-2 rounded-md px-3 py-2 text-base font-medium">logado como: Administrador</a>
-            </div>
-          <button onClick={() => handleAuthenticate()}>
-            logout
-          </button>
-        </div>)
-       }
+  <div className="sm:block" id="mobile-menu">
+    <div className="flex items-center space-x-4 pb-4 bg-gray-800 rounded-lg p-3 shadow-lg">
+      <div className="flex-1">
+        <p className="text-white text-sm font-semibold">Logado como:</p>
+        <p className="text-green-400 text-lg font-bold">Administrador</p>
+      </div>
+      <button
+        onClick={handleAuthenticate}
+        className="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-lg transition duration-300"
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+)}
+
        
     </nav>
     
