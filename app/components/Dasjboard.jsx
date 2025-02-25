@@ -198,19 +198,19 @@ const updateCharts = (data) => {
 
   // Gráfico de linha (fixo conforme o exemplo)
   destroyChart(lineChartRef);
-  lineChartRef.current.chartInstance = new Chart(lineChartRef.current, {
-    type: "line",
-    data: {
-      labels: ["Semana 1", "Semana 2", "Semana 3", "Semana 4"],
-      datasets: [
-        {
-          data: [10, 15, 8, 12],
-          borderColor: "#fc6161",
-          fill: true,
-        },
-      ],
-    },
-  });
+  // lineChartRef.current.chartInstance = new Chart(lineChartRef.current, {
+  //   type: "line",
+  //   data: {
+  //     labels: ["Semana 1", "Semana 2", "Semana 3", "Semana 4"],
+  //     datasets: [
+  //       {
+  //         data: [10, 15, 8, 12],
+  //         borderColor: "#fc6161",
+  //         fill: true,
+  //       },
+  //     ],
+  //   },
+  // });
 };
 
 return (
@@ -243,8 +243,13 @@ return (
                     
                     <div className="hidden sm:ml-6 sm:block">
                         <div className="flex space-x-4">
-                            <a href="#" className="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium">Dashboard</a>
-                            <a href="#" className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Equipe</a>
+                            <a href="#" className="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium">Home</a>
+                            <a href="#" className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Demandas</a>
+
+                            <a href="#" className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Categorias</a>
+
+                            <a href="#" className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Demandante</a>
+                            
                         </div>
                     </div>
                    
@@ -381,35 +386,27 @@ return (
 
         </div>
        
-     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 text-black text-center " >
-  <div className="bg-white shadow-lg rounded-2xl p-4">
-    <h3 className="text-xl font-semibold mb-2 text-black">Quantidade de demanda por categoria</h3>
-    <div className="w-full h-[300px]">
-      <canvas ref={barChartRef} />
-    </div>
-  </div>
+    
+   <div className=" max-w-6xl mx-auto bg-white text-black">
+            <div className="flex flex-col lg:flex-row p-4 ">
+                <div className="w-full lg:w-2/4 mb-4 lg:mb-0 lg:mr-4 bg-white shadow-lg rounded-2xl">
+                    <div className=" p-4 col-span-1 lg:col-span-2">
+                        <h3 className="text-xl font-semibold text-center mt-5">Status de demandas</h3>
+                        <canvas ref={doughnutChartRef}></canvas>
+                    </div>
+                </div>
+                <div className="w-full lg:w-2/4 mb-4 lg:mb-0 lg:mr-4">
+                    <div className="bg-white shadow-lg rounded-2xl p-4 col-span-1 lg:col-span-2">
+                        <h3 className="text-xl font-semibold text-center">Quantidade de demandas por demandante</h3>
+                        <canvas ref={demandanteChartRef}></canvas>
+                        <h3 className="text-xl font-semibold text-center">Tempo Médio por Demanda</h3>
+                        <canvas ref={barChartRef}></canvas>
+                    </div>
+                </div>
 
-  <div className="bg-white shadow-lg rounded-2xl p-4 ">
-    <h3 className="text-xl font-semibold mb-2 ">Status de demandas</h3>
-    <div className="w-full h-[300px] flex justify-center">
-      <canvas ref={doughnutChartRef} />
-    </div>
-  </div>
+            </div>
+        </div>
 
-  <div className="bg-white shadow-lg rounded-2xl p-4">
-    <h3 className="text-xl font-semibold mb-2 text-black ">Quantidades de demandas por demandante</h3>
-    <div className="w-full h-[300px]">
-     <canvas ref={demandanteChartRef} />
-    </div>
-  </div>
-
-  <div className="bg-white shadow-lg rounded-2xl p-4">
-    <h3 className="text-xl font-semibold mb-2 ">Tempo médio por demanda</h3>
-    <div className="w-full h-[300px]">
-      <canvas ref={lineChartRef} />
-    </div>
-  </div>
-</div>
     
     <div className="mx-auto bg-white mt-5">
         <div className="p-4 max-w-6xl mx-auto bg-white mt-5 mb-5">
