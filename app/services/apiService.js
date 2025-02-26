@@ -70,3 +70,13 @@ export const deleteItem = async (id) => {
     return false;
   }
 };
+
+export const tmpAVG = async () => {
+  try {
+    const response = await fetch(`${API_URL}/temp`, { method: "GET" });
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};

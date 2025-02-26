@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import 'material-icons/iconfont/material-icons.css';
 import Chart from "chart.js/auto";
-import { deleteItem, getAllItems } from "../services/apiService";
+import { deleteItem, getAllItems, tmpAVG } from "../services/apiService";
 import { FaTrash, FaEdit , FaPlus} from 'react-icons/fa';
 import Modal from "./Modal";
 import CadastroDemanda from "./DemandaForm";
@@ -10,7 +10,8 @@ import EditFormModal from "./EditDemandaForm";
 const Dashboard = () => {
   const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const barChartRef = useRef(null);const [isModalOpen, setIsModalOpen] = useState(false);
+    const barChartRef = useRef(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const doughnutChartRef = useRef(null);
     const demandanteChartRef = useRef(null);
     const lineChartRef = useRef(null);
@@ -20,8 +21,9 @@ const Dashboard = () => {
     const [nao, setNao] = useState(0);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isModalEditOpen, setIsModalEditOpen] = useState(false)
-    
-   const [selectedItemId, setSelectedItemId] = useState(null);
+    const [selectedItemId, setSelectedItemId] = useState(null);
+    const [tmp, setTmp] = useState({})
+
    const handleOpenEditModal = (id) => {
     setSelectedItemId(id);
     setIsModalEditOpen(true);
@@ -59,7 +61,24 @@ const Dashboard = () => {
         chartRef.current.chartInstance.destroy();
     }
     };
-    const handleDeleteItem = async (id) => {
+    
+    const handleTmpAVG = async () => {
+    setIsLoading(true);
+    try {
+      const data = await tmpAVG();
+      console.log("Media por categoria:", data);
+      setTmp(data);
+        
+    } catch (error) {
+        console.error("Erro ao buscar itens", error);
+    } finally {
+        setIsLoading(false);
+    }
+  };
+
+  
+
+  const handleDeleteItem = async (id) => {
   // Exibe um alerta de confirmação
   const confirmDelete = window.confirm("Tem certeza que deseja excluir esta demanda?");
   
@@ -98,23 +117,30 @@ const Dashboard = () => {
     } finally {
         setIsLoading(false);
     }
-    };
+  };
 
 useEffect(() => {
   fetchItems();
 }, []);
+useEffect(() => {
+    handleTmpAVG();
+  }, []);
 
 useEffect(() => {
-  if (items.length > 0) {
+  if (items.length > 0 && Object.keys(tmp).length > 0) {
     updateCharts(items);
   }
-}, [items]);
+}, [items, tmp]);
 const updateCharts = (data) => {
   const categorias = {};
   const status = { Em_andamento: 0, Atrasados: 0, Realizadas: 0, Nao_iniciada: 0 };
   const demandante = {};
 
+
+
   data.forEach((item) => {
+    
+    
     // Contabilizar categorias
     if (!categorias[item.CATEGORIA]) {
       categorias[item.CATEGORIA] = { soma: 0, count: 0 };
@@ -126,7 +152,7 @@ const updateCharts = (data) => {
     if (item.STATUS === "Em andamento") status["Em_andamento"] += 1;
     if (item.STATUS === "Não iniciada") status["Nao_iniciada"] += 1;
     if (item.STATUS === "Atrasados") status["Atrasados"] += 1;
-    if (item.STATUS === "Realizadas") status["Realizadas"] += 1;
+    if (item.STATUS === "Concluído") status["Realizadas"] += 1;
     
     // Contabilizar demandantes
 
@@ -143,11 +169,13 @@ const updateCharts = (data) => {
     }
   });
 
-  const labels = Object.keys(categorias);
-  const valoresMedios = labels.map((cat) => categorias[cat].soma / categorias[cat].count);
+  const labels = Object.keys(tmp); // Pega as categorias (chaves do objeto)
+  const valoresMedios = Object.values(tmp); // Pega os valores (valores do objeto)
 
+    
   // Gráfico de categorias
   destroyChart(barChartRef);
+  
   barChartRef.current.chartInstance = new Chart(barChartRef.current, {
     type: "bar",
     data: {
