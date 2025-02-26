@@ -6,7 +6,7 @@ import { FaTrash, FaEdit , FaPlus} from 'react-icons/fa';
 import Modal from "./Modal";
 import CadastroDemanda from "./DemandaForm";
 import EditFormModal from "./EditDemandaForm";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
   const [items, setItems] = useState([]);
@@ -24,6 +24,7 @@ const Dashboard = () => {
     const [isModalEditOpen, setIsModalEditOpen] = useState(false)
     const [selectedItemId, setSelectedItemId] = useState(null);
     const [tmp, setTmp] = useState({})
+    const router = useRouter()
 
    const handleOpenEditModal = (id) => {
     setSelectedItemId(id);
@@ -273,11 +274,11 @@ return (
                     <div className="hidden sm:ml-6 sm:block">
                         <div className="flex space-x-4">
                             <a href="#" className="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium">Home</a>
-                            <a href="#" className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Demandas</a>
+                            <a href="" onClick={() => {router.push()}} className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Demandas</a>
 
-                            <a href="#" className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Categorias</a>
+                            <a href="" onClick={() => {router.push("/categoria")}} className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Categorias</a>
 
-                            <a href="/demandante" className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Demandante</a>
+                            <a href="" onClick={() => {router.push("/demandante")}} className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Demandante</a>
                             
                         </div>
                     </div>

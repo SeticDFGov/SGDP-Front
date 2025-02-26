@@ -142,6 +142,7 @@ const handleSubmit = async (e) => {
               <option value="">Selecione uma opção</option>
               <option value="Em andamento">Em andamento</option>
               <option value="Atrasado">Atrasado</option>
+              <option value="Concluído">Concluído</option>
             </select>
           </div>
 

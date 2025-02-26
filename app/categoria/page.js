@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { deleteDemandante, getAllDemandantes } from "../services/demandanteService";
 import DemandanteForm from "../components/DemandanteForm";
 import 'material-icons/iconfont/material-icons.css';
+import { deleteCategoria, getAllCategoria } from "../services/categoriaService";
+import CategoriaForm from "../components/CategoriaForm";
 
 export default function Demandante() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -23,31 +25,31 @@ const handleAuthenticate = () => {
    }
   const handleDeleteItem = async (id) => {
   // Exibe um alerta de confirmação
-  const confirmDelete = window.confirm("Tem certeza que deseja excluir esse demandante?");
+  const confirmDelete = window.confirm("Tem certeza que deseja excluir essa categoria?");
   
   if (!confirmDelete) return;
 
   try {
-    const response = await deleteDemandante(id);
+    const response = await deleteCategoria(id);
 
     if (response) {
-      alert("demandante excluída com sucesso!");
+      alert("categoria excluída com sucesso!");
       window.location.reload(); // Recarrega a página após a exclusão
     } else {
-      alert("Erro ao excluir a demanda.");
+      alert("Erro ao excluir a categoria.");
     }
   } catch (error) {
-    console.error("Erro ao excluir a demanda:", error);
-    alert("Falha ao excluir a demanda.");
+    console.error("Erro ao excluir a categoria:", error);
+    alert("Falha ao excluir a categoria.");
   }
 };
   // Função para buscar demandantes
   const fetchItems = async () => {
     try {
-      const response = await getAllDemandantes();
+      const response = await getAllCategoria();
       setItems(response);
     } catch (error) {
-      console.error("Erro ao buscar demandantes:", error);
+      console.error("Erro ao buscar categorias:", error);
       setItems([]); // Evita que a tabela quebre caso ocorra erro na API
     }
   };
@@ -91,12 +93,13 @@ const handleAuthenticate = () => {
                     <div className="hidden sm:ml-6 sm:block">
                         <div className="flex space-x-4">
                             <a href="/" className="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium">Home</a>
-                            
+
                             <a href="" onClick={() => {router.push()}} className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Demandas</a>
 
                             <a href="" onClick={() => {router.push("/categoria")}} className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Categorias</a>
 
                             <a href="" onClick={() => {router.push("/demandante")}} className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Demandante</a>
+                            
                         </div>
                     </div>
                    
@@ -141,18 +144,18 @@ const handleAuthenticate = () => {
         <div className="p-4 max-w-6xl mx-auto bg-white mt-5 mb-5">
           <div className="max-w-6xl mx-auto mt p-4">
             <div className="mt-5 flex justify-between items-center">
-              <h2 className="text-2xl font-semibold">Quadro de Demandante</h2>
+              <h2 className="text-2xl font-semibold">Quadro de Categorias</h2>
               <button
                 onClick={() => setIsModalOpen(true)}
                 className="w-full md:w-1/4 bg-gray-900 text-white py-2 rounded hover:scale-105"
               >
-                Novo Demandante
+                Nova Categoria
               </button>
             </div>
           </div>
 
           {/* Modal */}
-          {isModalOpen && <DemandanteForm onClose={handleCloseModal} />}
+          {isModalOpen && <CategoriaForm onClose={handleCloseModal} />}
 
           {/* Tabela */}
           <div className="flex gap-4">
@@ -168,7 +171,7 @@ const handleAuthenticate = () => {
                   {items.length > 0 ? (
                     items.map((item) => (
                       <tr key={item.ID} className="shadow">
-                        <td className="border p-2">{item.NM_DEMANDANTE}</td>
+                        <td className="border p-2">{item.NM_CATEGORIA}</td>
                         <td className="border p-2">
                           <div className="flex justify-center items-center gap-2">
                             <button id="delete" className="text-gray-900 hover:scale-105" onClick={() => {handleDeleteItem(item.ID)}}>
@@ -181,8 +184,7 @@ const handleAuthenticate = () => {
                   ) : (
                     <tr>
                       <td colSpan="2" className="border p-4 text-center text-gray-500">
-                        Nenhum demandante encontrado
-                      </td>
+                        Nenhuma categoria encontrada                      </td>
                     </tr>
                   )}
                 </tbody>
