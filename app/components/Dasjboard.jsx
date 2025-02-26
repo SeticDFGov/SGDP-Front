@@ -6,6 +6,7 @@ import { FaTrash, FaEdit , FaPlus} from 'react-icons/fa';
 import Modal from "./Modal";
 import CadastroDemanda from "./DemandaForm";
 import EditFormModal from "./EditDemandaForm";
+import { useRouter } from "next/router";
 
 const Dashboard = () => {
   const [items, setItems] = useState([]);
@@ -276,7 +277,7 @@ return (
 
                             <a href="#" className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Categorias</a>
 
-                            <a href="#" className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Demandante</a>
+                            <a href="/demandante" className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Demandante</a>
                             
                         </div>
                     </div>
