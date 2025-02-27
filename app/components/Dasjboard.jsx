@@ -509,7 +509,7 @@ return (
                                 <th className="border p-2 text-left">Categoria</th>
                                 <th className="border p-2 text-left">Área Demandante</th>
                                 <th className="border p-2 text-left">Data da Conclusão</th>
-                                <th className="border p-2 text-left">Responsável</th>
+                                <th className="border p-2 text-left">Unidade SUBTDCR</th>
                                 <th className="border p-2 text-left">Detalhes</th>
                                 {isAuthenticated && <th className="border p-2">Ações</th>}
                             </tr>
@@ -546,7 +546,7 @@ return (
                                 })()
                                     }
                                 </td>
-                                <td className="border p-2">{item.PO_SUBTDCR}</td>
+                                <td className="border p-2">{item.UNIDADE}</td>
                                 <td className="border p-2">{item.NM_AREA_SUBTDCR}</td>
                                 {isAuthenticated && (
                                 <td className="border p-2 flex gap-2 justify-center">
