@@ -7,6 +7,7 @@ import Modal from "./Modal";
 import CadastroDemanda from "./DemandaForm";
 import EditFormModal from "./EditDemandaForm";
 import { useRouter } from "next/navigation";
+import Header from "./Header";
 
 const Dashboard = () => {
   const [items, setItems] = useState([]);
@@ -24,8 +25,7 @@ const Dashboard = () => {
     const [isModalEditOpen, setIsModalEditOpen] = useState(false)
     const [selectedItemId, setSelectedItemId] = useState(null);
     const [tmp, setTmp] = useState({})
-    const router = useRouter()
-
+    
    const handleOpenEditModal = (id) => {
     setSelectedItemId(id);
     setIsModalEditOpen(true);
@@ -52,11 +52,7 @@ const Dashboard = () => {
     setIsAuthenticated(authStatus);
   }, []);
 
-   const handleAuthenticate = () => {
-    localStorage.removeItem("authenticated");
-     setIsAuthenticated(false)
-     window.location.reload()
-   }
+ 
 
     const destroyChart = (chartRef) => {
     if (chartRef.current && chartRef.current.chartInstance) {
@@ -129,10 +125,12 @@ useEffect(() => {
   }, []);
 
 useEffect(() => {
-  if (items.length > 0 && Object.keys(tmp).length > 0) {
+  
+    if (items.length > 0 || Object.keys(tmp).length > 0) {
     updateCharts(items);
   }
 }, [items, tmp]);
+
 const updateCharts = (data) => {
   const categorias = {};
   const status = { Em_andamento: 0, Atrasados: 0, Realizadas: 0, Nao_iniciada: 0 };
@@ -147,13 +145,15 @@ const updateCharts = (data) => {
     if (!categorias[item.CATEGORIA]) {
       categorias[item.CATEGORIA] = { soma: 0, count: 0 };
     }
+    console.log("ite,m")
+    console.log(item)
     categorias[item.CATEGORIA].soma += 1;
     categorias[item.CATEGORIA].count += 1;
 
     // Contabilizar status
     if (item.STATUS === "Em andamento") status["Em_andamento"] += 1;
     if (item.STATUS === "Não iniciada") status["Nao_iniciada"] += 1;
-    if (item.STATUS === "Atrasados") status["Atrasados"] += 1;
+    if (item.STATUS === "Atrasado") status["Atrasados"] += 1;
     if (item.STATUS === "Concluído") status["Realizadas"] += 1;
     
     // Contabilizar demandantes
@@ -163,7 +163,7 @@ const updateCharts = (data) => {
     setConcluido(status["Realizadas"])
     setNao(status["Nao_iniciada"])
 
-    const nome = item.NM_PO_DEMANDANTE;
+    const nome = item.NM_AREA_DEMANDANTE;
     if (!demandante[nome]) {
       demandante[nome] = 1;
     } else {
@@ -179,31 +179,48 @@ const updateCharts = (data) => {
   destroyChart(barChartRef);
   
   barChartRef.current.chartInstance = new Chart(barChartRef.current, {
-    type: "bar",
-    data: {
-      labels,
-      datasets: [
-        {
-          label: "Média por Categoria",
-          data: valoresMedios,
-          backgroundColor: ["#ff6384", "#36a2eb", "#ffce56"],
+  type: "bar",
+  data: {
+    labels,
+    datasets: [
+      {
+        label: "Média por Categoria",
+        data: valoresMedios,
+        backgroundColor: ["#ff6384", "#36a2eb", "#ffce56"],
+      },
+    ],
+  },
+    options: {
+      plugins: {
+        legend: {
+          display: false,
+          position: "bottom", // Move a legenda para baixo
         },
-      ],
+      },
     },
   });
+
 
   // Gráfico de status
   destroyChart(doughnutChartRef);
   doughnutChartRef.current.chartInstance = new Chart(doughnutChartRef.current, {
     type: "doughnut",
     data: {
-      labels: ["Realizadas", "Em andamento", "Atrasadas", "Não iniciada"],
+      labels: ["Concluída", "Em andamento", "Atrasada", "Não iniciada"],
       datasets: [
         {
           data: [status["Realizadas"], status["Em_andamento"], status["Atrasados"], status["Nao_iniciada"]],
           backgroundColor: ["#17eba0", "#ffbc44", "#fc6161", "#1c2c34"],
         },
       ],
+    },
+    options: {
+      plugins: {
+        legend: {
+          display: true,
+          position: "bottom", // Move a legenda para baixo
+        },
+      },
     },
   });
 
@@ -215,7 +232,7 @@ const updateCharts = (data) => {
   demandanteChartRef.current.chartInstance = new Chart(demandanteChartRef.current, {
     type: "bar",
     data: {
-      labels: demandanteLabels,
+      labels: demandanteLabels ,
       datasets: [
         {
           label: "Quantidade de demandas por Demandante",
@@ -223,6 +240,14 @@ const updateCharts = (data) => {
           backgroundColor: "#1c2c34",
         },
       ],
+    },
+    options: {
+      plugins: {
+        legend: {
+          display: true,
+          position: "bottom", // Move a legenda para baixo
+        },
+      },
     },
   });
 
@@ -247,77 +272,8 @@ return (
 
     <div className="bg-white">
 
-    <nav className="bg-gray-900">
-        <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-            <div className="relative flex h-16 items-center justify-between">
-                <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                   
-                    <button type="button" 
-                        className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                        <span className="sr-only">Abrir menu principal</span>
-                      
-                        <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                            stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round"
-                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                        </svg>
-                    </button>
-                </div>
-               
-                <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start ">
-                    <div className="flex flex-shrink-0 items-center">
-                        <img className="h-14 w-auto"
-                            src="images.png"
-                            alt="SUBTDCR"/>
-                    </div>
-                    
-                    <div className="hidden sm:ml-6 sm:block">
-                        <div className="flex space-x-4">
-                            <a href="#" className="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium">Home</a>
-                            <a href="" onClick={() => {router.push()}} className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Demandas</a>
-
-                            <a href="" onClick={() => {router.push("/categoria")}} className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Categorias</a>
-
-                            <a href="" onClick={() => {router.push("/demandante")}} className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Demandante</a>
-                            
-                        </div>
-                    </div>
-                   
-                </div>
-                <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                {!isAuthenticated &&
-                    ( <div className="hidden sm:ml-6 sm:block">
-                        <div className="flex space-x-4">
-                            <a href="/login"
-                                className="text-gray-300 hover:bg-gray-700 hover:text-white block border-2 rounded-md px-3 py-2 text-base font-medium">Área
-                                logada</a>
-                        </div>
-                    </div>)
-                }
-                   
-                   
-                </div>
-            </div>
-        </div>
-       {isAuthenticated && (
-  <div className="sm:block" id="mobile-menu">
-    <div className="flex items-center space-x-4 pb-4 bg-gray-800 rounded-lg p-3 shadow-lg">
-      <div className="flex-1">
-        <p className="text-white text-sm font-semibold">Logado como:</p>
-        <p className="text-green-400 text-lg font-bold">Administrador</p>
-      </div>
-      <button
-        onClick={handleAuthenticate}
-        className="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-lg transition duration-300"
-      >
-        Logout
-      </button>
-    </div>
-  </div>
-)}
-
-       
-    </nav>
+   <Header>
+   </Header>
     
     <div className="mx-auto bg-white ">
         <div className=" max-w-6xl mx-auto bg-white mt p-4">
@@ -331,7 +287,7 @@ return (
 
                     <div className="text-left">
                         <h3 className="text-3xl font-bold">{concluido}</h3>
-                        <p className="text-gray-600">demandas Realizadas</p>
+                        <p className="text-gray-600">demandas concluídas</p>
                     </div>
                     <span className="material-icons text-5xl" style={{color: '#17eba0'}}>check_circle</span>
                 </div>
@@ -421,15 +377,15 @@ return (
             <div className="flex flex-col lg:flex-row p-4 ">
                 <div className="w-full lg:w-2/4 mb-4 lg:mb-0 lg:mr-4 bg-white shadow-lg rounded-2xl">
                     <div className=" p-4 col-span-1 lg:col-span-2">
-                        <h3 className="text-xl font-semibold text-center mt-5">Status de demandas</h3>
+                        <h3 className="text-xl font-semibold text-center mt-5 pb-5">Situação da demanda</h3>
                         <canvas ref={doughnutChartRef}></canvas>
                     </div>
                 </div>
                 <div className="w-full lg:w-2/4 mb-4 lg:mb-0 lg:mr-4">
                     <div className="bg-white shadow-lg rounded-2xl p-4 col-span-1 lg:col-span-2">
-                        <h3 className="text-xl font-semibold text-center">Quantidade de demandas por demandante</h3>
+                        <h3 className="text-xl font-semibold text-center pb-5">Quantidade de demandas por Área demandante</h3>
                         <canvas ref={demandanteChartRef}></canvas>
-                        <h3 className="text-xl font-semibold text-center">Tempo Médio por Demanda</h3>
+                        <h3 className="text-xl font-semibold text-center pt-10 pb-5">Tempo Médio por Tipo</h3>
                         <canvas ref={barChartRef}></canvas>
                     </div>
                 </div>
@@ -552,7 +508,7 @@ return (
                                 <th className="border p-2 text-left">Data de Abertura</th>
                                 <th className="border p-2 text-left">Status</th>
                                 <th className="border p-2 text-left">Categoria</th>
-                                <th className="border p-2 text-left">Demandante</th>
+                                <th className="border p-2 text-left">Área Demandante</th>
                                 <th className="border p-2 text-left">Data da Conclusão</th>
                                 <th className="border p-2 text-left">Responsável</th>
                                 <th className="border p-2 text-left">Detalhes</th>
@@ -577,7 +533,7 @@ return (
                                 </td>
                                 <td className="border p-2">{item.STATUS}</td>
                                 <td className="border p-2">{item.CATEGORIA}</td>
-                                <td className="border p-2">{item.NM_PO_DEMANDANTE}</td>
+                                <td className="border p-2">{item.NM_AREA_DEMANDANTE}</td>
                                 <td className="border p-2">
                                     {
                                          (() => {
@@ -592,7 +548,7 @@ return (
                                     }
                                 </td>
                                 <td className="border p-2">{item.PO_SUBTDCR}</td>
-                                <td className="border p-2">{item.NM_PO_SUBTDCR}</td>
+                                <td className="border p-2">{item.NM_AREA_SUBTDCR}</td>
                                 {isAuthenticated && (
                                 <td className="border p-2 flex gap-2 justify-center">
                                 <button

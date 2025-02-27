@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createItem } from "../services/apiService";
+import { getAllCategoria } from "../services/categoriaService";
+import { getAllDemandantes } from "../services/demandanteService";
 
 
-const CadastroDemanda = ({onClose}) => {
+const CadastroDemanda = ({onCloses}) => {
+  const [categorias, setCategorias] = useState([])
+  const [demandantes, setDemandantes] = useState([])
   const [formData, setFormData] = useState({
     NM_DEMANDA: "",
     DT_SOLICITACAO: "",
@@ -12,12 +16,29 @@ const CadastroDemanda = ({onClose}) => {
     STATUS: "",
     NM_PO_SUBTDCR: "",
     NM_PO_DEMANDANTE: "",
+    NM_AREA_DEMANDANTE :"",
     UNIDADE: "",
     NR_PROCESSO_SEI: "",
     PERIODICO: "",
     PERIODICIDADE: "",
     PATROCINADOR: "",
   });
+
+  const fetchItems = async () => {
+    try {
+      const responseCategoria = await getAllCategoria();
+      const responseDemandante = await getAllDemandantes();
+      setCategorias(responseCategoria);
+      setDemandantes(responseDemandante)
+    } catch (error) {
+      console.error("Erro ao buscar categorias:", error);
+      setCategorias([]); // Evita que a tabela quebre caso ocorra erro na API
+    }
+  };
+
+   useEffect(() => {
+    fetchItems();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,6 +86,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
           STATUS: "",
           NM_PO_SUBTDCR: "",
           NM_PO_DEMANDANTE: "",
+          NM_AREA_DEMANDANTE:"",
           UNIDADE: "",
           NR_PROCESSO_SEI: "",
           PERIODICO: "",
@@ -148,25 +170,32 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
             value={formData.DT_CONCLUSAO}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded"
-            
+            required={formData.PERIODICO === "Concluído"}
+            disabled={formData.STATUS !== "Concluído"}
           />
         </div>
 
         {/* Categoria */}
-        <div className="flex flex-col">
-          <label htmlFor="CATEGORIA" className="text-sm font-semibold text-gray-700">
-            Categoria
-          </label>
-          <input
-            type="text"
-            id="CATEGORIA"
-            name="CATEGORIA"
-            value={formData.CATEGORIA}
-            onChange={handleChange}
-            className="mt-1 p-2 border border-gray-300 rounded"
-            required
-          />
-        </div>
+            <div className="flex flex-col">
+      <label htmlFor="CATEGORIA" className="text-sm font-semibold text-gray-700">
+        Categoria
+      </label>
+      <select
+        id="CATEGORIA"
+        name="CATEGORIA"
+        value={formData.CATEGORIA}
+        onChange={handleChange}
+        className="mt-1 p-2 border border-gray-300 rounded"
+        required
+      >
+        <option value="">Selecione uma categoria</option>
+        {categorias.map((item) => (
+          <option key={item.ID} value={item.NM_CATEGORIA}>
+            {item.NM_CATEGORIA}
+          </option>
+        ))}
+      </select>
+    </div>
 
         {/* Status */}
         <div className="flex flex-col">
@@ -229,6 +258,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
           <label htmlFor="NM_PO_DEMANDANTE" className="text-sm font-semibold text-gray-700">
             Nome do Demandante
           </label>
+          
           <input
             type="text"
             id="NM_PO_DEMANDANTE"
@@ -238,6 +268,28 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
             className="mt-1 p-2 border border-gray-300 rounded"
             required
           />
+        </div>
+
+        {/* Nome do Demandante */}
+        <div className="flex flex-col">
+          <label htmlFor="NM_AREA_DEMANDANTE" className="text-sm font-semibold text-gray-700">
+            Nome da Área Demandante
+          </label>
+          <select
+        id="NM_AREA_DEMANDANTE"
+        name="NM_AREA_DEMANDANTE"
+        value={formData.NM_AREA_DEMANDANTE}
+        onChange={handleChange}
+        className="mt-1 p-2 border border-gray-300 rounded"
+        required
+      >
+        <option value="">Selecione uma categoria</option>
+        {demandantes.map((item) => (
+          <option key={item.ID} value={item.NM_DEMANDANTE}>
+            {item.NM_DEMANDANTE}
+          </option>
+        ))}
+      </select>
         </div>
 
         {/* Unidade */}

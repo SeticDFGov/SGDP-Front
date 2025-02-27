@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getItemById, updateItem } from '../services/apiService';
+import { getAllCategoria } from '../services/categoriaService';
+import { getAllDemandantes } from '../services/demandanteService';
 
 const EditFormModal = ({ itemId, onSave , onClose}) => {
   if(!onClose) return null;
@@ -9,13 +11,44 @@ const EditFormModal = ({ itemId, onSave , onClose}) => {
     "Daniel CGOV", "Eduardo Galvão", "Felipe Stefens", "Izabel", "Joran Freire", "Marcio Henrique",
     "Munique", "Rayssa Parente", "Rômulo Adan", "Sergio Velozo"
   ];
-
+  const [categorias, setCategorias] = useState([])
+  const [demandantes, setDemandantes] = useState([])
   const unidades = ["CGOV", "UCR", "UPTD"];
   const periodos = ["Semanal", "Mensal", "Trimestral", "Quadrimestral", "Semestral", "Anual", "Bienal"];
 
-  const [formData, setFormData] = useState({});
+ const [formData, setFormData] = useState({
+  NM_DEMANDA: "",
+  DT_SOLICITACAO: "",
+  DT_ABERTURA: "",
+  DT_CONCLUSAO: "",
+  CATEGORIA: "",
+  STATUS: "",
+  PO_SUBTDCR: "",
+  NM_PO_DEMANDANTE: "",
+  NM_AREA_DEMANDANTE: "",
+  UNIDADE: "",
+  NR_PROCESSO_SEI: "",
+  PERIODICO: "",
+  PERIODICIDADE: "",
+  PATROCINADOR: ""
+});
   
-  
+  const fetchItems = async () => {
+    try {
+      const responseCategoria = await getAllCategoria();
+      const responseDemandante = await getAllDemandantes();
+      setDemandantes(responseDemandante)
+      setCategorias(responseCategoria);
+    } catch (error) {
+      console.error("Erro ao buscar categorias:", error);
+      setCategorias([]); // Evita que a tabela quebre caso ocorra erro na API
+    }
+  };
+
+   useEffect(() => {
+    fetchItems();
+  }, []);
+
   useEffect(() => {
     const fetchItem = async () => {
       if (itemId) {
@@ -32,12 +65,13 @@ const EditFormModal = ({ itemId, onSave , onClose}) => {
               CATEGORIA: response.CATEGORIA,
               STATUS: response.STATUS,
               PO_SUBTDCR: response.PO_SUBTDCR, // Mapear o nome correto
-              NM_PO_DEMANDANTE: response.NM_PO_DEMANDANTE,
+              NM_PO_DEMANDANTE: response.NM_PO_DEMANDANTE ,
+              NM_AREA_DEMANDANTE: response.NM_AREA_DEMANDANTE,
               UNIDADE: response.UNIDADE,
-              NR_PROCESSO_SEI: response.NR_PROCESSO_SEI,
+              NR_PROCESSO_SEI: response.NR_PROCESSO_SEI ,
               PERIODICO: response.PERIODICO,
               PERIODICIDADE: response.PERIODICIDADE,
-              PATROCINADOR: response.PATROCINADOR
+              PATROCINADOR: response.PATROCINADOR 
             });
           }
         } catch (error) {
@@ -58,19 +92,38 @@ const EditFormModal = ({ itemId, onSave , onClose}) => {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+
+  const body = {};
+
+  if (formData.NM_DEMANDA) body.NM_DEMANDA = formData.NM_DEMANDA;
+  if (formData.DT_SOLICITACAO) body.DT_SOLICITACAO = formData.DT_SOLICITACAO;
+  if (formData.DT_ABERTURA) body.DT_ABERTURA = formData.DT_ABERTURA;
+  if (formData.DT_CONCLUSAO) body.DT_CONCLUSAO = formData.DT_CONCLUSAO;
+  if (formData.CATEGORIA) body.CATEGORIA = formData.CATEGORIA;
+  if (formData.STATUS) body.STATUS = formData.STATUS;
+  if (formData.PO_SUBTDCR) body.PO_SUBTDCR = formData.PO_SUBTDCR;
+  if (formData.NM_PO_DEMANDANTE) body.NM_PO_DEMANDANTE = formData.NM_PO_DEMANDANTE;
+  if (formData.NM_AREA_DEMANDANTE) body.NM_AREA_DEMANDANTE = formData.NM_AREA_DEMANDANTE;
+  if (formData.UNIDADE) body.UNIDADE = formData.UNIDADE;
+  if (formData.NR_PROCESSO_SEI) body.NR_PROCESSO_SEI = formData.NR_PROCESSO_SEI;
+  if (formData.PERIODICO) body.PERIODICO = formData.PERIODICO;
+  if (formData.PERIODICIDADE) body.PERIODICIDADE = formData.PERIODICIDADE;
+  if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
+
   try {
-    const response = await updateItem(itemId, formData);
+    const response = await updateItem(itemId, body);
     if (response) {
-      alert('Item atualizado com sucesso!');
+      alert("Item atualizado com sucesso!");
       onClose(); // Fecha o modal
       window.location.reload(); // Recarrega a página
     } else {
-      alert('Erro ao atualizar item.');
+      alert("Erro ao atualizar item.");
     }
   } catch (error) {
-    console.error('Erro ao enviar requisição:', error);
+    console.error("Erro ao enviar requisição:", error);
   }
 };
+
 
 
   return (
@@ -109,23 +162,33 @@ const handleSubmit = async (e) => {
                 value={formData[field] || ''}
                 onChange={handleChange}
                 className="mt-1 p-2 border border-gray-300 rounded"
-                required
+                /** Regras aplicadas SOMENTE para DT_CONCLUSAO */
+                required={field === 'DT_CONCLUSAO' && formData.PERIODICO === 'Concluído'}
+                disabled={field === 'DT_CONCLUSAO' && formData.STATUS !== 'Concluído'}
               />
             </div>
           ))}
 
+
           {/* Categoria */}
           <div className="flex flex-col">
             <label htmlFor="CATEGORIA" className="text-sm font-semibold text-gray-700">Categoria</label>
-            <input
-              type="text"
+            <select
               id="CATEGORIA"
               name="CATEGORIA"
               value={formData.CATEGORIA || ''}
               onChange={handleChange}
               className="mt-1 p-2 border border-gray-300 rounded"
               required
-            />
+            >
+              <option value="">Selecione uma categoria</option>
+              {categorias.map((item) => (
+                <option key={item.ID} value={item.NM_CATEGORIA}>
+                  {item.NM_CATEGORIA}
+                </option>
+              ))}
+      </select>
+           
           </div>
 
           {/* Status */}
@@ -164,6 +227,27 @@ const handleSubmit = async (e) => {
             </select>
           </div>
 
+          <div className="flex flex-col">
+          <label htmlFor="NM_AREA_DEMANDANTE" className="text-sm font-semibold text-gray-700">
+            Nome da Área Demandante
+          </label>
+          <select
+        id="NM_AREA_DEMANDANTE"
+        name="NM_AREA_DEMANDANTE"
+        value={formData.NM_AREA_DEMANDANTE || ''}
+        onChange={handleChange}
+        className="mt-1 p-2 border border-gray-300 rounded"
+        required
+      >
+        <option value="">Selecione uma área</option>
+        {demandantes.map((item) => (
+          <option key={item.ID} value={item.NM_DEMANDANTE}>
+            {item.NM_DEMANDANTE}
+          </option>
+        ))}
+      </select>
+        </div>
+
           {/* Unidade */}
           <div className="flex flex-col">
             <label htmlFor="UNIDADE" className="text-sm font-semibold text-gray-700">Unidade</label>
@@ -192,7 +276,7 @@ const handleSubmit = async (e) => {
               value={formData.NR_PROCESSO_SEI || ''}
               onChange={handleChange}
               className="mt-1 p-2 border border-gray-300 rounded"
-              required
+           
             />
           </div>
 
@@ -242,7 +326,7 @@ const handleSubmit = async (e) => {
               value={formData.PATROCINADOR || ''}
               onChange={handleChange}
               className="mt-1 p-2 border border-gray-300 rounded"
-              required
+            
             />
           </div>
 

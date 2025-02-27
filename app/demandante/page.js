@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { deleteDemandante, getAllDemandantes } from "../services/demandanteService";
 import DemandanteForm from "../components/DemandanteForm";
 import 'material-icons/iconfont/material-icons.css';
+import Header from "../components/Header";
 
 export default function Demandante() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -64,77 +65,7 @@ const handleAuthenticate = () => {
 
   return (
     <div className="text-black">
-          <nav className="bg-gray-900">
-        <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-            <div className="relative flex h-16 items-center justify-between">
-                <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                   
-                    <button type="button" 
-                        className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                        <span className="sr-only">Abrir menu principal</span>
-                      
-                        <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                            stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round"
-                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                        </svg>
-                    </button>
-                </div>
-               
-                <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start ">
-                    <div className="flex flex-shrink-0 items-center">
-                        <img className="h-14 w-auto"
-                            src="images.png"
-                            alt="SUBTDCR"/>
-                    </div>
-                    
-                    <div className="hidden sm:ml-6 sm:block">
-                        <div className="flex space-x-4">
-                            <a href="/" className="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium">Home</a>
-                            
-                            <a href="" onClick={() => {router.push()}} className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Demandas</a>
-
-                            <a href="" onClick={() => {router.push("/categoria")}} className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Categorias</a>
-
-                            <a href="" onClick={() => {router.push("/demandante")}} className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Demandante</a>
-                        </div>
-                    </div>
-                   
-                </div>
-                <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                {!isAuthenticated &&
-                    ( <div className="hidden sm:ml-6 sm:block">
-                        <div className="flex space-x-4">
-                            <a href="/login"
-                                className="text-gray-300 hover:bg-gray-700 hover:text-white block border-2 rounded-md px-3 py-2 text-base font-medium">Área
-                                logada</a>
-                        </div>
-                    </div>)
-                }
-                   
-                   
-                </div>
-            </div>
-        </div>
-       {isAuthenticated && (
-  <div className="sm:block" id="mobile-menu">
-    <div className="flex items-center space-x-4 pb-4 bg-gray-800 rounded-lg p-3 shadow-lg">
-      <div className="flex-1">
-        <p className="text-white text-sm font-semibold">Logado como:</p>
-        <p className="text-green-400 text-lg font-bold">Administrador</p>
-      </div>
-      <button
-        onClick={handleAuthenticate}
-        className="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-lg transition duration-300"
-      >
-        Logout
-      </button>
-    </div>
-  </div>
-)}
-
-       
-    </nav>
+      <Header></Header> 
 
       {/* Seção Principal */}
       <div className="mx-auto bg-white mt-5">
