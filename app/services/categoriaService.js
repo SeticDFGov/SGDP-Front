@@ -1,4 +1,4 @@
-const API_URL =  process.env.NEXT_PUBLIC_API_URL_CATEGORIA || "http://localhost:8080/api/categoria"
+const API_URL =  process.env.NEXT_PUBLIC_API_URL_CATEGORIA || "http://localhost:5000/api/categoria"
 
 export const createCategoria = async (itemData) => {
   try {

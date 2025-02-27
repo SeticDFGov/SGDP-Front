@@ -1,4 +1,4 @@
-const API_URL =  process.env.NEXT_PUBLIC_API_URL_DEMANDANTE || "http://localhost:8080/api/demandante"
+const API_URL =  process.env.NEXT_PUBLIC_API_URL_DEMANDANTE || "http://localhost:5000/api/demandante"
 
 export const createDemandante = async (itemData) => {
   try {

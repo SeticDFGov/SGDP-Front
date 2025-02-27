@@ -373,25 +373,24 @@ return (
         </div>
        
     
-   <div className=" max-w-6xl mx-auto bg-white text-black">
-            <div className="flex flex-col lg:flex-row p-4 ">
-                <div className="w-full lg:w-2/4 mb-4 lg:mb-0 lg:mr-4 bg-white shadow-lg rounded-2xl">
-                    <div className=" p-4 col-span-1 lg:col-span-2">
-                        <h3 className="text-xl font-semibold text-center mt-5 pb-5">Situação da demanda</h3>
-                        <canvas ref={doughnutChartRef}></canvas>
-                    </div>
-                </div>
-                <div className="w-full lg:w-2/4 mb-4 lg:mb-0 lg:mr-4">
-                    <div className="bg-white shadow-lg rounded-2xl p-4 col-span-1 lg:col-span-2">
-                        <h3 className="text-xl font-semibold text-center pb-5">Quantidade de demandas por Área demandante</h3>
-                        <canvas ref={demandanteChartRef}></canvas>
-                        <h3 className="text-xl font-semibold text-center pt-10 pb-5">Tempo Médio por Tipo</h3>
-                        <canvas ref={barChartRef}></canvas>
-                    </div>
-                </div>
-
-            </div>
+ <div className="max-w-6xl mx-auto bg-white text-black">
+    <div className="flex flex-wrap lg:flex-nowrap justify-center gap-4 p-4">
+        <div className="w-full lg:w-1/3 bg-white shadow-lg rounded-2xl p-3 h-64 flex flex-col items-center justify-center">
+            <h3 className="text-lg font-semibold text-center pb-3">Situação da demanda</h3>
+            <canvas ref={doughnutChartRef} className="max-h-40"></canvas>
         </div>
+        <div className="w-full lg:w-1/3 bg-white shadow-lg rounded-2xl p-3 h-64 flex flex-col items-center justify-center">
+            <h3 className="text-lg font-semibold text-center pb-3">Quantidade de demandas por Área demandante</h3>
+            <canvas ref={demandanteChartRef} className="max-h-40"></canvas>
+        </div>
+        <div className="w-full lg:w-1/3 bg-white shadow-lg rounded-2xl p-3 h-64 flex flex-col items-center justify-center">
+            <h3 className="text-lg font-semibold text-center pb-3">Tempo Médio por Tipo</h3>
+            <canvas ref={barChartRef} className="max-h-40"></canvas>
+        </div>
+    </div>
+</div>
+
+
 
     
     <div className="mx-auto bg-white mt-5">

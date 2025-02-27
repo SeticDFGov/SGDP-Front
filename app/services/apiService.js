@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/sharepoint";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/sharepoint";
 
 export const getAllItems = async () => {
   try {
