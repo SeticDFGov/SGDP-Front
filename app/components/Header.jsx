@@ -1,5 +1,6 @@
 import { useRouter } from "next/navigation";
 import React, {useState, useEffect} from "react"
+import { login } from "../services/authService";
 
 export const Header = () => {
     
@@ -7,13 +8,18 @@ export const Header = () => {
     const router = useRouter()
 
     const handleLogout = () => {
+        localStorage.removeItem("authenticated")
         setIsAuthenticated(false)
+        window.location.reload()
+   
         
     }
-    const handleAuthenticate = () => {
-    localStorage.removeItem("authenticated");
-     setIsAuthenticated(false)
-     window.location.reload()
+    const login1 = () => {
+  window.location.href = `${API_URL}/api/auth/login`;
+};
+
+    const handleAuthenticate = async () => {
+        await login()
    }
     useEffect(() => {
     const authStatus = localStorage.getItem("authenticated") === "true";
@@ -59,13 +65,13 @@ export const Header = () => {
                         {isAuthenticated ? (
                             <div className="flex items-center space-x-4">
                                 <span className="material-icons text-white text-xl">person</span>
-                                <span className="text-white text-sm font-medium">Administrador</span>
-                                <button onClick={handleAuthenticate} className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md text-sm font-medium">
+                                <span className="text-white text-sm font-medium">{localStorage.getItem("userName")}</span>
+                                <button onClick={() => handleLogout()} className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md text-sm font-medium">
                                     Logout
                                 </button>
                             </div>
                         ) : (
-                            <a href="/login" className="text-gray-300 hover:bg-gray-700 hover:text-white border-2 rounded-md px-3 py-2 text-base font-medium">
+                            <a onClick={() => login()} className="text-gray-300 hover:bg-gray-700 hover:text-white border-2 rounded-md px-3 py-2 text-base font-medium cursor-pointer">
                                 Área logada
                             </a>
                         )}

@@ -4,7 +4,10 @@ import { getAllCategoria } from "../services/categoriaService";
 import { getAllDemandantes } from "../services/demandanteService";
 
 
-const CadastroDemanda = ({onCloses}) => {
+const CadastroDemanda = ({onClose}) => {
+  
+  if(!onClose) return null;
+
   const [categorias, setCategorias] = useState([])
   const [demandantes, setDemandantes] = useState([])
   const [formData, setFormData] = useState({
@@ -105,6 +108,9 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
   };
 
   return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 text-black">
+
+   
      <form onSubmit={handleSubmit} className="space-y-4 p-6 bg-white rounded-lg shadow-md text-black">
       <h2 className="text-2xl font-semibold text-center">Cadastro de Demanda</h2>
 
@@ -394,11 +400,15 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
         </div>
       </div>
 
-      <button type="submit" className="w-full bg-blue-500 text-white p-2 mt-4 rounded">
-        Cadastrar Demanda
-      </button>
+     
+      
+      <div className="flex justify-end space-x-2">
+          <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Cadastrar Demanda</button>
+          <button onClick={onClose} type="button" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Fechar</button>
+        </div>
     </form>
-
+    
+ </div>
   );
 };
 

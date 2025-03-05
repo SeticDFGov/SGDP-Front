@@ -2,12 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import 'material-icons/iconfont/material-icons.css';
 import Chart from "chart.js/auto";
 import { deleteItem, getAllItems, tmpAVG } from "../services/apiService";
-import { FaTrash, FaEdit , FaPlus} from 'react-icons/fa';
+import { FaTrash, FaEdit , FaPlus, FaEye} from 'react-icons/fa';
 import Modal from "./Modal";
 import CadastroDemanda from "./DemandaForm";
 import EditFormModal from "./EditDemandaForm";
 import { useRouter } from "next/navigation";
 import Header from "./Header";
+import DemandDetailsModal from "./Detalhamento";
+
 
 const Dashboard = () => {
   const [items, setItems] = useState([]);
@@ -24,8 +26,10 @@ const Dashboard = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isModalEditOpen, setIsModalEditOpen] = useState(false)
     const [selectedItemId, setSelectedItemId] = useState(null);
+    const [isModalDetailOpen, setIsModalDetailOpen] = useState(false)
+    const [nomeId, setNomeId] = useState(null)
     const [tmp, setTmp] = useState({})
-    
+    const [detail, setDetail] = useState(null)
    const handleOpenEditModal = (id) => {
     setSelectedItemId(id);
     setIsModalEditOpen(true);
@@ -35,7 +39,21 @@ const Dashboard = () => {
     setIsModalEditOpen(false);
     setSelectedItemId(null);
     };
+   const handleOpenDetailModal = (id, item) => {
+    console.log(id)
+    setDetail(item)    
+    setNomeId(id);
+    setIsModalDetailOpen(true);
+  };
 
+  // Fecha o modal
+  const handleCloseDetailModal = () => {
+    // Verifique se o modal está aberto antes de tentar fechá-lo
+    if (isModalDetailOpen) {
+      setIsModalDetailOpen(false);
+      setNomeId(null);
+    }
+  };
     const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -64,7 +82,7 @@ const Dashboard = () => {
     setIsLoading(true);
     try {
       const data = await tmpAVG();
-      console.log("Media por categoria:", data);
+    
       setTmp(data);
         
     } catch (error) {
@@ -101,7 +119,7 @@ const Dashboard = () => {
     setIsLoading(true);
     try {
         const data = await getAllItems();
-        console.log("Dados recebidos:", data);
+       
 
         if (!Array.isArray(data)) {
         console.warn("O retorno da API não é um array:", data);
@@ -145,8 +163,7 @@ const updateCharts = (data) => {
     if (!categorias[item.CATEGORIA]) {
       categorias[item.CATEGORIA] = { soma: 0, count: 0 };
     }
-    console.log("ite,m")
-    console.log(item)
+    
     categorias[item.CATEGORIA].soma += 1;
     categorias[item.CATEGORIA].count += 1;
 
@@ -495,7 +512,9 @@ return (
            <Modal isOpen={isModalEditOpen} onClose={handleCloseEditModal}>
             <EditFormModal itemId = {selectedItemId} onClose={handleCloseEditModal}></EditFormModal>
            </Modal>
+              <DemandDetailsModal isOpen={isModalDetailOpen} onClose={handleCloseDetailModal} demandaId={nomeId} item = {detail}>
 
+              </DemandDetailsModal>
 
             <div className="flex gap-4 text-black">
               
@@ -510,8 +529,8 @@ return (
                                 <th className="border p-2 text-left">Área Demandante</th>
                                 <th className="border p-2 text-left">Data da Conclusão</th>
                                 <th className="border p-2 text-left">Unidade SUBTDCR</th>
-                                <th className="border p-2 text-left">Detalhes</th>
-                                {isAuthenticated && <th className="border p-2">Ações</th>}
+                                {isAuthenticated && <th className="border p-2 text-left">Ações</th>}
+                               
                             </tr>
                         </thead>
                         <tbody>
@@ -546,24 +565,42 @@ return (
                                 })()
                                     }
                                 </td>
+
                                 <td className="border p-2">{item.UNIDADE}</td>
-                                <td className="border p-2">{item.NM_AREA_SUBTDCR}</td>
-                                {isAuthenticated && (
-                                <td className="border p-2 flex gap-2 justify-center">
-                                <button
-                                    className="text-red-500 hover:text-red-700"
-                                    onClick={() => handleDeleteItem(item.ID)}
-                                >
-                                    <FaTrash />
-                                </button>
-                                <button
-                                    className="text-blue-500 hover:text-blue-700"
-                                    onClick={() => handleOpenEditModal(item.ID)}
-                                >
-                                    <FaEdit />
-                                </button>
-                                </td>
-                            )}
+                               
+                                
+  {isAuthenticated && (
+    <td className="border p-2 flex gap-2 justify-center">
+    <button
+      className="text-red-500 hover:text-red-700"
+      onClick={() => { handleOpenDetailModal(item.NM_DEMANDA, item); setNomeId(item.NM_DEMANDA); }}
+    >
+      <FaEye />
+    </button>
+    </td>
+  )}
+
+
+  {isAuthenticated && (
+    <td className="border p-2 flex gap-2 justify-center">
+    <>
+      <button
+        className="text-red-500 hover:text-red-700"
+        onClick={() => handleDeleteItem(item.ID)}
+      >
+        <FaTrash />
+      </button>
+      <button
+        className="text-blue-500 hover:text-blue-700"
+        onClick={() => handleOpenEditModal(item.ID)}
+      >
+        <FaEdit />
+      </button>
+    </>
+    </td>
+  )}
+
+
                                 </tr>
                             ))}
                            
