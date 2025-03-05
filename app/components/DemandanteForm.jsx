@@ -6,6 +6,7 @@ import { createDemandante } from "../services/demandanteService";
 const DemandanteForm = ({ onClose }) => {
   const [demandante, setDemandante] = useState({
     NM_DEMANDANTE: "",
+    NM_SIGLA:""
   });
 
   const [error, setError] = useState("");
@@ -13,7 +14,7 @@ const DemandanteForm = ({ onClose }) => {
   const handleSubmit = async () => {
     try {
       await createDemandante(demandante);
-      setDemandante({ NM_DEMANDANTE: "" });
+      setDemandante({ NM_DEMANDANTE: "", NM_SIGLA:"" });
       onClose(); // Fecha o modal após sucesso
     } catch {
       setError("Erro no momento do cadastro do demandante");
@@ -47,6 +48,14 @@ const DemandanteForm = ({ onClose }) => {
           placeholder="Nome da área demandante"
           className="w-full p-2 border border-gray-300 rounded mt-2"
           value={demandante.NM_DEMANDANTE}
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          name="NM_SIGLA"
+          placeholder="Sigla"
+          className="w-full p-2 border border-gray-300 rounded mt-2"
+          value={demandante.NM_SIGLA}
           onChange={handleChange}
         />
         <button

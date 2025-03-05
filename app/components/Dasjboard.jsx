@@ -208,6 +208,7 @@ const updateCharts = (data) => {
     ],
   },
     options: {
+      indexAxis: "y", // Inverte os eixos (X vira Y e Y vira   X)
       plugins: {
         legend: {
           display: false,
@@ -259,6 +260,7 @@ const updateCharts = (data) => {
       ],
     },
     options: {
+      indexAxis: "y", // Inverte os eixos (X vira Y e Y vira   X)
       plugins: {
         legend: {
           display: true,
@@ -304,7 +306,7 @@ return (
 
                     <div className="text-left">
                         <h3 className="text-3xl font-bold">{concluido}</h3>
-                        <p className="text-gray-600">demandas concluídas</p>
+                        <p className="text-gray-600">Demandas Concluídas</p>
                     </div>
                     <span className="material-icons text-5xl" style={{color: '#17eba0'}}>check_circle</span>
                 </div>
@@ -313,7 +315,7 @@ return (
                     style={{borderColor: "#ffbc44" ,height: "auto"}}>
                     <div className="text-left">
                         <h3 className="text-3xl font-bold">{andamneto}</h3>
-                        <p className="text-gray-600">demandas em andamento</p>
+                        <p className="text-gray-600">Demandas em Andamento</p>
                     </div>
                     <span className="material-icons text-5xl" style={{color: "#ffbc44"}}>pending</span>
                 </div>
@@ -322,7 +324,7 @@ return (
                     style={{borderColor: "#fc6161", height: "auto"}}>
                     <div className="text-left">
                         <h3 className="text-3xl font-bold">{atrasado}</h3>
-                        <p className="text-gray-600">demandas atrasadas</p>
+                        <p className="text-gray-600">Demandas Atrasadas</p>
                     </div>
                     <span className="material-icons text-5xl" style={{color: "#fc6161"}}>warning</span>
                 </div>
@@ -340,10 +342,10 @@ return (
 
                 <div className="flex-1 relative">
                   <select
-                    defaultValue="todos"
+                    defaultValue=""
                     className="w-full border rounded-full p-2 pl-4 pr-10 bg-white text-gray-900 appearance-none"
                     >
-                    <option value="" disabled>
+                    <option value="" >
                         Selecione o período
                     </option>
                     <option value="todos">Todos</option>
@@ -365,10 +367,10 @@ return (
                 </div>
                 <div className="flex-1 relative">
                    <select
-                        defaultValue="todas"
+                        defaultValue=""
                         className="w-full border rounded-full p-2 pl-4 pr-10 bg-white text-gray-900 appearance-none"
                         >
-                        <option value="" disabled>
+                        <option value="" >
                             Selecione uma categoria
                         </option>
                         <option value="todas">Todas</option>
@@ -417,10 +419,10 @@ return (
 
                 <div className="flex-1 relative">
                    <select
-                    defaultValue="todas"
+                    defaultValue=""
                     className="w-full border rounded-full p-2 pl-4 pr-10 bg-gray-900 text-white appearance-none"
                     >
-                    <option value="" disabled>
+                    <option value="" >
                         Selecione uma categoria
                     </option>
                     <option value="todas">Todas</option>
@@ -439,10 +441,10 @@ return (
                 </div>
                 <div className="flex-1 relative">
                     <select
-  defaultValue="todas"
+  defaultValue=""
   className="w-full border rounded-full p-2 pl-4 pr-10 bg-gray-900 text-white appearance-none"
 >
-  <option value="" disabled>
+  <option value="" >
     Selecione a unidade
   </option>
   <option value="todas">Todas</option>
@@ -466,7 +468,7 @@ return (
   defaultValue=""
   className="w-full border rounded-full p-2 pl-4 pr-10 bg-gray-900 text-white appearance-none"
 >
-  <option value="" disabled>
+  <option value="" >
     Selecione o status
   </option>
   <option value="Atrasado">Atrasado</option>
@@ -524,7 +526,7 @@ return (
                             <tr className="bg-gray-50">
                                 <th className="border p-2 text-left">Nome Demanda</th>
                                 <th className="border p-2 text-left">Data de Abertura</th>
-                                <th className="border p-2 text-left">Status</th>
+                                <th className="border p-2 text-left">Situação</th>
                                 <th className="border p-2 text-left">Categoria</th>
                                 <th className="border p-2 text-left">Área Demandante</th>
                                 <th className="border p-2 text-left">Data da Conclusão</th>

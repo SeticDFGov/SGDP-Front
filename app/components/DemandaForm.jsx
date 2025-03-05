@@ -176,8 +176,8 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
             value={formData.DT_CONCLUSAO}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded"
-            required={formData.PERIODICO === "Concluído"}
-            disabled={formData.STATUS !== "Concluído"}
+            required={formData.PERIODICO=== "Concluído"}
+           
           />
         </div>
 
@@ -206,7 +206,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
         {/* Status */}
         <div className="flex flex-col">
           <label htmlFor="STATUS" className="text-sm font-semibold text-gray-700">
-            Status
+            Situação
           </label>
           <select
             id="STATUS"
@@ -218,8 +218,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
           >
             <option value="">Selecione o Status</option>
             <option value="Em andamento">Em andamento</option>
-            <option value="Atrasados">Atrasadas</option>
-            <option value="Realizadas">Realizadas</option>
+            <option value="Atrasado">Atrasado</option>
             <option value="Não iniciada">Não iniciada</option>
 
           </select>

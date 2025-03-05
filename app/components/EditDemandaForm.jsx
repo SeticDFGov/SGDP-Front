@@ -165,7 +165,7 @@ const handleSubmit = async (e) => {
 
           {[
             { id: "CATEGORIA", label: "Categoria", options: categorias.map(item => ({ value: item.NM_CATEGORIA, label: item.NM_CATEGORIA })) },
-            { id: "STATUS", label: "Status", options: ["Em andamento", "Atrasado", "Concluído"].map(value => ({ value, label: value })) },
+            { id: "STATUS", label: "Situação", options: ["Em andamento", "Atrasado", "Concluído", "Não iniciada"].map(value => ({ value, label: value })) },
             { id: "PO_SUBTDCR", label: "Nome do PO Subtdcr", options: responsaveis.map(resp => ({ value: resp, label: resp })) },
             { id: "NM_AREA_DEMANDANTE", label: "Nome da Área Demandante", options: demandantes.map(item => ({ value: item.NM_DEMANDANTE, label: item.NM_DEMANDANTE })) },
             { id: "UNIDADE", label: "Unidade", options: unidades.map(un => ({ value: un, label: un })) },

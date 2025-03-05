@@ -92,6 +92,7 @@ const handleAuthenticate = () => {
                 <thead>
                   <tr className="bg-gray-50">
                     <th className="border p-2 text-left">Nome</th>
+                    <th className="border p-2 text-left">Sigla</th>
                     <th className="border w-20 text-center">Ações</th>
                   </tr>
                 </thead>
@@ -100,6 +101,7 @@ const handleAuthenticate = () => {
                     items.map((item) => (
                       <tr key={item.ID} className="shadow">
                         <td className="border p-2">{item.NM_DEMANDANTE}</td>
+                        <td className="border p-2">{item.NM_SIGLA}</td>
                         <td className="border p-2">
                           <div className="flex justify-center items-center gap-2">
                             <button id="delete" className="text-gray-900 hover:scale-105" onClick={() => {handleDeleteItem(item.ID)}}>
