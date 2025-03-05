@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_API_URL_AUTH || "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL_AUTH || "http://localhost:5000";
 
 
 export const login = async () => {
