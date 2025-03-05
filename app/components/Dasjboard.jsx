@@ -9,6 +9,7 @@ import EditFormModal from "./EditDemandaForm";
 import { useRouter } from "next/navigation";
 import Header from "./Header";
 import DemandDetailsModal from "./Detalhamento";
+import { getAllDemandantes } from "../services/demandanteService";
 
 
 const Dashboard = () => {
@@ -30,6 +31,8 @@ const Dashboard = () => {
     const [nomeId, setNomeId] = useState(null)
     const [tmp, setTmp] = useState({})
     const [detail, setDetail] = useState(null)
+    const [demandante1, setDemandantes] = useState([])
+    const [siglasMap, setSiglasMap] = useState([])
    const handleOpenEditModal = (id) => {
     setSelectedItemId(id);
     setIsModalEditOpen(true);
@@ -141,13 +144,47 @@ useEffect(() => {
 useEffect(() => {
     handleTmpAVG();
   }, []);
+const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+useEffect(() => {
+  const fetchDemandantes = async () => {
+    try {
+      const response = await getAllDemandantes();
+      console.log("Resposta da API:", response);
+
+      if (!Array.isArray(response)) {
+        console.error("Erro: A resposta da API não é um array!");
+        return;
+      }
+
+      setDemandantes(response);
+
+      const newSiglasMap = {};
+      response.forEach((item) => {
+        if (item.NM_DEMANDANTE && item.NM_SIGLA) {
+          newSiglasMap[item.NM_DEMANDANTE] = item.NM_SIGLA;
+        }
+      });
+
+      console.log("Siglas Map Construído:", newSiglasMap);
+      setSiglasMap(newSiglasMap);
+      setIsDataLoaded(true); // Dados carregados
+
+    } catch (error) {
+      console.error("Erro ao buscar demandantes:", error);
+    }
+  };
+
+  fetchDemandantes();
+}, []);
+
 
 useEffect(() => {
   
-    if (items.length > 0 || Object.keys(tmp).length > 0) {
+    if (items.length > 0 || Object.keys(tmp).length > 0 || Object.keys(siglasMap).length >0) {
     updateCharts(items);
   }
-}, [items, tmp]);
+}, [items, tmp, siglasMap]);
 
 const updateCharts = (data) => {
   const categorias = {};
@@ -241,34 +278,56 @@ const updateCharts = (data) => {
       },
     },
   });
-
   // Gráfico de demandantes
-  const demandanteLabels = Object.keys(demandante);
-  const demandanteValues = Object.values(demandante);
+const demandanteLabels = Object.keys(demandante).map(nome => {
+  // Verificar se a chave existe no siglasMap
+  const sigla = siglasMap[nome] || nome; // Se não encontrar a sigla, usa o nome completo
+  console.log("Buscando sigla para:", nome, "->", sigla); // Verificar o que está sendo retornado
+  return sigla; // Retorna a sigla ou o nome completo
+});
 
-  destroyChart(demandanteChartRef);
-  demandanteChartRef.current.chartInstance = new Chart(demandanteChartRef.current, {
-    type: "bar",
-    data: {
-      labels: demandanteLabels ,
-      datasets: [
-        {
-          label: "Quantidade de demandas por Demandante",
-          data: demandanteValues,
-          backgroundColor: "#1c2c34",
-        },
-      ],
-    },
-    options: {
-      indexAxis: "y", // Inverte os eixos (X vira Y e Y vira   X)
-      plugins: {
-        legend: {
-          display: true,
-          position: "bottom", // Move a legenda para baixo
-        },
+const demandanteValues = Object.values(demandante);
+console.log(siglasMap);
+console.log("Chaves do siglasMap:", Object.keys(siglasMap));
+
+// Combine os dados em um único array para ordenação
+const combinedData = demandanteLabels.map((label, index) => ({
+  label,
+  value: demandanteValues[index],
+}));
+
+// Ordena os dados do maior para o menor com base no valor
+combinedData.sort((a, b) => b.value - a.value);
+
+// Separa os dados ordenados de volta em rótulos e valores
+const sortedLabels = combinedData.map(item => item.label);
+const sortedValues = combinedData.map(item => item.value);
+
+// Atualize o gráfico com os dados ordenados
+destroyChart(demandanteChartRef);
+demandanteChartRef.current.chartInstance = new Chart(demandanteChartRef.current, {
+  type: "bar",
+  data: {
+    labels: sortedLabels, // Rótulos ordenados
+    datasets: [
+      {
+        label: "Quantidade de demandas por Demandante",
+        data: sortedValues, // Valores ordenados
+        backgroundColor: "#1c2c34",
+      },
+    ],
+  },
+  options: {
+    indexAxis: "y", // Inverte os eixos (X vira Y e Y vira X)
+    plugins: {
+      legend: {
+        display: true,
+        position: "bottom", // Move a legenda para baixo
       },
     },
-  });
+  },
+});
+
 
   // Gráfico de linha (fixo conforme o exemplo)
   destroyChart(lineChartRef);
