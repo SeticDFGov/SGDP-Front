@@ -321,7 +321,7 @@ demandanteChartRef.current.chartInstance = new Chart(demandanteChartRef.current,
     indexAxis: "y", // Inverte os eixos (X vira Y e Y vira X)
     plugins: {
       legend: {
-        display: true,
+        display: false,
         position: "bottom", // Move a legenda para baixo
       },
     },
@@ -528,10 +528,11 @@ return (
   className="w-full border rounded-full p-2 pl-4 pr-10 bg-gray-900 text-white appearance-none"
 >
   <option value="" >
-    Selecione o status
+    Selecione a situação
   </option>
   <option value="Atrasado">Atrasado</option>
   <option value="Em andamento">Em andamento</option>
+  <option value="Concluído">Não iniciada</option>
   <option value="Concluído">Concluído</option>
 </select>
 

@@ -216,7 +216,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
             className="mt-1 p-2 border border-gray-300 rounded"
             required
           >
-            <option value="">Selecione o Status</option>
+            <option value="">Selecione a Situação</option>
             <option value="Em andamento">Em andamento</option>
             <option value="Atrasado">Atrasado</option>
             <option value="Não iniciada">Não iniciada</option>
@@ -288,7 +288,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
         className="mt-1 p-2 border border-gray-300 rounded"
         required
       >
-        <option value="">Selecione uma categoria</option>
+        <option value="">Selecione uma área Demandante</option>
         {demandantes.map((item) => (
           <option key={item.ID} value={item.NM_DEMANDANTE}>
             {item.NM_DEMANDANTE}
