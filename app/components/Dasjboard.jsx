@@ -589,6 +589,8 @@ return (
                                 <th className="border p-2 text-left">Situação</th>
                                 <th className="border p-2 text-left">Categoria</th>
                                 <th className="border p-2 text-left">Área Demandante</th>
+                                {isAuthenticated && <th className="border p-2 text-left">Responsável</th>
+}
                                 <th className="border p-2 text-left">Data da Conclusão</th>
                                 <th className="border p-2 text-left">Unidade SUBTDCR</th>
                                 {isAuthenticated && <th className="border p-2 text-left">Ações</th>}
@@ -614,6 +616,8 @@ return (
                                 <td className="border p-2">{item.STATUS}</td>
                                 <td className="border p-2">{item.CATEGORIA}</td>
                                 <td className="border p-2">{item.NM_AREA_DEMANDANTE}</td>
+                                {isAuthenticated && <td className="border p-2">{item.PO_SUBTDCR}</td>
+ }
                                 <td className="border p-2">
                                     {
                                          (() => {
