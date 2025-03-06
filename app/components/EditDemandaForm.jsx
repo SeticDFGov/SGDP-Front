@@ -15,6 +15,11 @@ const EditFormModal = ({ itemId, onSave , onClose}) => {
   const [demandantes, setDemandantes] = useState([])
   const unidades = ["CGOV", "UCR", "UPTD"];
   const periodos = ["Semanal", "Mensal", "Trimestral", "Quadrimestral", "Semestral", "Anual", "Bienal"];
+     const fieldLabels = {
+  DT_SOLICITACAO: "Data de Solicitação",
+  DT_ABERTURA: "Data de Abertura",
+  DT_CONCLUSAO: "Data de Conclusão",
+};
 
  const [formData, setFormData] = useState({
   NM_DEMANDA: "",
@@ -145,28 +150,31 @@ const handleSubmit = async (e) => {
             />
           </div>
 
-          {["DT_SOLICITACAO", "DT_ABERTURA", "DT_CONCLUSAO"].map((field) => (
-            <div key={field} className="flex flex-col">
-              <label htmlFor={field} className="text-sm font-semibold text-gray-700">
-                {field.replace('_', ' ').replace('DT', 'Data')}
-              </label>
-              <input
-                type="date"
-                id={field}
-                name={field}
-                value={formData[field] || ''}
-                onChange={handleChange}
-                className="mt-1 p-2 border border-gray-300 rounded"
-                required={field === 'DT_CONCLUSAO' && formData.PERIODICO === 'Concluído'}
-                disabled={field === 'DT_CONCLUSAO' && formData.STATUS !== 'Concluído'}
-              />
-            </div>
-          ))}
+  
+
+{["DT_SOLICITACAO", "DT_ABERTURA", "DT_CONCLUSAO"].map((field) => (
+  <div key={field} className="flex flex-col">
+    <label htmlFor={field} className="text-sm font-semibold text-gray-700">
+      {fieldLabels[field] || field} {/* Usa o nome amigável ou mantém o original */}
+    </label>
+    <input
+      type="date"
+      id={field}
+      name={field}
+      value={formData[field] || ''}
+      onChange={handleChange}
+      className="mt-1 p-2 border border-gray-300 rounded"
+      required={field === 'DT_CONCLUSAO' && formData.PERIODICO === 'Concluído'}
+      disabled={field === 'DT_CONCLUSAO' && formData.STATUS !== 'Concluído'}
+    />
+  </div>
+))}
+
 
           {[
             { id: "CATEGORIA", label: "Categoria", options: categorias.map(item => ({ value: item.NM_CATEGORIA, label: item.NM_CATEGORIA })) },
             { id: "STATUS", label: "Situação", options: ["Em andamento", "Atrasado", "Concluído", "Não iniciada"].map(value => ({ value, label: value })) },
-            { id: "PO_SUBTDCR", label: "Nome do PO Subtdcr", options: responsaveis.map(resp => ({ value: resp, label: resp })) },
+            { id: "PO_SUBTDCR", label: "Nome do Responsável SUBTDCR", options: responsaveis.map(resp => ({ value: resp, label: resp })) },
             { id: "NM_AREA_DEMANDANTE", label: "Nome da Área Demandante", options: demandantes.map(item => ({ value: item.NM_DEMANDANTE, label: item.NM_DEMANDANTE })) },
             { id: "UNIDADE", label: "Unidade", options: unidades.map(un => ({ value: un, label: un })) },
             { id: "PERIODICO", label: "Periódico", options: ["Sim", "Não"].map(value => ({ value, label: value })) },
