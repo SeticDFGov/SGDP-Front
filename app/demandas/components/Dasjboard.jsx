@@ -587,7 +587,7 @@ return (
                                 <th className="border p-2 text-left">Nome Demanda</th>
                                 <th className="border p-2 text-left">Data de Abertura</th>
                                 <th className="border p-2 text-left">Situação</th>
-                                <th className="border p-2 text-left">Categoria</th>
+                                <th className="border p-2 text-left">Tipo</th>
                                 <th className="border p-2 text-left">Área Demandante</th>
                                 {isAuthenticated && <th className="border p-2 text-left">Responsável</th>
 }
