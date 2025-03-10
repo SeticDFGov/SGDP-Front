@@ -100,20 +100,22 @@ const handleSubmit = async (e) => {
 
   const body = {};
 
-  if (formData.NM_DEMANDA) body.NM_DEMANDA = formData.NM_DEMANDA;
-  if (formData.DT_SOLICITACAO) body.DT_SOLICITACAO = formData.DT_SOLICITACAO;
-  if (formData.DT_ABERTURA) body.DT_ABERTURA = formData.DT_ABERTURA;
-  if (formData.DT_CONCLUSAO) body.DT_CONCLUSAO = formData.DT_CONCLUSAO;
-  if (formData.CATEGORIA) body.CATEGORIA = formData.CATEGORIA;
-  if (formData.STATUS) body.STATUS = formData.STATUS;
-  if (formData.PO_SUBTDCR) body.PO_SUBTDCR = formData.PO_SUBTDCR;
-  if (formData.NM_PO_DEMANDANTE) body.NM_PO_DEMANDANTE = formData.NM_PO_DEMANDANTE;
-  if (formData.NM_AREA_DEMANDANTE) body.NM_AREA_DEMANDANTE = formData.NM_AREA_DEMANDANTE;
-  if (formData.UNIDADE) body.UNIDADE = formData.UNIDADE;
-  if (formData.NR_PROCESSO_SEI) body.NR_PROCESSO_SEI = formData.NR_PROCESSO_SEI;
-  if (formData.PERIODICO) body.PERIODICO = formData.PERIODICO;
-  if (formData.PERIODICIDADE) body.PERIODICIDADE = formData.PERIODICIDADE;
-  if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
+
+body.NM_DEMANDA = formData.NM_DEMANDA || '';
+body.DT_SOLICITACAO = formData.DT_SOLICITACAO || '';
+body.DT_ABERTURA = formData.DT_ABERTURA || '';
+body.DT_CONCLUSAO = formData.DT_CONCLUSAO || '';
+body.CATEGORIA = formData.CATEGORIA || '';
+body.STATUS = formData.STATUS || '';
+body.PO_SUBTDCR = formData.PO_SUBTDCR || '';
+body.NM_PO_DEMANDANTE = formData.NM_PO_DEMANDANTE || '';
+body.NM_AREA_DEMANDANTE = formData.NM_AREA_DEMANDANTE || '';
+body.UNIDADE = formData.UNIDADE || '';
+body.NR_PROCESSO_SEI = formData.NR_PROCESSO_SEI || '';
+body.PERIODICO = formData.PERIODICO || '';
+body.PERIODICIDADE = formData.PERIODICIDADE || '';
+body.PATROCINADOR = formData.PATROCINADOR || '';
+
 
   try {
     const response = await updateItem(itemId, body);
