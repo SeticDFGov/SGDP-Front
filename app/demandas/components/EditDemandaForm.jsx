@@ -164,8 +164,8 @@ const handleSubmit = async (e) => {
       value={formData[field] || ''}
       onChange={handleChange}
       className="mt-1 p-2 border border-gray-300 rounded"
-      required={field === 'DT_CONCLUSAO' && formData.PERIODICO === 'Concluído'}
-      disabled={field === 'DT_CONCLUSAO' && formData.STATUS !== 'Concluído'}
+    
+  
     />
   </div>
 ))}

@@ -144,7 +144,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
             value={formData.DT_SOLICITACAO}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded"
-            required
+            
           />
         </div>
 
@@ -160,7 +160,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
             value={formData.DT_ABERTURA}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded"
-            required
+            
           />
         </div>
 
@@ -176,7 +176,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
             value={formData.DT_CONCLUSAO}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded"
-            required={formData.PERIODICO=== "Concluído"}
+           
            
           />
         </div>
@@ -192,7 +192,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
         value={formData.CATEGORIA}
         onChange={handleChange}
         className="mt-1 p-2 border border-gray-300 rounded"
-        required
+    
       >
         <option value="">Selecione uma categoria</option>
         {categorias.map((item) => (
@@ -214,7 +214,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
             value={formData.STATUS}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded"
-            required
+           
           >
             <option value="">Selecione a Situação</option>
             <option value="Em andamento">Em andamento</option>
@@ -235,7 +235,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
     value={formData.NM_PO_SUBTDCR}
     onChange={handleChange}
     className="mt-1 p-2 border border-gray-300 rounded"
-    required
+ 
   >
     <option value="">Selecione um responsável</option>
     <option value="Adriana Christina">Adriana Christina</option>
@@ -271,7 +271,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
             value={formData.NM_PO_DEMANDANTE}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded"
-            required
+          
           />
         </div>
 
@@ -286,7 +286,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
         value={formData.NM_AREA_DEMANDANTE}
         onChange={handleChange}
         className="mt-1 p-2 border border-gray-300 rounded"
-        required
+     
       >
         <option value="">Selecione uma área Demandante</option>
         {demandantes.map((item) => (
@@ -308,7 +308,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
     value={formData.UNIDADE}
     onChange={handleChange}
     className="mt-1 p-2 border border-gray-300 rounded"
-    required
+   
   >
     <option value="">Selecione a unidade</option>
     <option value="CGOV">CGOV</option>
@@ -345,7 +345,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
     value={formData.PERIODICO}
     onChange={handleChange}
     className="mt-1 p-2 border border-gray-300 rounded"
-    required
+  
   >
     <option value="">Selecione uma opção</option>
     <option value="Sim">Sim</option>
