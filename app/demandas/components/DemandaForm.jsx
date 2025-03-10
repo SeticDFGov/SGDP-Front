@@ -366,7 +366,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
     value={formData.PERIODICIDADE}
     onChange={handleChange}
     className="mt-1 p-2 border border-gray-300 rounded"
-    required={formData.PERIODICO === "Sim"}
+    
     disabled={formData.PERIODICO !== "Sim"}
   >
     <option value="">Selecione uma opção</option>

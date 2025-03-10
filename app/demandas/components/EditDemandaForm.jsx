@@ -178,7 +178,7 @@ const handleSubmit = async (e) => {
             { id: "NM_AREA_DEMANDANTE", label: "Nome da Área Demandante", options: demandantes.map(item => ({ value: item.NM_DEMANDANTE, label: item.NM_DEMANDANTE })) },
             { id: "UNIDADE", label: "Unidade", options: unidades.map(un => ({ value: un, label: un })) },
             { id: "PERIODICO", label: "Periódico", options: ["Sim", "Não"].map(value => ({ value, label: value })) },
-            { id: "PERIODICIDADE", label: "Periodicidade", options: periodos.map(p => ({ value: p, label: p })), disabled: formData.PERIODICO !== "Sim", required: formData.PERIODICO === "Sim" }
+            { id: "PERIODICIDADE", label: "Periodicidade", options: periodos.map(p => ({ value: p, label: p })), disabled: formData.PERIODICO !== "Sim" }
           ].map(({ id, label, options, ...rest }) => (
             <div key={id} className="flex flex-col">
               <label htmlFor={id} className="text-sm font-semibold text-gray-700">{label}</label>
