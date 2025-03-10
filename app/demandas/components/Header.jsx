@@ -51,8 +51,8 @@ export const Header = () => {
                                 {isAuthenticated && (
                                     <>
                                         
-                                        <a onClick={() => router.push("/categoria")} className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium cursor-pointer">Cadastro de Tipos</a>
-                                        <a onClick={() => router.push("/demandante")} className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium cursor-pointer">Cadastro Área Demandante</a>
+                                        <a onClick={() => router.push("/demandas/categoria")} className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium cursor-pointer">Cadastro de Tipos</a>
+                                        <a onClick={() => router.push("/demandas/demandante")} className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium cursor-pointer">Cadastro Área Demandante</a>
                                     </>
                                 )}
                                 
