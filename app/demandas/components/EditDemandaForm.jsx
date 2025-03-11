@@ -64,8 +64,8 @@ const EditFormModal = ({ itemId, onSave , onClose}) => {
             // Mapear os dados da API para os campos esperados no formulário
             setFormData({
               NM_DEMANDA: response.NM_DEMANDA,
-              DT_SOLICITACAO: response.DT_SOLICITACAO.split('T')[0], // Converter para formato de data
-              DT_ABERTURA: response.DT_ABERTURA.split('T')[0], // Converter para formato de data
+              DT_SOLICITACAO: response.DT_SOLICITACAO ? response.DT_SOLICITACAO.split('T')[0] : '',
+              DT_ABERTURA: response.DT_ABERTURA ? response.DT_ABERTURA.split('T')[0] : '',
               DT_CONCLUSAO: response.DT_CONCLUSAO ? response.DT_CONCLUSAO.split('T')[0] : '',
               CATEGORIA: response.CATEGORIA,
               STATUS: response.STATUS,
@@ -102,9 +102,9 @@ const handleSubmit = async (e) => {
 
 
 body.NM_DEMANDA = formData.NM_DEMANDA || '';
-body.DT_SOLICITACAO = formData.DT_SOLICITACAO || '';
-body.DT_ABERTURA = formData.DT_ABERTURA || '';
-body.DT_CONCLUSAO = formData.DT_CONCLUSAO || '';
+body.DT_SOLICITACAO = formData.DT_SOLICITACAO ? formData.DT_SOLICITACAO.split('T')[0] : '';
+body.DT_ABERTURA = formData.DT_ABERTURA  ? formData.DT_ABERTURA.split('T')[0] : '';
+body.DT_CONCLUSAO = formData.DT_CONCLUSAO ? formData.DT_CONCLUSAO.split('T')[0] : '';
 body.CATEGORIA = formData.CATEGORIA || '';
 body.STATUS = formData.STATUS || '';
 body.PO_SUBTDCR = formData.PO_SUBTDCR || '';
@@ -116,7 +116,7 @@ body.PERIODICO = formData.PERIODICO || '';
 body.PERIODICIDADE = formData.PERIODICIDADE || '';
 body.PATROCINADOR = formData.PATROCINADOR || '';
 
-
+console.log(body.DT_CONCLUSAO)
   try {
     const response = await updateItem(itemId, body);
     if (response) {
@@ -163,8 +163,11 @@ body.PATROCINADOR = formData.PATROCINADOR || '';
       type="date"
       id={field}
       name={field}
-      value={formData[field] || ''}
-      onChange={handleChange}
+      value={formData[field] ? new Date(formData[field]).toISOString().split('T')[0] : ''}
+      onChange={(e) => {
+        const value = e.target.value === "" ? null : e.target.value; // Converte a string vazia para null
+        handleChange({ target: { name: field, value } }); // Atualiza o estado com a data ou null
+      }}
       className="mt-1 p-2 border border-gray-300 rounded"
     
   
