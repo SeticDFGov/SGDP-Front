@@ -647,7 +647,7 @@ return (
   )}
 
 
-  {!isAuthenticated && (
+  {isAuthenticated && (
     <td className="border p-2 flex gap-2 justify-center">
     <>
       <button

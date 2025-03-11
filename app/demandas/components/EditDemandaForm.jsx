@@ -102,9 +102,9 @@ const handleSubmit = async (e) => {
 
 
 body.NM_DEMANDA = formData.NM_DEMANDA || '';
-body.DT_SOLICITACAO = formData.DT_SOLICITACAO ? formData.DT_SOLICITACAO.split('T')[0] : '';
-body.DT_ABERTURA = formData.DT_ABERTURA  ? formData.DT_ABERTURA.split('T')[0] : '';
-body.DT_CONCLUSAO = formData.DT_CONCLUSAO ? formData.DT_CONCLUSAO.split('T')[0] : '';
+body.DT_SOLICITACAO = formData.DT_SOLICITACAO ? formData.DT_SOLICITACAO.split('T')[0] : null;
+body.DT_ABERTURA = formData.DT_ABERTURA  ? formData.DT_ABERTURA.split('T')[0] : null;
+body.DT_CONCLUSAO = formData.DT_CONCLUSAO ? formData.DT_CONCLUSAO.split('T')[0] : null;
 body.CATEGORIA = formData.CATEGORIA || '';
 body.STATUS = formData.STATUS || '';
 body.PO_SUBTDCR = formData.PO_SUBTDCR || '';
