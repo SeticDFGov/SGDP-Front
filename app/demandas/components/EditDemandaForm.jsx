@@ -116,7 +116,6 @@ body.PERIODICO = formData.PERIODICO || '';
 body.PERIODICIDADE = formData.PERIODICIDADE || '';
 body.PATROCINADOR = formData.PATROCINADOR || '';
 
-console.log(body.DT_CONCLUSAO)
   try {
     const response = await updateItem(itemId, body);
     if (response) {
