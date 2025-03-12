@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from "react";
-import { getAllItems } from "./services/projetoService";
+import { deleteItem, getAllItems } from "./services/projetoService";
 import Header from "../demandas/components/Header";
 import ProjetoForm from "./components/ProjetoForm";
 import 'material-icons/iconfont/material-icons.css';
@@ -10,6 +10,7 @@ export default function Projetos () {
 
 const [data, setData] = useState([])
 const [modalOpen, setIsModalOpen] = useState(false)
+const [isAuthenticated, setIsAuthenticated] = useState(false);
 
 const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -24,9 +25,35 @@ useEffect(() => {
     }; handleItens()
 },[])
 
+ const handleDeleteItem = async (id) => {
+  // Exibe um alerta de confirmação
+  const confirmDelete = window.confirm("Tem certeza que deseja excluir esse projeto?");
+  
+  if (!confirmDelete) return;
+
+  try {
+    const response = await deleteItem(id);
+
+    if (response) {
+      alert("projeto excluído com sucesso!");
+      window.location.reload(); // Recarrega a página após a exclusão
+    } else {
+      alert("Erro ao excluir o projeto.");
+    }
+  } catch (error) {
+    console.error("Erro ao excluir o projeto:", error);
+    alert("Falha ao excluir o projeto.");
+  }
+};
+
+useEffect(() => {
+    const authStatus = localStorage.getItem("authenticated") === "true";
+    setIsAuthenticated(authStatus);
+  }, []);
 
 
 
+  
 return (
  <>
  <div className="bg-white">
@@ -52,7 +79,7 @@ return (
                                 <th className="border p-2 text-left">Número do processo SEI</th>
                                 <th className="border p-2 text-left">Área Demandante</th>
                                 <th className="border p-2 text-left">Ano</th>
-                                <th className="border p-2 text-left">Ação</th>
+                                { isAuthenticated &&  (<th className="border p-2 text-left">Ação</th>)}
                                
                             </tr>
                         </thead>
@@ -67,7 +94,20 @@ return (
                                 <td className="border p-2">{item.NM_AREA_DEMANDANTE}</td>
                                 <td className="border p-2">{item.ANO}</td>
                         
-                        
+                                
+                                {isAuthenticated && (
+                                    <td className="border p-2 flex gap-2 justify-center">
+                                    <>
+                                    <button
+                                        className="text-red-500 hover:text-red-700"
+                                        onClick={() => handleDeleteItem(item.ID)}
+                                    >
+                                        <FaTrash />
+                                    </button>
+                
+                                    </>
+                                    </td>
+                                )}
                         
                         
                         
