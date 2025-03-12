@@ -2,11 +2,14 @@
 
 import 'material-icons/iconfont/material-icons.css';
 import { useRouter } from 'next/navigation';
+import Header from './demandas/components/Header';
 
 export default function HomePage() {
   const router = useRouter();
 
   return (
+    <>
+  <Header/>
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* SGD - Sistema Gestão de Demanda */}
@@ -27,5 +30,6 @@ export default function HomePage() {
         </div>
       </div>
     </div>
+      </>
   );
 }
