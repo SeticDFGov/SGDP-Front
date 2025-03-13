@@ -65,34 +65,37 @@ export default function ProductPage() {
     return (
         <>
        <Header />
-<div className="bg-gray-100 min-h-screen">
+<div className="bg-gray-100 h-screen">
     {/* Container Centralizado */}
-    <div className="max-w-7xl mx-auto flex h-screen">
+    <div className="max-w-7xl mx-auto flex ">
         {/* Sidebar */}
-        <aside className="w-1/4 bg-white shadow-lg p-4 overflow-y-auto">
-            <h2 className="text-lg font-semibold mb-4">Etapas</h2>
-            <ul className="space-y-2">
-                {etapas.map((etapa) => (
-                    <li
-                        key={etapa.ID}
-                        className={`cursor-pointer p-2 rounded-md ${
-                            etapaSelecionada?.ID === etapa.ID
-                                ? "bg-blue-500 text-white"
-                                : "bg-gray-200 hover:bg-gray-300"
-                        }`}
-                        onClick={() => setEtapaSelecionada(etapa)}
-                    >
-                        {etapa.NM_ETAPA}
-                    </li>
-                ))}
-            </ul>
-            <button
-                onClick={() => setIsModalOpen(true)}
-                className="mt-4 w-full py-2 bg-green-500 text-white rounded-md"
-            >
-                Cadastrar Etapa
-            </button>
-        </aside>
+        <aside className="w-1/4 bg-white shadow-lg p-4 flex flex-col justify-between h-[850px]">
+    <div>
+        <h2 className="text-lg font-semibold mb-4">Etapas</h2>
+        <ul className="space-y-2">
+            {etapas.map((etapa) => (
+                <li
+                    key={etapa.ID}
+                    className={`cursor-pointer p-2 rounded-md ${
+                        etapaSelecionada?.ID === etapa.ID
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-200 hover:bg-gray-300"
+                    }`}
+                    onClick={() => setEtapaSelecionada(etapa)}
+                >
+                    {etapa.NM_ETAPA}
+                </li>
+            ))}
+        </ul>
+    </div>
+    <button
+        onClick={() => setIsModalOpen(true)}
+        className="mt-auto w-full py-2 bg-[rgb(15,147,7)] text-white rounded-md hover:bg-green-600"
+    >
+        Cadastrar Etapa
+    </button>
+</aside>
+
 
         {/* Modal de cadastro */}
         <EtapaForm
@@ -189,7 +192,7 @@ export default function ProductPage() {
                     <div className="mt-4 flex justify-end">
                         <button
                             onClick={() => setShowModal(true)}
-                            className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                            className="px-4 py-2 bg-[rgb(15,147,7)] text-white rounded-md hover:bg-green-600"
                         >
                             Nova Análise de Desempenho
                         </button>
