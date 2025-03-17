@@ -137,7 +137,6 @@ export default function Projetos () {
                                   <th className="border p-2 text-left">Gerente do Projeto</th>
                                   <th className="border p-2 text-left">Situação</th>
                                   <th className="border p-2 text-left">Unidade</th>
-                                  <th className="border p-2 text-left">Número do processo SEI</th>
                                   <th className="border p-2 text-left">Área Demandante</th>
                                   <th className="border p-2 text-left">Ano</th>
                                   {isAuthenticated && (<th className="border p-2 text-left">Ação</th>)}
@@ -150,18 +149,13 @@ export default function Projetos () {
                                       <td className="border p-2">{item.GERENTE_PROJETO}</td>
                                       <td className="border p-2">{item.SITUACAO}</td>
                                       <td className="border p-2">{item.UNIDADE}</td>
-                                      <td className="border p-2">{item.NR_PROCESSO_SEI}</td>
+                
                                       <td className="border p-2">{item.NM_AREA_DEMANDANTE}</td>
                                       <td className="border p-2">{item.ANO}</td>
                                       {isAuthenticated && (
                                           <td className="border p-2 flex gap-2 justify-center">
                                               <>
-                                                  <button
-                                                      className="text-red-500 hover:text-red-700"
-                                                      onClick={() => handleDeleteItem(item.ID)}
-                                                  >
-                                                      <FaTrash />
-                                                  </button>
+                                                
                                                   <button id="etapa" className="button is-primary"
                                                       onClick={() => router.push(`/projeto/etapa/${item.ID}/${item.NM_PROJETO}`)}
                                                   >
