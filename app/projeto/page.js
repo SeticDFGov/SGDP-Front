@@ -33,7 +33,7 @@ export default function Projetos () {
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
-
+  if(!isAuthenticated) return "Necessário estar logado!"
   useEffect(() => {
       const handleItens = async () => {
           const response = await getAllItems();
