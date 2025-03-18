@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/etapa";
+const API_URL = process.env.NEXT_PUBLIC_API_URL_ETAPA || "http://localhost:5000/api/etapa";
 
 export const getAllEtapas = async (nome_projeto) => {
   try {
