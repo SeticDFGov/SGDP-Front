@@ -3,15 +3,16 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getItemById } from "@/app/projeto/services/projetoService";
-import { getAllItems } from "@/app/projeto/services/etapaSevice";
+import { getAllEtapas, getAllItems } from "@/app/projeto/services/etapaSevice";
 import { getAllAnalise } from "@/app/projeto/services/analiseService"; // Certifique-se de importar o serviço
 import 'material-icons/iconfont/material-icons.css';
 import Header from "@/app/demandas/components/Header";
 import { EtapaForm } from "@/app/projeto/components/EtapaForm";
-import { AnaliseForm } from "@/app/projeto/components/AnaliseForm";
+import AnaliseModal, { AnaliseForm } from "@/app/projeto/components/AnaliseForm";
 import { FaTrash, FaEdit , FaPlus, FaEye} from 'react-icons/fa';
 import { Bar } from "react-chartjs-2";
 import Chart from "chart.js/auto"; // ✅ Importando automaticamente os módulos do Chart.js
+import { DesempenhoForm } from "@/app/projeto/components/DesempenhoForm";
 
 export default function ProductPage() {
     const { id, nome } = useParams(); // Agora capturamos id e nome
@@ -19,9 +20,13 @@ export default function ProductPage() {
     const [etapas, setEtapas] = useState([]);
     const [etapaSelecionada, setEtapaSelecionada] = useState(null);
     const [analises, setAnalises] = useState([]);
-    const [ultimaAnalise, setUltimaAnalise] = useState(null); // Armazenar a última análise
+    const [ultimaAnalise, setUltimaAnalise] = useState({}); // Armazenar a última análise
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [showDesempenho, setShowDesempenho] = useState(false)
+    const [showAnalise, setShowAnalise] = useState(false)
+    const [exec, setExec] = useState(0)
+    const [plan, setPlan] = useState(0)
     
 
 const dataGraph = {
@@ -29,10 +34,11 @@ const dataGraph = {
     datasets: [
       {
         label: "Valores",
-        data: [30, 50],
+        data: [plan, exec],
         backgroundColor: ["#6366F1", "#0F9307"],
         borderColor: ["#4F46E5", "#D97706"],
         borderWidth: 1,
+        barThickness: 125, // Ajuste a largura da barra aqui
       },
     ],
   };
@@ -48,47 +54,87 @@ const dataGraph = {
       y: { beginAtZero: true },
     },
   };
-    useEffect(() => {
-        const fetchProjeto = async () => {
-            const response = await getItemById(id);
-            setProjeto(response);
-        };
-        fetchProjeto();
-    }, [id]);
-
-    useEffect(() => {
-        const fetchEtapas = async () => {
-            const response = await getAllItems(nome); // Agora usamos o nome
-            setEtapas(response);
-        };
-        fetchEtapas();
-    }, [nome]);
-
-    useEffect(() => {
-        if (etapaSelecionada) {
-            const fetchAnalises = async () => {
-                const analisesData = await getAllAnalise(etapaSelecionada.NM_ETAPA); // Supondo que o parâmetro seja o nome da etapa
-                setAnalises(analisesData);
-            };
-            fetchAnalises();
-        }
-    }, [etapaSelecionada]);
-
-    useEffect(() => {
-        if (analises.length > 0) {
-            // Ordena as análises pela data de criação e pega a mais recente
-            const ultima = analises
-                .sort((a, b) => new Date(b.Created) - new Date(a.Created))
-                .shift(); // Pega a última análise
-            setUltimaAnalise(ultima);
-        }
-    }, [analises]);
-
-    const handleCadastroEtapa = (novaEtapa) => {
-        // Adiciona a nova etapa à lista de etapas
-        setEtapas((prevEtapas) => [...prevEtapas, novaEtapa]);
-        setIsModalOpen(false); // Fecha o modal após o cadastro
+useEffect(() => {
+    const fetchProjeto = async () => {
+        const response = await getItemById(id);
+        setProjeto(response);
     };
+    fetchProjeto();
+}, [id]);
+
+useEffect(() => {
+    const fetchEtapas = async () => {
+        const response = await getAllEtapas(nome);
+        setEtapas(response);
+
+        let execSum = 0;
+        let planSum = 0;
+
+        response.forEach((item) => {
+            execSum += parseFloat(item.PERCENT_EXEC_REAL) || 0;
+
+            const parseDate = (dateString) => {
+                const [day, month, year] = dateString.split("-");
+                return new Date(year, month - 1, day);
+            };
+
+            const removeTime = (date) => {
+                const newDate = new Date(date);
+                newDate.setHours(0, 0, 0, 0);
+                return newDate;
+            };
+
+            const dtInicioPrevisto = parseDate(item.DT_INICIO_PREVISTO);
+            const dtTerminoPrevisto = parseDate(item.DT_TERMINO_PREVISTO);
+            const diffDays = (dtTerminoPrevisto - dtInicioPrevisto) / (1000 * 3600 * 24);
+
+            if (diffDays > 0) {
+                const diffToday = (removeTime(new Date()) - dtInicioPrevisto) / (1000 * 3600 * 24);
+                const planValue = (diffToday * 100) / diffDays;
+                planSum += parseFloat(planValue) || 0;
+            }
+        });
+
+        setExec(execSum);
+        setPlan(planSum);
+    };
+
+    if (nome) {
+        fetchEtapas();
+    }
+}, [nome]);
+
+useEffect(() => {
+    const fetchAnalises = async () => {
+        const analisesData = await getAllAnalise(nome);
+        setAnalises(analisesData);
+    };
+
+    if (nome) {
+        fetchAnalises();
+    }
+}, [nome]);
+
+// 🔹 Melhoria na lógica de última análise
+useEffect(() => {
+    if (analises.length > 0) {
+        console.log("Atualizando última análise com:", analises);
+
+        const ultima = [...analises]
+            .sort((a, b) => new Date(b.Created) - new Date(a.Created))
+            .shift();
+
+        setUltimaAnalise(ultima);
+    }
+}, [analises]);
+
+const handleCadastroEtapa = (novaEtapa) => {
+    setEtapas((prevEtapas) => [...prevEtapas, novaEtapa]);
+    setIsModalOpen(false);
+};
+
+
+  
 
     return (
         <>
@@ -109,7 +155,16 @@ const dataGraph = {
             onSubmit={handleCadastroEtapa}
             nome_projeto={nome}
         />
-
+        <DesempenhoForm
+            isOpen={showDesempenho}
+            onClose={() => setShowDesempenho(false)}
+            etapa={etapaSelecionada}
+        />
+        <AnaliseModal
+            isOpen={showAnalise}
+            onClose={() => setShowAnalise(false)}
+            nomeProjeto ={nome}
+        />
         {/* Conteúdo Principal */}
         <main className="flex-1 p-6 bg-white rounded-lg shadow-md">
             {/* Detalhes do Projeto */}
@@ -137,14 +192,25 @@ const dataGraph = {
             <p className="text-gray-600">{projeto.NM_AREA_DEMANDANTE}</p>
           </div>
           <div>
-            <p className="text-gray-800 font-semibold">Ano:</p>
-            <p className="text-gray-600">{projeto.ANO}</p>
+            <p className="text-gray-800 font-semibold">Última Ánalise:</p>
+            <p className="text-gray-600">{ultimaAnalise.ANALISE}</p>
           </div>
         </div>
 
         {/* Gráfico */}
         <div className="h-64 w-full">
-          <Bar data={dataGraph} options={options} />
+           <div className="flex justify-end">
+  <button
+    onClick={() => {
+      setShowAnalise(true);
+    }}
+    className="px-4 py-2 bg-[rgb(15,147,7)] text-white rounded-md"
+  >
+    Nova análise do projeto
+  </button>
+</div>
+
+          <Bar className={"pt-10"} data={dataGraph} options={options} />
         </div>
       </div>
     </div>
@@ -163,7 +229,8 @@ const dataGraph = {
                                   <th className="border p-2 text-left">Ínicio Real</th>
                                   <th className="border p-2 text-left">Termino Real</th>
 
-                                  <th className="border p-2 text-left">Situação</th>
+                                  <th className="border p-2 text-left">% Planejado</th>
+                                  <th className="border p-2 text-left">% Executado</th>
                                   <th className="border p-2 text-left">Ação</th>
                               </tr>
                           </thead>
@@ -173,52 +240,79 @@ const dataGraph = {
                                       <td className="border p-2">{item.NM_ETAPA}</td>
                                       <td className="border p-2">{item.RESPONSAVEL_ETAPA}</td>
                                       <td className="border p-2">
-                                        {(() => {
-                                    try {
-                                        const data = new Date(item.DT_INICIO_PREVISTO);
-                                        if (isNaN(data)) throw new Error("Data inválida");
-                                        return data.toLocaleDateString("pt-BR");
-                                    } catch {
-                                        return "";
-                                    }
-                                })()}
+                                        {
+                                        item.DT_INICIO_PREVISTO
+                                
+                                }
                                       </td>
                                       <td className="border p-2">
 
-                                      {(() => {
-                                    try {
-                                        const data = new Date(item.DT_TERMINO_PREVISTO);
-                                        if (isNaN(data)) throw new Error("Data inválida");
-                                        return data.toLocaleDateString("pt-BR");
-                                    } catch {
-                                        return "";
-                                    }
-                                })()}  
+                                      {
+                                      item.DT_TERMINO_PREVISTO
+                                       }  
                                       </td>
                 
                                       <td className="border p-2">
-                                        {(() => {
-                                    try {
-                                        const data = new Date(item.DT_INICIO_REAL);
-                                        if (isNaN(data)) throw new Error("Data inválida");
-                                        return data.toLocaleDateString("pt-BR");
-                                    } catch {
-                                        return "";
-                                    }
-                                })()}
+                                        {
+                                         item.DT_INICIO_REAL
+                                        }
 
                                       </td>
                                       <td className="border p-2">
-                                    {(() => {
-                                    try {
-                                        const data = new Date(item.DT_TERMINO_REAL);
-                                        if (isNaN(data)) throw new Error("Data inválida");
-                                        return data.toLocaleDateString("pt-BR");
-                                    } catch {
-                                        return "";
-                                    }
-                                })()}
+                                    {
+                                    item.DT_TERMINO_REAL
+                                     }
                                     </td>
+                                    <td className="border p-2">
+  {(() => {
+    const parseDate = (dateString) => {
+      const [day, month, year] = dateString.split('-');
+      return new Date(year, month - 1, day); // mês começa em 0 no JavaScript
+    };
+
+    const dtInicioPrevisto = parseDate(item.DT_INICIO_PREVISTO);
+    const dtTerminoPrevisto = parseDate(item.DT_TERMINO_PREVISTO);
+
+    // Calculando a diferença em dias
+    const removeTime = (date) => {
+    const newDate = new Date(date);
+    newDate.setHours(0, 0, 0, 0); // Define a hora para 00:00:00
+    return newDate;
+};
+
+// Calcule a diferença considerando apenas o dia
+
+    const diffDays = (dtTerminoPrevisto - dtInicioPrevisto) / (1000 * 3600 * 24);
+ 
+    if (diffDays > 0) {
+      const diffToday = (removeTime(new Date()) - dtInicioPrevisto) / (1000 * 3600 * 24);
+      console.log(`Dias TODAY ${item.NM_ETAPA} ${diffToday}`)
+      return ((diffToday * 100) / diffDays).toFixed(2); // Calcula a porcentagem e formata com 2 casas decimais
+    }
+
+    return 0;
+  })()}
+</td>
+<td className="border p-2">
+    {
+        item.PERCENT_EXEC_REAL
+    }
+</td>
+
+                                    <td className="border p-2">
+                                        {
+                                            <button
+                            onClick={() => {
+                                setEtapaSelecionada(item)
+                                setShowDesempenho(true)}
+                            }
+                            className="px-4 py-2   rounded-md "
+                        >
+                            <span className="material-icons ">sync</span>
+                        </button>
+                                        }
+                                    </td>
+
                                      
                                   </tr>
                               ))}
@@ -226,78 +320,8 @@ const dataGraph = {
                       </table>
             </div>
 
-            {/* Detalhes da Etapa Selecionada */}
-            {etapaSelecionada && (
-                <div className="p-6 rounded-lg shadow-md">
-                    <h2 className="text-xl font-semibold mb-6">
-                        Detalhes sobre a etapa {etapaSelecionada.NM_ETAPA}
-                    </h2>
-                    <div className="grid grid-cols-2 gap-x-10 gap-y-4">
-                        <div>
-                            <p className="text-gray-800 font-semibold">Situação da Etapa:</p>
-                            <p className="text-gray-600">{etapaSelecionada.SITUA_x00c7__x00c3_O}</p>
-                        </div>
-                        <div>
-                            <p className="text-gray-800 font-semibold">Responsável pela Etapa:</p>
-                            <p className="text-gray-600">{etapaSelecionada.RESPONSAVEL_ETAPA}</p>
-                        </div>
-                        <div>
-                            <p className="text-gray-800 font-semibold">Início Previsto:</p>
-                            <p className="text-gray-600">{etapaSelecionada.DT_INICIO_PREVISTO}</p>
-                        </div>
-                        <div>
-                            <p className="text-gray-800 font-semibold">Término Previsto:</p>
-                            <p className="text-gray-600">{etapaSelecionada.DT_TERMINO_PREVISTO}</p>
-                        </div>
-                        <div>
-                            <p className="text-gray-800 font-semibold">Início Real:</p>
-                            <p className="text-gray-600">{etapaSelecionada.DT_INICIO_REAL}</p>
-                        </div>
-                        <div>
-                            <p className="text-gray-800 font-semibold">Término Real:</p>
-                            <p className="text-gray-600">{etapaSelecionada.DT_TERMINO_REAL}</p>
-                        </div>
-                    </div>
-
-                    {/* Última Análise */}
-                    {ultimaAnalise && (
-                        <div className="mt-6 p-4 bg-gray-50 rounded-lg shadow-md">
-                            <h3 className="text-lg font-semibold mb-4">Última Análise</h3>
-                            <p className="text-gray-800 font-semibold">Data de Criação:</p>
-                            <p className="text-gray-600">
-                                {(() => {
-                                    try {
-                                        const data = new Date(ultimaAnalise.Created);
-                                        if (isNaN(data)) throw new Error("Data inválida");
-                                        return data.toLocaleDateString("pt-BR");
-                                    } catch {
-                                        return "";
-                                    }
-                                })()}
-                            </p>
-                            <p className="text-gray-800 font-semibold">Análise:</p>
-                            <p className="text-gray-600">{ultimaAnalise.ANALISE_ETAPA}</p>
-                        </div>
-                    )}
-
-                    {/* Botão para abrir o modal */}
-                    <div className="mt-4 flex justify-end">
-                        <button
-                            onClick={() => setShowModal(true)}
-                            className="px-4 py-2 bg-[rgb(15,147,7)] text-white rounded-md hover:bg-green-600"
-                        >
-                            Nova Análise de Desempenho
-                        </button>
-                    </div>
-
-                    {/* Modal de cadastro de análise */}
-                    <AnaliseForm
-                        showModal={showModal}
-                        setShowModal={setShowModal}
-                        etapaSelecionada={etapaSelecionada}
-                    />
-                </div>
-            )}
+        
+                
         </main>
     </div>
 </div>

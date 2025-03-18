@@ -13,7 +13,7 @@ const ProjetoForm = ({ onClose, isOpen }) => {
     UNIDADE: "",
     NR_PROCESSO_SEI: "",
     NM_AREA_DEMANDANTE: "",
-    ANO: "",
+    ANO: "2025",
   });
 
   const [error, setError] = useState("");
@@ -33,10 +33,11 @@ const ProjetoForm = ({ onClose, isOpen }) => {
         UNIDADE: "",
         NR_PROCESSO_SEI: "",
         NM_AREA_DEMANDANTE: "",
-        ANO: "",
+        ANO: "2025",
       });
       console.log("Cadastro realizado com sucesso!");
       onClose();
+      window.location.reload()
     } else {
       setError("Erro no momento do cadastro do Projeto");
     }
@@ -57,7 +58,7 @@ const ProjetoForm = ({ onClose, isOpen }) => {
 
   return (
     <>
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="fixed inset-0 flex items-center justify-center bg-black text-black bg-opacity-50">
         <div className="bg-white p-6 rounded-lg shadow-md w-[1250px] relative h-[400px] flex flex-col justify-between">
           <h2 className="text-2xl font-semibold mb-4 text-center">Cadastro de Projeto</h2>
           {error && <div className="text-red-500 mb-4">{error}</div>}
@@ -85,16 +86,7 @@ const ProjetoForm = ({ onClose, isOpen }) => {
                   onChange={handleChange}
                 />
               </div>
-              <div>
-                <input
-                  type="text"
-                  name="SITUACAO"
-                  placeholder="Situação"
-                  className="w-full p-2 border border-gray-300 rounded mt-2 h-12"
-                  value={projeto.SITUACAO}
-                  onChange={handleChange}
-                />
-              </div>
+             
               <div>
                 <input
                   type="text"
@@ -127,16 +119,7 @@ const ProjetoForm = ({ onClose, isOpen }) => {
               </div>
             </div>
             <div className="grid grid-cols-3 gap-4 w-full">
-              <div>
-                <input
-                  type="text"
-                  name="ANO"
-                  placeholder="Ano"
-                  className="w-full p-2 border border-gray-300 rounded mt-2 h-12"
-                  value={projeto.ANO}
-                  onChange={handleChange}
-                />
-              </div>
+           
             </div>
             {/* Botões de Ação (Cancel e Submit) */}
           <div className="w-full flex justify-end space-x-2 mt-4">

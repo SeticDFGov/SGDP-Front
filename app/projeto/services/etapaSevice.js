@@ -1,6 +1,6 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/etapa";
 
-export const getAllItems = async (nome_projeto) => {
+export const getAllEtapas = async (nome_projeto) => {
   try {
     const response = await fetch(`${API_URL}/${nome_projeto}`);
     if (!response.ok) throw new Error("Erro ao obter itens");

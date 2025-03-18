@@ -10,7 +10,7 @@ export const EtapaForm = ({ onClose, isOpen, nome_projeto }) => {
     DT_TERMINO_REAL: "",
     PERCENT_TOTAL_ETAPA: "",
     PERCENT_EXECUTADO: "",
-    PERCENT_PLANEJADO: "",
+
     SITUA_x00c7__x00c3_O: "",
   });
 
@@ -21,33 +21,44 @@ export const EtapaForm = ({ onClose, isOpen, nome_projeto }) => {
       [name]: value,
     }));
   };
+// Aqui você captura a data no formato yyyy-mm-dd
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Função para formatar a data no formato dd-mm-yyyy
+  const formatDate = (date) => {
+    if (!date) return ""; // Se não houver data, retorna uma string vazia
 
-    // Construindo o objeto de dados que será enviado para a API
-    const itemData = {
-      NM_PROJETO: nome_projeto, // Defina o nome do projeto conforme necessário
-      NM_ETAPA: formData.NM_ETAPA,
-      DT_INICIO_PREVISTO: formData.DT_INICIO_PREVISTO,
-      DT_TERMINO_PREVISTO: formData.DT_TERMINO_PREVISTO,
-      DT_INICIO_REAL: formData.DT_INICIO_REAL,
-      DT_TERMINO_REAL: formData.DT_TERMINO_REAL,
-      PERCENT_TOTAL_ETAPA: formData.PERCENT_TOTAL_ETAPA,
-      PERCENT_EXECUTADO: formData.PERCENT_EXECUTADO,
-      PERCENT_PLANEJADO: formData.PERCENT_PLANEJADO,
-      SITUA_x00c7__x00c3_O: formData.SITUA_x00c7__x00c3_O,
-    };
-
-    // Envia os dados para a API
-    const response = await createItem(itemData);
-
-   
-      alert("Etapa cadastrada com sucesso!");
-      onClose(); // Fecha o modal após o cadastro
-      window.location.reload()
-    
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0'); // Mês começa em 0
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
   };
+
+  // Construindo o objeto de dados que será enviado para a API
+  const itemData = {
+    NM_PROJETO: nome_projeto, // Defina o nome do projeto conforme necessário
+    NM_ETAPA: formData.NM_ETAPA,
+    DT_INICIO_PREVISTO: formatDate(formData.DT_INICIO_PREVISTO),
+    DT_TERMINO_PREVISTO: formatDate(formData.DT_TERMINO_PREVISTO),
+    DT_INICIO_REAL: formatDate(formData.DT_INICIO_REAL),
+    DT_TERMINO_REAL: formatDate(formData.DT_TERMINO_REAL),
+    PERCENT_TOTAL_ETAPA: formData.PERCENT_TOTAL_ETAPA,
+    PERCENT_EXECUTADO: formData.PERCENT_EXECUTADO,
+    PERCENT_PLANEJADO: formData.PERCENT_PLANEJADO,
+    SITUA_x00c7__x00c3_O: formData.SITUA_x00c7__x00c3_O,
+  };
+
+  // Envia os dados para a API
+  const response = await createItem(itemData);
+
+  
+    alert("Etapa cadastrada com sucesso!");
+    onClose(); // Fecha o modal após o cadastro
+    window.location.reload(); // Recarrega a página
+  
+};
 
   return (
    isOpen && (<div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
@@ -88,28 +99,7 @@ export const EtapaForm = ({ onClose, isOpen, nome_projeto }) => {
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium">Data Início Real</label>
-            <input
-              type="date"
-              name="DT_INICIO_REAL"
-              value={formData.DT_INICIO_REAL}
-              onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-md"
-            
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium">Data Término Real</label>
-            <input
-              type="date"
-              name="DT_TERMINO_REAL"
-              value={formData.DT_TERMINO_REAL}
-              onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-md"
-             
-            />
-          </div>
+     
           <div className="mb-4">
             <label className="block text-sm font-medium">Percentual Total da Etapa</label>
             <input
@@ -122,39 +112,7 @@ export const EtapaForm = ({ onClose, isOpen, nome_projeto }) => {
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium">Percentual Executado</label>
-            <input
-              type="number"
-              name="PERCENT_EXECUTADO"
-              value={formData.PERCENT_EXECUTADO}
-              onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-md"
-              
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium">Percentual Planejado</label>
-            <input
-              type="number"
-              name="PERCENT_PLANEJADO"
-              value={formData.PERCENT_PLANEJADO}
-              onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-md"
-             
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium">Situação</label>
-            <input
-              type="text"
-              name="SITUA_x00c7__x00c3_O"
-              value={formData.SITUA_x00c7__x00c3_O}
-              onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-md"
-             
-            />
-          </div>
+       
 
           <div className="col-span-3 flex justify-end space-x-2">
             <button
