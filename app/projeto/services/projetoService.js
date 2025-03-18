@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/projeto";
+const API_URL = process.env.NEXT_PUBLIC_API_URL_PROJETO || "http://localhost:5000/api/projeto";
 
 export const getAllItems = async () => {
   try {
