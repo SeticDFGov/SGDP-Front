@@ -52,13 +52,11 @@ export default function Projetos () {
   // Dados fictícios para os gráficos
  useEffect(() => {
         const fetchProjetos = async () => {
-            const projetos = ["Projeto1", "Projeto2", "Projeto3"]; // Lista de projetos
             let concluido = 0, andamento = 0, atrasado = 0;
             
             for (const projeto of data) {
                 
                 const response = await getAllEtapas(projeto.NM_PROJETO);
-                console.log(response)
                 let hasAtraso = false;
                 let hasAndamento = false;
                 let hasConcluido = false
@@ -69,7 +67,6 @@ export default function Projetos () {
                     const inicioReal = etapa.DT_INICIO_REAL ? new Date(etapa.DT_INICIO_REAL) : null;
                     const terminoReal = etapa.DT_TERMINO_REAL ? new Date(etapa.DT_TERMINO_REAL) : null;
                     const hoje = new Date();
-                     console.log(inicioReal)
                     let situacao = "";
                     if (!inicioReal && hoje < inicioPrevisto) situacao = "não iniciada";
                     else if (hoje > inicioPrevisto && !inicioReal) situacao = "atrasado para inicio";
@@ -88,7 +85,6 @@ export default function Projetos () {
             }
 
             setChartData({ concluido, andamento, atrasado })
-            console.log(`concluido ${concluido} andamento ${andamento} atrasado ${atrasado}`);
         };
         fetchProjetos();
     }, [data]);

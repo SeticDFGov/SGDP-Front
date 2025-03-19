@@ -121,7 +121,6 @@ useEffect(() => {
 // 🔹 Melhoria na lógica de última análise
 useEffect(() => {
     if (analises.length > 0) {
-        console.log("Atualizando última análise com:", analises);
 
         const ultima = [...analises]
             .sort((a, b) => new Date(b.Created) - new Date(a.Created))
@@ -292,7 +291,6 @@ const handleCadastroEtapa = (novaEtapa) => {
  
     if (diffDays > 0) {
       const diffToday = (removeTime(new Date()) - dtInicioPrevisto) / (1000 * 3600 * 24);
-      console.log(`Dias TODAY ${item.NM_ETAPA} ${diffToday}`)
       return ((diffToday * 100) / diffDays).toFixed(2); // Calcula a porcentagem e formata com 2 casas decimais
     }
 
