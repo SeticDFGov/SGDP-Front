@@ -74,6 +74,9 @@ useEffect(() => {
             execSum += parseFloat(item.PERCENT_EXEC_REAL) || 0;
 
             const parseDate = (dateString) => {
+              if (!dateString || dateString === "undefined" || dateString === "null") {
+    return null; // Retorna null caso o dateString seja inválido
+  }
                 const [day, month, year] = dateString.split("-");
                 return new Date(year, month - 1, day);
             };
@@ -266,6 +269,9 @@ const handleCadastroEtapa = (novaEtapa) => {
                                     <td className="border p-2">
   {(() => {
     const parseDate = (dateString) => {
+      if (!dateString || dateString === "undefined" || dateString === "null") {
+    return null; // Retorna null caso o dateString seja inválido
+  }
       const [day, month, year] = dateString.split('-');
       return new Date(year, month - 1, day); // mês começa em 0 no JavaScript
     };
