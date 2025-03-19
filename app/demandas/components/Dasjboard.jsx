@@ -44,7 +44,7 @@ const Dashboard = () => {
     };
    const handleOpenDetailModal = (id, item) => {
     console.log(id)
-    setDetail(item)    
+    setDetail(item)
     setNomeId(id);
     setIsModalDetailOpen(true);
   };
@@ -73,21 +73,21 @@ const Dashboard = () => {
     setIsAuthenticated(authStatus);
   }, []);
 
- 
+
 
     const destroyChart = (chartRef) => {
     if (chartRef.current && chartRef.current.chartInstance) {
         chartRef.current.chartInstance.destroy();
     }
     };
-    
+
     const handleTmpAVG = async () => {
     setIsLoading(true);
     try {
       const data = await tmpAVG();
-    
+
       setTmp(data);
-        
+
     } catch (error) {
         console.error("Erro ao buscar itens", error);
     } finally {
@@ -95,12 +95,12 @@ const Dashboard = () => {
     }
   };
 
-  
+
 
   const handleDeleteItem = async (id) => {
   // Exibe um alerta de confirmação
   const confirmDelete = window.confirm("Tem certeza que deseja excluir esta demanda?");
-  
+
   if (!confirmDelete) return;
 
   try {
@@ -122,7 +122,7 @@ const Dashboard = () => {
     setIsLoading(true);
     try {
         const data = await getAllItems();
-       
+
 
         if (!Array.isArray(data)) {
         console.warn("O retorno da API não é um array:", data);
@@ -180,7 +180,7 @@ useEffect(() => {
 
 
 useEffect(() => {
-  
+
     if (items.length > 0 || Object.keys(tmp).length > 0 || Object.keys(siglasMap).length >0) {
     updateCharts(items);
   }
@@ -194,13 +194,13 @@ const updateCharts = (data) => {
 
 
   data.forEach((item) => {
-    
-    
+
+
     // Contabilizar categorias
     if (!categorias[item.CATEGORIA]) {
       categorias[item.CATEGORIA] = { soma: 0, count: 0 };
     }
-    
+
     categorias[item.CATEGORIA].soma += 1;
     categorias[item.CATEGORIA].count += 1;
 
@@ -209,7 +209,7 @@ const updateCharts = (data) => {
     if (item.STATUS === "Não iniciada") status["Nao_iniciada"] += 1;
     if (item.STATUS === "Atrasado") status["Atrasados"] += 1;
     if (item.STATUS === "Concluído") status["Realizadas"] += 1;
-    
+
     // Contabilizar demandantes
 
     setAndamento(status["Em_andamento"])
@@ -228,10 +228,10 @@ const updateCharts = (data) => {
   const labels = Object.keys(tmp); // Pega as categorias (chaves do objeto)
   const valoresMedios = Object.values(tmp); // Pega os valores (valores do objeto)
 
-    
+
   // Gráfico de categorias
   destroyChart(barChartRef);
-  
+
   barChartRef.current.chartInstance = new Chart(barChartRef.current, {
   type: "bar",
   data: {
@@ -352,14 +352,14 @@ return (
 
    <Header>
    </Header>
-    
+
     <div className="mx-auto bg-white ">
         <div className=" max-w-6xl mx-auto bg-white mt p-4">
             <div className="mb-6">
                 <h2 className="text-4xl font-semibold text-black ">Bem-vindo ao sistema de gestão da SUBTDCR</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8 text-black">
-                
+
                 <div className="bg-white shadow-lg rounded-2xl p-3 flex justify-between items-center border-2"
                    style={{ borderColor: '#17eba0', height: 'auto' }}>
 
@@ -369,7 +369,7 @@ return (
                     </div>
                     <span className="material-icons text-5xl" style={{color: '#17eba0'}}>check_circle</span>
                 </div>
-               
+
                 <div className="bg-white shadow-lg rounded-2xl p-3 flex justify-between items-center border-2"
                     style={{borderColor: "#ffbc44" ,height: "auto"}}>
                     <div className="text-left">
@@ -378,7 +378,7 @@ return (
                     </div>
                     <span className="material-icons text-5xl" style={{color: "#ffbc44"}}>pending</span>
                 </div>
-               
+
                 <div className="bg-white shadow-lg rounded-2xl p-3 flex justify-between items-center border-2"
                     style={{borderColor: "#fc6161", height: "auto"}}>
                     <div className="text-left">
@@ -387,7 +387,7 @@ return (
                     </div>
                     <span className="material-icons text-5xl" style={{color: "#fc6161"}}>warning</span>
                 </div>
-             
+
                 <div className="bg-white shadow-lg rounded-2xl p-3 flex justify-between items-center border-2"
                     style={{borderColor: "#1c2c34", height: "auto"}}>
                     <div className="text-left">
@@ -402,7 +402,7 @@ return (
                 <div className="flex-1 relative">
                   <select
                     defaultValue=""
-                    className="w-full border rounded-full p-2 pl-4 pr-10 bg-white text-gray-900 appearance-none"
+                    className="w-full border rounded p-2 pl-4 pr-10 bg-white text-gray-900 appearance-none"
                     >
                     <option value="" >
                         Selecione o período
@@ -413,8 +413,8 @@ return (
                     <option value="6meses">Últimos 6 meses</option>
                     <option value="ano">Último ano</option>
                     </select>
- 
-                    
+
+
                     <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-900" viewBox="0 0 20 20"
                             fill="currentColor">
@@ -427,7 +427,7 @@ return (
                 <div className="flex-1 relative">
                    <select
                         defaultValue=""
-                        className="w-full border rounded-full p-2 pl-4 pr-10 bg-white text-gray-900 appearance-none"
+                        className="w-full border rounded p-2 pl-4 pr-10 bg-white text-gray-900 appearance-none"
                         >
                         <option value="" >
                             Selecione uma categoria
@@ -436,7 +436,7 @@ return (
                         <option value="categoria">Categoria</option>
                         </select>
 
-                   
+
                     <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-900" viewBox="0 0 20 20"
                             fill="currentColor">
@@ -449,8 +449,8 @@ return (
             </div>
 
         </div>
-       
-    
+
+
  <div className="max-w-6xl mx-auto bg-white text-black">
     <div className="flex flex-wrap lg:flex-nowrap justify-center gap-4 p-4">
         <div className="w-full lg:w-1/3 bg-white shadow-lg rounded-2xl p-3 h-64 flex flex-col items-center justify-center">
@@ -470,16 +470,16 @@ return (
 
 
 
-    
+
     <div className="mx-auto bg-white mt-5">
         <div className="p-4 max-w-6xl mx-auto bg-white mt-5 mb-5">
-         
+
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
 
                 <div className="flex-1 relative">
                    <select
                     defaultValue=""
-                    className="w-full border rounded-full p-2 pl-4 pr-10 bg-gray-900 text-white appearance-none"
+                    className="w-full border rounded p-2 pl-4 pr-10 bg-white text-gray-900 appearance-none"
                     >
                     <option value="" >
                         Selecione uma categoria
@@ -488,9 +488,9 @@ return (
                     <option value="categoria">Categoria</option>
                     </select>
 
-                   
+
                     <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20"
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-900" viewBox="0 0 20 20"
                             fill="currentColor">
                             <path fillRule="evenodd"
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -501,7 +501,7 @@ return (
                 <div className="flex-1 relative">
                     <select
   defaultValue=""
-  className="w-full border rounded-full p-2 pl-4 pr-10 bg-gray-900 text-white appearance-none"
+  className="w-full border rounded p-2 pl-4 pr-10 bg-white text-gray-900 appearance-none"
 >
   <option value="" >
     Selecione a unidade
@@ -512,9 +512,9 @@ return (
   <option value="UPTD">UPTD</option>
 </select>
 
-                   
+
                     <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20"
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-900" viewBox="0 0 20 20"
                             fill="currentColor">
                             <path fillRule="evenodd"
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -525,7 +525,7 @@ return (
                 <div className="flex-1 relative">
                     <select
   defaultValue=""
-  className="w-full border rounded-full p-2 pl-4 pr-10 bg-gray-900 text-white appearance-none"
+  className="w-full border rounded p-2 pl-4 pr-10 bg-white text-gray-900 appearance-none"
 >
   <option value="" >
     Selecione a situação
@@ -536,9 +536,9 @@ return (
   <option value="Concluído">Concluído</option>
 </select>
 
-                  
+
                     <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20"
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-900" viewBox="0 0 20 20"
                             fill="currentColor">
                             <path fillRule="evenodd"
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -548,8 +548,8 @@ return (
                 </div>
                 <div className="flex-1 relative">
                     <input type="text" placeholder="Buscar"
-                        className="w-full border rounded-full p-2 pl-4 pr-10 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                   
+                        className="w-full border rounded p-2 pl-4 pr-10 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+
                     <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-900" viewBox="0 0 20 20"
                             fill="currentColor">
@@ -566,7 +566,7 @@ return (
             <FaPlus className="text-blue-500 text-xl" />
             <span className="text-gray-700">Inserir demanda</span>
             </div>)}
-            
+
            <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
             <CadastroDemanda onClose = {handleCloseModal} ></CadastroDemanda>
            </Modal>
@@ -579,7 +579,7 @@ return (
               </DemandDetailsModal>
 
             <div className="flex gap-4 text-black">
-              
+
                 <div className="flex-1 overflow-x-auto mt-2">
                     <table className="w-full border-collapse border">
                         <thead>
@@ -594,14 +594,14 @@ return (
                                 <th className="border p-2 text-left">Data da Conclusão</th>
                                 <th className="border p-2 text-left">Unidade SUBTDCR</th>
                                 {isAuthenticated && <th className="border p-2 text-left">Ações</th>}
-                               
+
                             </tr>
                         </thead>
                         <tbody>
                             {items.map((item) => (
-                                <tr key={item.ID} className="shadow">   
+                                <tr key={item.ID} className="shadow">
                                 <td className="border p-2">{item.NM_DEMANDA}</td>
-                        
+
                               <td className="border p-2">
                                 {(() => {
                                     try {
@@ -632,48 +632,49 @@ return (
                                     }
                                 </td>
 
+
+
                                 <td className="border p-2">{item.UNIDADE}</td>
-                               
-                                
-  {isAuthenticated && (
-    <td className="border p-2 flex gap-2 justify-center">
-    <button
-      className="text-red-500 hover:text-red-700"
+
+                                {isAuthenticated && (
+<td className="border p-2 justify-center gap-2">
+  <div className="flex justify-center items-center gap-2">
+  <button
+      className="text-[rgb(1,98,175,255)] hover:text-[rgb(1,78,140)] hover:scale-105"
       onClick={() => { handleOpenDetailModal(item.NM_DEMANDA, item); setNomeId(item.NM_DEMANDA); }}
     >
-      <FaEye />
+      <span class="material-icons">visibility</span>
     </button>
-    </td>
-  )}
-
-
-  {isAuthenticated && (
-    <td className="border p-2 flex gap-2 justify-center">
-    <>
-      <button
-        className="text-red-500 hover:text-red-700"
+    <button
+        className="text-[rgb(1,98,175,255)] hover:text-[rgb(1,78,140)] hover:scale-105"
         onClick={() => handleDeleteItem(item.ID)}
       >
-        <FaTrash />
+      <span class="material-icons">delete</span>
       </button>
       <button
-        className="text-blue-500 hover:text-blue-700"
+        className="text-[rgb(1,98,175,255)] hover:text-[rgb(1,78,140)] hover:scale-105"
         onClick={() => handleOpenEditModal(item.ID)}
       >
-        <FaEdit />
+      <span class="material-icons">edit</span>
       </button>
-    </>
-    </td>
-  )}
+  </div>
+
+</td>
+)}
 
 
-                                </tr>
+
+
+
+
+
+</tr>
                             ))}
-                           
-                
+
+
                         </tbody>
                     </table>
-                 
+
                     <div className="pagination mx-auto mt-5" style={{textAlign: "center"}}>
                         <button id="prev" className="button is-primary">
                             <span className="material-icons">chevron_left</span>
@@ -691,8 +692,8 @@ return (
         </div>
     </div>
 
-    
-    
+
+
 
   </div>
 
