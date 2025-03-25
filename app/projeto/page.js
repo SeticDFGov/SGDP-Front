@@ -30,18 +30,18 @@ export default function Projetos () {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
   const [chartData, setChartData] = useState({ concluido: 0, andamento: 0, atrasado: 0 });
-
+  const [ total_SUBTDCR, setTotal_SUBTDCR ] = useState(0);
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
- 
+
   useEffect(() => {
       const handleItens = async () => {
           const response = await getAllItems();
           setData(response);
+          setTotal_SUBTDCR(response.length)
       };
       handleItens();
   }, []);
-
 
 
   useEffect(() => {
@@ -53,9 +53,9 @@ export default function Projetos () {
  useEffect(() => {
         const fetchProjetos = async () => {
             let concluido = 0, andamento = 0, atrasado = 0;
-            
+
             for (const projeto of data) {
-                
+
                 const response = await getAllEtapas(projeto.NM_PROJETO);
                 let hasAtraso = false;
                 let hasAndamento = false;
@@ -73,7 +73,7 @@ export default function Projetos () {
                     else if (inicioReal && !terminoReal && hoje < terminoPrevisto) situacao = "Em andamento";
                     else if (inicioReal && !terminoReal && hoje > terminoPrevisto) situacao = "atrasado para conclusão";
                     else if (inicioReal && terminoReal) situacao = "Concluído";
-                   
+
                     if (situacao.includes("atrasado")) hasAtraso = true;
                     if (situacao === "Em andamento") hasAndamento = true;
                     if (situacao === "Concluído") hasConcluido = true;
@@ -119,7 +119,7 @@ export default function Projetos () {
   <div className="bg-white">
     <Header />
     <div className="max-w-6xl mx-auto bg-white mt p-4 ">
-      <div className="mb-6 pt-5">
+      <div className="mb-6">
         <h2 className="text-4xl font-semibold text-black">
           Bem-vindo ao sistema de gestão de projetos da SETIC
         </h2>
@@ -132,7 +132,7 @@ export default function Projetos () {
           style={{ borderColor: "black", height: "auto" }}
         >
           <div className="text-left">
-            <h3 className="text-3xl font-bold">0</h3>
+            <h3 className="text-3xl font-bold">{total_SUBTDCR}</h3>
             <p className="text-gray-600">Projetos SUBTDCR</p>
           </div>
         </div>
@@ -157,27 +157,33 @@ export default function Projetos () {
           </div>
         </div>
       </div>
+      <div className="max-w-6xl mx-auto bg-white text-black">
+    <div className="flex flex-wrap lg:flex-nowrap justify-center gap-4 p-4">
+        <div className="w-full lg:w-1/3 bg-white shadow-lg rounded-2xl p-3 h-64 flex flex-col items-center justify-center">
+            <h3 className="text-lg font-semibold text-center pb-3">Situação da demanda</h3>
+            <div className="max-h-40">
+            <Bar data={barData} options={{ responsive: true, maintainAspectRatio: false }} />
+            </div>
+
+        </div>
+    </div>
+</div>
 
       <ProjetoForm onClose={handleCloseModal} isOpen={modalOpen} />
+      <div className=" mb-6  justify-items-end">
 
-      {/* Gráficos centralizados */}
-      <div className="flex flex-wrap justify-center gap-4 w-full px-4 mt-6">
-        <div className="h-40 w-80">
-          <Bar data={barData} options={{ responsive: true, maintainAspectRatio: false }} />
-        </div>
 
-        <div className="h-40 w-80">
-          <Line data={lineData} options={{ responsive: true, maintainAspectRatio: false }} />
-        </div>
-      </div>
+{isAuthenticated && (
+  <div
+    onClick={handleOpenModal}
+    className="cursor-pointer bg-[rgb(1,98,175,255)] hover:bg-[rgb(1,78,140)] text-white w-10 h-10 rounded-full hover:scale-105 flex items-center justify-center"
+  >
+    <FaPlus className="text-white text-lg" />
+  </div>
+)}
 
-      <div
-        onClick={handleOpenModal}
-        className="flex items-center space-x-2 bg-gray-100 p-4 rounded-lg shadow-md mt-4 cursor-pointer"
-      >
-        <FaPlus className="text-blue-500 text-xl" />
-        <span className="text-gray-700">Inserir Projeto</span>
-      </div>
+
+</div>
 
       <div className="flex gap-4 text-black bg-white">
         <div className="flex-1 overflow-x-auto mt-2">

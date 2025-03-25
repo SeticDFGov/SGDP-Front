@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { createItem } from "../services/apiService";
 import { getAllCategoria } from "../services/categoriaService";
 import { getAllDemandantes } from "../services/demandanteService";
+import 'material-icons/iconfont/material-icons.css';
+import { FaTimes } from 'react-icons/fa';
 
 
 const CadastroDemanda = ({onClose}) => {
-  
+
   if(!onClose) return null;
 
   const [categorias, setCategorias] = useState([])
@@ -110,9 +112,22 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 text-black">
 
-   
+
      <form onSubmit={handleSubmit} className="space-y-4 p-6 bg-white rounded-lg shadow-md text-black">
-      <h2 className="text-2xl font-semibold text-center">Cadastro de Demanda</h2>
+            <div className="mt-4 flex justify-between items-center mb-4">
+        <div className="">
+        <h2 className="text-2xl font-semibold text-center">Cadastro de Demanda</h2>
+        </div>
+
+        <div className=" flex justify-center items-center">
+          <div
+            onClick={onClose}
+            className="cursor-pointer text-white w-10 h-10 rounded-full hover:scale-105 flex items-center justify-center"
+          >
+            <FaTimes className="text-gray-900 text-lg" />
+          </div>
+        </div>
+      </div>
 
       {/* Grid com 3 colunas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -144,7 +159,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
             value={formData.DT_SOLICITACAO}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded"
-            
+
           />
         </div>
 
@@ -160,7 +175,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
             value={formData.DT_ABERTURA}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded"
-            
+
           />
         </div>
 
@@ -176,8 +191,8 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
             value={formData.DT_CONCLUSAO}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded"
-           
-           
+
+
           />
         </div>
 
@@ -192,7 +207,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
         value={formData.CATEGORIA}
         onChange={handleChange}
         className="mt-1 p-2 border border-gray-300 rounded"
-    
+
       >
         <option value="">Selecione uma categoria</option>
         {categorias.map((item) => (
@@ -214,7 +229,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
             value={formData.STATUS}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded"
-           
+
           >
             <option value="">Selecione a Situação</option>
             <option value="Em andamento">Em andamento</option>
@@ -235,7 +250,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
     value={formData.NM_PO_SUBTDCR}
     onChange={handleChange}
     className="mt-1 p-2 border border-gray-300 rounded"
- 
+
   >
     <option value="">Selecione um responsável</option>
     <option value="Adriana Christina">Adriana Christina</option>
@@ -263,7 +278,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
           <label htmlFor="NM_PO_DEMANDANTE" className="text-sm font-semibold text-gray-700">
             Nome do Demandante
           </label>
-          
+
           <input
             type="text"
             id="NM_PO_DEMANDANTE"
@@ -271,7 +286,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
             value={formData.NM_PO_DEMANDANTE}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded"
-          
+
           />
         </div>
 
@@ -286,7 +301,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
         value={formData.NM_AREA_DEMANDANTE}
         onChange={handleChange}
         className="mt-1 p-2 border border-gray-300 rounded"
-     
+
       >
         <option value="">Selecione uma área Demandante</option>
         {demandantes.map((item) => (
@@ -308,7 +323,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
     value={formData.UNIDADE}
     onChange={handleChange}
     className="mt-1 p-2 border border-gray-300 rounded"
-   
+
   >
     <option value="">Selecione a unidade</option>
     <option value="CGOV">CGOV</option>
@@ -345,7 +360,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
     value={formData.PERIODICO}
     onChange={handleChange}
     className="mt-1 p-2 border border-gray-300 rounded"
-  
+
   >
     <option value="">Selecione uma opção</option>
     <option value="Sim">Sim</option>
@@ -366,7 +381,7 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
     value={formData.PERIODICIDADE}
     onChange={handleChange}
     className="mt-1 p-2 border border-gray-300 rounded"
-    
+
     disabled={formData.PERIODICO !== "Sim"}
   >
     <option value="">Selecione uma opção</option>
@@ -394,19 +409,18 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
             value={formData.PATROCINADOR}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded"
-            
+
           />
         </div>
       </div>
 
-     
-      
-      <div className="flex justify-end space-x-2">
-          <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Cadastrar Demanda</button>
-          <button onClick={onClose} type="button" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Fechar</button>
+
+
+      <div className="flex justify-center mt-6 space-x-2">
+          <button type="submit" className="px-4 py-2 bg-[rgb(1,98,175,255)] hover:bg-[rgb(1,78,140)] text-white rounded">Cadastrar Demanda</button>
         </div>
     </form>
-    
+
  </div>
   );
 };

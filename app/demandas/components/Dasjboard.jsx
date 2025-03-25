@@ -472,8 +472,23 @@ return (
 
 
     <div className="mx-auto bg-white mt-5">
+
         <div className="p-4 max-w-6xl mx-auto bg-white mt-5 mb-5">
 
+        <div className=" mb-6  justify-items-end">
+
+
+{isAuthenticated && (
+  <div
+    onClick={handleOpenModal}
+    className="cursor-pointer bg-[rgb(1,98,175,255)] hover:bg-[rgb(1,78,140)] text-white w-10 h-10 rounded-full hover:scale-105 flex items-center justify-center"
+  >
+    <FaPlus className="text-white text-lg" />
+  </div>
+)}
+
+
+</div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
 
                 <div className="flex-1 relative">
@@ -561,11 +576,6 @@ return (
                 </div>
 
             </div>
-
-            {isAuthenticated && (<div onClick={handleOpenModal} className="flex items-center space-x-2 bg-gray-100 p-4 rounded-lg shadow-md">
-            <FaPlus className="text-blue-500 text-xl" />
-            <span className="text-gray-700">Inserir demanda</span>
-            </div>)}
 
            <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
             <CadastroDemanda onClose = {handleCloseModal} ></CadastroDemanda>
