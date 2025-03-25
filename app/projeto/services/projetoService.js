@@ -71,3 +71,21 @@ export const deleteItem = async (id) => {
   }
 };
 
+export const fetchTemplates = async (itemData) => {
+  try {
+    const response = await fetch(`${API_URL}/items/templates`,{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(itemData), // Envia o objeto diretamente, sem "fields"
+    });
+    if (!response.ok) {
+      throw new Error("Erro ao buscar templates");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Erro ao buscar templates:", error);
+    return null;
+  }
+};

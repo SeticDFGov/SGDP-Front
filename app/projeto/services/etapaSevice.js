@@ -22,7 +22,7 @@ export const getItemById = async (id) => {
   }
 };
 
-export const createItem = async (itemData) => {
+export const createEtapa = async (itemData) => {
   try {
     console.log("Enviando dados:", JSON.stringify(itemData)); // Log para debug
 

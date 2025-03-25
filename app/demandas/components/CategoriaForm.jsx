@@ -5,7 +5,7 @@ import { createCategoria } from "../services/categoriaService";
 
 const CategoriaForm = ({ onClose }) => {
   const [categoria, setCategoria] = useState({
-    NM_CATEGORIA: "",
+    Nome: "",
   });
 
   const [error, setError] = useState("");
@@ -13,7 +13,7 @@ const CategoriaForm = ({ onClose }) => {
   const handleSubmit = async () => {
     try {
       await createCategoria(categoria);
-      setCategoria({ NM_CATEGORIA: "" });
+      setCategoria({ Nome: "" });
       onClose(); // Fecha o modal após sucesso
     } catch {
       setError("Erro no momento do cadastro da categoria");
@@ -43,10 +43,10 @@ const CategoriaForm = ({ onClose }) => {
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <input
           type="text"
-          name="NM_CATEGORIA"
+          name="Nome"
           placeholder="Nome da categoria"
           className="w-full p-2 border border-gray-300 rounded mt-2"
-          value={categoria.NM_CATEGORIA}
+          value={categoria.Nome}
           onChange={handleChange}
         />
         <button

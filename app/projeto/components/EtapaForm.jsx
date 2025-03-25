@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createItem } from "../services/etapaSevice"; // Refira-se à função de criação de item
+import { createEtapa, createItem } from "../services/etapaSevice"; // Refira-se à função de criação de item
 
 export const EtapaForm = ({ onClose, isOpen, nome_projeto }) => {
   const [formData, setFormData] = useState({
@@ -51,7 +51,7 @@ const handleSubmit = async (e) => {
   };
 
   // Envia os dados para a API
-  const response = await createItem(itemData);
+  const response = await createEtapa(itemData);
 
   
     alert("Etapa cadastrada com sucesso!");
