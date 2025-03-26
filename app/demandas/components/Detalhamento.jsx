@@ -1,6 +1,8 @@
 import React from "react";
 import { createDetalhe, getAllDetalhes } from "../services/detalheSerive";
 import { useState, useEffect } from "react";
+import 'material-icons/iconfont/material-icons.css';
+import { FaTimes } from 'react-icons/fa';
 
 const DemandDetailsModal = ({ isOpen, onClose, demandaId , item}) => {
   const [detailData, setDetailData] = useState([]);
@@ -55,20 +57,49 @@ const handleAddDetail = async () => {
 
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-3/4 max-w-4xl">
-        <h2 className="text-xl font-bold mb-4 flex justify-between items-center">
-          Detalhes
-          {/* Botão de adicionar novo detalhamento */}
-          <button
-            onClick={() => setIsAddingDetail(true)} // Exibe o campo de input
-            className="text-white bg-blue-500 rounded-full p-2 hover:bg-blue-600 focus:outline-none"
-          >
-            <span className="material-icons">add</span>
-          </button>
-        </h2>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded" >
+      <div className="bg-white p-6  shadow-lg w-3/4 max-w-4xl ">
+      <div className="mt-4 flex justify-between items-center mb-4">
+  <div className="">
+  <h2 className="text-2xl font-semibold text-center">Detalhes</h2>
+  </div>
 
-        {/* Campo de input para novo detalhamento */}
+  <div className=" flex justify-center items-center">
+    <div
+      onClick={onClose}
+      className="cursor-pointer text-white w-10 h-10 rounded-full hover:scale-105 flex items-center justify-center"
+    >
+      <FaTimes className="text-gray-900 text-lg" />
+    </div>
+  </div>
+</div>
+
+
+
+        <div className="grid grid-cols-3 gap-4">
+          {/* Histórico de detalhamentos */}
+          <div className="col-span-1 border-r pr-4 ">
+          <h3 className="font-semibold mb-2">Histórico de detalhamentos</h3>
+            <div className="border-l-2 border-gray-300 pl-4">
+              {detailData.map((item) => (
+                <div key={item.ID} className="mb-4">
+                  <p className="text-sm font-bold">
+                    {(() => {
+                      try {
+                        const data = new Date(item.Created);
+                        if (isNaN(data)) throw new Error("Data inválida");
+                        return data.toLocaleDateString("pt-BR");
+                      } catch {
+                        return "";
+                      }
+                    })()}
+                  </p>
+                  <p className="text-sm">{item.DETALHAMENTO}</p>
+                </div>
+              ))}
+            </div>
+
+          {/* Campo de input para novo detalhamento */}
         {isAddingDetail && (
           <div className="mb-4">
             <textarea
@@ -93,32 +124,17 @@ const handleAddDetail = async () => {
           </div>
         )}
 
-        <div className="grid grid-cols-3 gap-4">
-          {/* Histórico de detalhamentos */}
-          <div className="col-span-1 border-r pr-4">
-            <h3 className="font-semibold mb-2">Histórico de detalhamentos</h3>
-            <div className="border-l-2 border-gray-300 pl-4">
-              {detailData.map((item) => (
-                <div key={item.ID} className="mb-4">
-                  <p className="text-sm font-bold">
-                    {(() => {
-                      try {
-                        const data = new Date(item.Created);
-                        if (isNaN(data)) throw new Error("Data inválida");
-                        return data.toLocaleDateString("pt-BR");
-                      } catch {
-                        return "";
-                      }
-                    })()}
-                  </p>
-                  <p className="text-sm">{item.DETALHAMENTO}</p>
-                </div>
-              ))}
-            </div>
+            <button
+            onClick={() => setIsAddingDetail(true)} // Exibe o campo de input
+            className="text-white bg-[rgb(1,98,175,255)] rounded p-3 hover:bg-[rgb(1,78,140)] focus:outline-none mb-2"
+          > Novo detalhamento
+            <span className="material-icons">add</span>
+          </button>
           </div>
 
           {/* Informações da demanda */}
           <div className="col-span-2 bg-gray-100 p-4 rounded">
+
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="font-semibold">Nome</p>
@@ -186,7 +202,7 @@ const handleAddDetail = async () => {
                 <p className="font-semibold">Demandante</p>
                 <p>{item.NM_PO_DEMANDANTE}</p>
               </div>
-              
+
               <div>
                 <p className="font-semibold">Nº Processo SEI</p>
                 <p>{item.NR_PROCESSO_SEI}</p>
@@ -207,12 +223,6 @@ const handleAddDetail = async () => {
           </div>
         </div>
 
-        {/* Botão de fechar */}
-        <div className="flex justify-end mt-4">
-          <button onClick={onClose} className="border border-black px-4 py-2 rounded">
-            Fechar
-          </button>
-        </div>
       </div>
     </div>
   );

@@ -28,6 +28,20 @@ export default function HomePage() {
           <span className="material-icons text-green-500 text-6xl">dashboard</span>
           <h2 className="mt-4 text-lg font-semibold text-gray-800">SGP - Sistema Gestão de Projetos</h2>
         </div>
+                {/* SGP - Sistema Gestão de Projetos */}
+                <div className="pointer-events-none flex flex-col items-center p-6 bg-white shadow-lg rounded-2xl cursor-pointer hover:bg-gray-200 transition"
+        onClick={() => router.push('/projeto')}
+        >
+          <span  className="material-icons text-gray-500 text-6xl ">dashboard</span>
+          <h2 className="mt-4 text-lg font-semibold text-gray-800">SEGD - Sistema de Gestão da Estratégia de Governança Digital</h2>
+        </div>
+                        {/* SGP - Sistema Gestão de Projetos */}
+                        <div className="pointer-events-none flex flex-col items-center p-6 bg-white shadow-lg rounded-2xl cursor-pointer hover:bg-gray-200 transition"
+        onClick={() => router.push('/projeto')}
+        >
+          <span  className="material-icons text-gray-500 text-6xl ">dashboard</span>
+          <h2 className="mt-4 text-lg font-semibold text-gray-800">SIMI - Sistema de monitoramento de indicadores</h2>
+        </div>
       </div>
     </div>
       </>

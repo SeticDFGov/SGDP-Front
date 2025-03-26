@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { getItemById, updateItem } from '../services/apiService';
 import { getAllCategoria } from '../services/categoriaService';
 import { getAllDemandantes } from '../services/demandanteService';
+import 'material-icons/iconfont/material-icons.css';
+import { FaTimes } from 'react-icons/fa';
 
 const EditFormModal = ({ itemId, onSave , onClose}) => {
   if(!onClose) return null;
@@ -37,7 +39,7 @@ const EditFormModal = ({ itemId, onSave , onClose}) => {
   PERIODICIDADE: "",
   PATROCINADOR: ""
 });
-  
+
   const fetchItems = async () => {
     try {
       const responseCategoria = await getAllCategoria();
@@ -76,7 +78,7 @@ const EditFormModal = ({ itemId, onSave , onClose}) => {
               NR_PROCESSO_SEI: response.NR_PROCESSO_SEI ,
               PERIODICO: response.PERIODICO,
               PERIODICIDADE: response.PERIODICIDADE,
-              PATROCINADOR: response.PATROCINADOR 
+              PATROCINADOR: response.PATROCINADOR
             });
           }
         } catch (error) {
@@ -135,7 +137,20 @@ body.PATROCINADOR = formData.PATROCINADOR || '';
   return (
    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 text-black">
       <form onSubmit={handleSubmit} className="space-y-4 p-6 bg-white rounded-lg shadow-md text-black w-full max-w-7xl h-">
-        <h2 className="text-2xl font-semibold text-center">Editar Demanda</h2>
+              <div className="mt-4 flex justify-between items-center mb-4">
+          <div className="">
+          <h2 className="text-2xl font-semibold text-center">Editar Demanda</h2>
+          </div>
+
+          <div className=" flex justify-center items-center">
+            <div
+              onClick={onClose}
+              className="cursor-pointer text-white w-10 h-10 rounded-full hover:scale-105 flex items-center justify-center"
+            >
+              <FaTimes className="text-gray-900 text-lg" />
+            </div>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="flex flex-col">
@@ -151,7 +166,7 @@ body.PATROCINADOR = formData.PATROCINADOR || '';
             />
           </div>
 
-  
+
 
 {["DT_SOLICITACAO", "DT_ABERTURA", "DT_CONCLUSAO"].map((field) => (
   <div key={field} className="flex flex-col">
@@ -168,8 +183,8 @@ body.PATROCINADOR = formData.PATROCINADOR || '';
         handleChange({ target: { name: field, value } }); // Atualiza o estado com a data ou null
       }}
       className="mt-1 p-2 border border-gray-300 rounded"
-    
-  
+
+
     />
   </div>
 ))}
@@ -235,14 +250,13 @@ body.PATROCINADOR = formData.PATROCINADOR || '';
   />
 </div>
         </div>
-        
 
-        <div className="flex justify-end space-x-2">
-          <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Salvar Alterações</button>
-          <button onClick={onClose} type="button" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Fechar</button>
+
+        <div className="flex justify-center mt-6 space-x-2">
+          <button type="submit" className="px-4 py-2 bg-[rgb(1,98,175,255)] hover:bg-[rgb(1,78,140)] text-white rounded">Salvar Alterações</button>
         </div>
       </form>
-    </div> 
+    </div>
   );
 };
 
