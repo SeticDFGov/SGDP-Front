@@ -626,7 +626,7 @@ return (
                                 <td className="border p-2">{item.STATUS}</td>
                                 <td className="border p-2">{item.CATEGORIA}</td>
                                 <td className="border p-2">{item.NM_AREA_DEMANDANTE}</td>
-                                {isAuthenticated && <td className="border p-2">{item.PO_SUBTDCR}</td>
+                                {isAuthenticated && <td className="border p-2">{item.NM_PO_SUBTDCR}</td>
  }
                                 <td className="border p-2">
                                     {
@@ -653,19 +653,19 @@ return (
       className="text-[rgb(1,98,175,255)] hover:text-[rgb(1,78,140)] hover:scale-105"
       onClick={() => { handleOpenDetailModal(item.NM_DEMANDA, item); setNomeId(item.NM_DEMANDA); }}
     >
-      <span class="material-icons">visibility</span>
+      <span className="material-icons">visibility</span>
     </button>
     <button
         className="text-[rgb(1,98,175,255)] hover:text-[rgb(1,78,140)] hover:scale-105"
         onClick={() => handleDeleteItem(item.ID)}
       >
-      <span class="material-icons">delete</span>
+      <span className="material-icons">delete</span>
       </button>
       <button
         className="text-[rgb(1,98,175,255)] hover:text-[rgb(1,78,140)] hover:scale-105"
         onClick={() => handleOpenEditModal(item.ID)}
       >
-      <span class="material-icons">edit</span>
+      <span className="material-icons">edit</span>
       </button>
   </div>
 

@@ -192,7 +192,7 @@ const handleAddDetail = async () => {
               </div>
               <div>
                 <p className="font-semibold">Responsável</p>
-                <p>{item.PO_SUBTDCR}</p>
+                <p>{item.NM_PO_SUBTDCR}</p>
               </div>
               <div>
                 <p className="font-semibold">Área Demandante</p>
