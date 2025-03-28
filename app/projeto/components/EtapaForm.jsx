@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createEtapa, createItem } from "../services/etapaSevice"; // Refira-se à função de criação de item
 
-export const EtapaForm = ({ onClose, isOpen, nome_projeto }) => {
+export const EtapaForm = ({ onClose, isOpen, id }) => {
   const [formData, setFormData] = useState({
     NM_ETAPA: "",
     DT_INICIO_PREVISTO: "",
@@ -11,7 +11,6 @@ export const EtapaForm = ({ onClose, isOpen, nome_projeto }) => {
     PERCENT_TOTAL_ETAPA: "",
     PERCENT_EXECUTADO: "",
 
-    SITUA_x00c7__x00c3_O: "",
   });
 
   const handleInputChange = (e) => {
@@ -38,7 +37,6 @@ const handleSubmit = async (e) => {
 
   // Construindo o objeto de dados que será enviado para a API
   const itemData = {
-    NM_PROJETO: nome_projeto, // Defina o nome do projeto conforme necessário
     NM_ETAPA: formData.NM_ETAPA,
     DT_INICIO_PREVISTO: formatDate(formData.DT_INICIO_PREVISTO),
     DT_TERMINO_PREVISTO: formatDate(formData.DT_TERMINO_PREVISTO),
@@ -51,7 +49,7 @@ const handleSubmit = async (e) => {
   };
 
   // Envia os dados para a API
-  const response = await createEtapa(itemData);
+  const response = await createEtapa(itemData, id);
 
   
     alert("Etapa cadastrada com sucesso!");

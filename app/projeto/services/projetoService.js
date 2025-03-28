@@ -1,8 +1,8 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL_PROJETO || "http://localhost:5000/api/projeto";
+const API_URL = process.env.NEXT_PUBLIC_API_URL_PROJETO || "http://localhost:5148/api/projeto";
 
 export const getAllItems = async () => {
   try {
-    const response = await fetch(`${API_URL}/items`);
+    const response = await fetch(`${API_URL}`);
     if (!response.ok) throw new Error("Erro ao obter itens");
     return await response.json();
   } catch (error) {
@@ -13,7 +13,7 @@ export const getAllItems = async () => {
 
 export const getItemById = async (id) => {
   try {
-    const response = await fetch(`${API_URL}/items/${id}`);
+    const response = await fetch(`${API_URL}/${id}`);
     if (!response.ok) throw new Error(`Erro ao obter item ${id}`);
     return await response.json();
   } catch (error) {
@@ -26,7 +26,7 @@ export const createItem = async (itemData) => {
   try {
     console.log("Enviando dados:", JSON.stringify(itemData)); // Log para debug
 
-    const response = await fetch(`${API_URL}/items`, {
+    const response = await fetch(`${API_URL}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -39,7 +39,7 @@ export const createItem = async (itemData) => {
       throw new Error(`Erro ao criar item: ${errorText}`);
     }
 
-    return await response.json();
+    return await response.text();
   } catch (error) {
     console.error("Erro na requisição:", error.message);
     return null;

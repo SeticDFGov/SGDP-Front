@@ -15,7 +15,7 @@ import Chart from "chart.js/auto"; // ✅ Importando automaticamente os módulos
 import { DesempenhoForm } from "@/app/projeto/components/DesempenhoForm";
 
 export default function ProductPage() {
-    const { id, nome } = useParams(); // Agora capturamos id e nome
+    const { id } = useParams(); // Agora capturamos id e nome
     const [projeto, setProjeto] = useState({});
     const [etapas, setEtapas] = useState([]);
     const [etapaSelecionada, setEtapaSelecionada] = useState(null);
@@ -57,6 +57,7 @@ const dataGraph = {
 useEffect(() => {
     const fetchProjeto = async () => {
         const response = await getItemById(id);
+        console.log(response)
         setProjeto(response);
     };
     fetchProjeto();
@@ -64,7 +65,7 @@ useEffect(() => {
 
 useEffect(() => {
     const fetchEtapas = async () => {
-        const response = await getAllEtapas(nome);
+        const response = await getAllEtapas(id);
         setEtapas(response);
 
         let execSum = 0;
@@ -102,21 +103,21 @@ useEffect(() => {
         setPlan(planSum);
     };
 
-    if (nome) {
+    if (id) {
         fetchEtapas();
     }
-}, [nome]);
+}, [id]);
 
 useEffect(() => {
     const fetchAnalises = async () => {
-        const analisesData = await getAllAnalise(nome);
+        const analisesData = await getAllAnalise(id);
         setAnalises(analisesData);
     };
 
-    if (nome) {
+    if (id) {
         fetchAnalises();
     }
-}, [nome]);
+}, [id]);
 
 // 🔹 Melhoria na lógica de última análise
 useEffect(() => {
@@ -155,7 +156,7 @@ const handleCadastroEtapa = (novaEtapa) => {
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             onSubmit={handleCadastroEtapa}
-            nome_projeto={nome}
+            id={id}
         />
         <DesempenhoForm
             isOpen={showDesempenho}
@@ -165,7 +166,7 @@ const handleCadastroEtapa = (novaEtapa) => {
         <AnaliseModal
             isOpen={showAnalise}
             onClose={() => setShowAnalise(false)}
-            nomeProjeto ={nome}
+            nomeProjeto ={id}
         />
         {/* Conteúdo Principal */}
         <main className="flex-1 p-6 bg-white rounded-lg shadow-md">
