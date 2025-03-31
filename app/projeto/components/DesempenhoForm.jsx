@@ -9,21 +9,12 @@ export const DesempenhoForm = ({ onClose, isOpen, etapa }) => {
     ANALISE: "",
   });
 
-  // Função para formatar datas no padrão YYYY-MM-DD para inputs type="date"
-  const formatDateForInput = (date) => {
-    if (!date) return "";
-    const [day, month, year] = date.split("-");
-    return `${year}-${month}-${day}`;
-  };
 
   // Função para formatar datas para exibição e submissão (dd-mm-yyyy)
-  const formatDateForDisplay = (date) => {
-    if (!date) return "";
-    const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const year = d.getFullYear();
-    return `${day}-${month}-${year}`;
+  const formatDateForDisplay = (dateString) => {
+    if (!dateString) return ""; // Evita erro se for null ou undefined
+
+  return dateString.split("T")[0]; // Retorna apenas 'YYYY-MM-DD'
   };
 
   // Função para carregar os dados ao abrir o modal
@@ -31,12 +22,13 @@ export const DesempenhoForm = ({ onClose, isOpen, etapa }) => {
     if (!etapa?.ID) return; // Evita erro caso o ID não esteja definido
 
     const data = await getItemById(etapa.ID);
+    console.log(data)
     if (data) {
       setFormData({
-        DT_INICIO_REAL: formatDateForInput(data.DT_INICIO_REAL),
-        DT_TERMINO_REAL: formatDateForInput(data.DT_TERMINO_REAL),
-        PERCENT_EXEC_ETAPA: data.PERCENT_EXEC_ETAPA || "",
-        ANALISE: data.ANALISE || "",
+        DT_INICIO_REAL: formatDateForDisplay(data.dT_INICIO_REAL),
+        DT_TERMINO_REAL: formatDateForDisplay(data.dT_TERMINO_REAL),
+        PERCENT_EXEC_ETAPA: data.percenT_EXEC_ETAPA || "",
+        ANALISE: data.analise || "",
       });
     }
   };
@@ -60,8 +52,8 @@ export const DesempenhoForm = ({ onClose, isOpen, etapa }) => {
     e.preventDefault();
 
     const itemData = {
-      DT_INICIO_REAL: formatDateForDisplay(formData.DT_INICIO_REAL),
-      DT_TERMINO_REAL: formatDateForDisplay(formData.DT_TERMINO_REAL),
+      DT_INICIO_REAL: formData.DT_INICIO_REAL,
+      DT_TERMINO_REAL: formData.DT_TERMINO_REAL,
       PERCENT_EXEC_ETAPA: formData.PERCENT_EXEC_ETAPA,
       ANALISE: formData.ANALISE,
     };
@@ -101,7 +93,7 @@ export const DesempenhoForm = ({ onClose, isOpen, etapa }) => {
             <div className="mb-4">
               <label className="block text-sm font-medium">Percentual Executado da Etapa</label>
               <input
-                type="text"
+                type="number"
                 name="PERCENT_EXEC_ETAPA"
                 value={formData.PERCENT_EXEC_ETAPA}
                 onChange={handleInputChange}

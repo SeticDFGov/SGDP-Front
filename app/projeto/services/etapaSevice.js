@@ -13,7 +13,7 @@ export const getAllEtapas = async (id) => {
 
 export const getItemById = async (id) => {
   try {
-    const response = await fetch(`${API_URL}/items/${id}`);
+    const response = await fetch(`${API_URL}/api/byid/${id}`);
     if (!response.ok) throw new Error(`Erro ao obter item ${id}`);
     return await response.json();
   } catch (error) {
@@ -49,7 +49,7 @@ export const createEtapa = async (itemData, id) => {
 
 export const updateItem = async (id, itemData) => {
   try {
-    const response = await fetch(`${API_URL}/items/${id}`, {
+    const response = await fetch(`${API_URL}/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(itemData),

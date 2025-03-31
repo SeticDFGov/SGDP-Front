@@ -3,9 +3,9 @@ import { createItem, getLastAnalise } from "../services/analiseService";
 
 export const AnaliseModal = ({ isOpen, onClose, nomeProjeto }) => {
   const [formData, setFormData] = useState({
-    NM_PROJETO:nomeProjeto,
+   NM_PROJETO:nomeProjeto,
     ANALISE: "",
-    ENTRAVE: "Nao"
+    ENTRAVE: false
   });
   const [lastAnalise, setLastAnalise] = useState(null);
 
@@ -30,7 +30,8 @@ export const AnaliseModal = ({ isOpen, onClose, nomeProjeto }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await createItem({ ...formData });
+    console.log(nomeProjeto);
+    const response = await createItem({ ...formData }, nomeProjeto);
     if (response) {
       alert("Análise salva com sucesso!");
       onClose();
@@ -66,8 +67,8 @@ export const AnaliseModal = ({ isOpen, onClose, nomeProjeto }) => {
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
               >
-                <option value="Sim">Sim</option>
-                <option value="Nao">Não</option>
+                <option value={true}>Sim</option>
+                <option value={false}>Não</option>
               </select>
             </div>
             <div className="flex justify-end space-x-2">
