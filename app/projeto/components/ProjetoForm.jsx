@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { createItem, fetchTemplates } from "../services/projetoService";
-import { createEtapa } from "../services/etapaSevice";
 
 const ProjetoForm = ({ onClose, isOpen }) => {
   if (!isOpen) return null;
@@ -23,41 +22,15 @@ const ProjetoForm = ({ onClose, isOpen }) => {
   });
 
   const [error, setError] = useState("");
-  const [etapas, setEtapas] = useState([]);
-
-  useEffect(() => {
-    if (projeto.TEMPLATE === "Contratação pregão") {
-      const fetchData = async () => {
-        try {
-          const data = await fetchTemplates({ NM_TEMPLATE: "Contratação pregão" });
-          setEtapas(data || []);
-        } catch (err) {
-          console.error("Erro ao buscar templates:", err);
-          setEtapas([]);
-        }
-      };
-      fetchData();
-    } else {
-      setEtapas([]); // Se mudar para outro template, limpar etapas
-    }
-  }, [projeto.TEMPLATE]);
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const response = await createItem(projeto);
 
-      if (response) {
-        if (projeto.TEMPLATE === "Contratação pregão" && etapas.length > 0) {
-          for (const etapa of etapas) {
-            await createEtapa({
-              NM_ETAPA: etapa.NM_ETAPA,
-              NM_PROJETO: projeto.NM_PROJETO, // ID do projeto recém-criado
-              PERCENT_TOTAL_ETAPA: etapa.PERCENT_TOTAL,
-            });
-          }
-        }
+      if (response.ok) {
+        
 
         setProjeto({
           NM_PROJETO: "",
