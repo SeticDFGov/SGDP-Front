@@ -211,7 +211,7 @@ export default function Projetos () {
                       <button
                         id="etapa"
                         className="button is-primary"
-                        onClick={() => router.push(`/projeto/etapa/${item.ID}/${item.NM_PROJETO}`)}
+                        onClick={() => router.push(`/projeto/etapa/${item.ID}`)}
                       >
                         <span className="material-icons">sync</span>
                       </button>

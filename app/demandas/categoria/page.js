@@ -29,7 +29,7 @@ const handleAuthenticate = () => {
   if (!confirmDelete) return;
 
   try {
-    const response = await deleteCategoria(id);
+    const response = await deleteCategoria(  id);
 
     if (response) {
       alert("categoria excluída com sucesso!");
@@ -98,11 +98,11 @@ const handleAuthenticate = () => {
                 <tbody>
                   {items.length > 0 ? (
                     items.map((item) => (
-                      <tr key={item.ID} className="shadow">
-                        <td className="border p-2">{item.NM_CATEGORIA}</td>
+                      <tr key={item.CategoriaId} className="shadow">
+                        <td className="border p-2">{item.Nome}</td>
                         <td className="border p-2">
                           <div className="flex justify-center items-center gap-2">
-                            <button id="delete" className="text-gray-900 hover:scale-105" onClick={() => {handleDeleteItem(item.ID)}}>
+                            <button id="delete" className="text-gray-900 hover:scale-105" onClick={() => {handleDeleteItem(item.CategoriaId)}}>
                               <span className="material-icons">delete</span>
                             </button>
                           </div>

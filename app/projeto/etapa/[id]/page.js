@@ -4,23 +4,24 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getItemById } from "@/app/projeto/services/projetoService";
 import { getAllEtapas, getAllItems } from "@/app/projeto/services/etapaSevice";
-import { getAllAnalise } from "@/app/projeto/services/analiseService"; // Certifique-se de importar o serviço
+import { getAllAnalise, getLastAnalise } from "@/app/projeto/services/analiseService"; 
 import 'material-icons/iconfont/material-icons.css';
 import Header from "@/app/demandas/components/Header";
 import { EtapaForm } from "@/app/projeto/components/EtapaForm";
 import AnaliseModal, { AnaliseForm } from "@/app/projeto/components/AnaliseForm";
 import { FaTrash, FaEdit , FaPlus, FaEye} from 'react-icons/fa';
 import { Bar } from "react-chartjs-2";
-import Chart from "chart.js/auto"; // ✅ Importando automaticamente os módulos do Chart.js
+import Chart from "chart.js/auto"; 
 import { DesempenhoForm } from "@/app/projeto/components/DesempenhoForm";
+import { CornerDownLeft } from "lucide-react";
 
 export default function ProductPage() {
-    const { id, nome } = useParams(); // Agora capturamos id e nome
+    const { id } = useParams(); 
     const [projeto, setProjeto] = useState({});
     const [etapas, setEtapas] = useState([]);
     const [etapaSelecionada, setEtapaSelecionada] = useState(null);
     const [analises, setAnalises] = useState([]);
-    const [ultimaAnalise, setUltimaAnalise] = useState({}); // Armazenar a última análise
+    const [ultimaAnalise, setUltimaAnalise] = useState({}); 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [showDesempenho, setShowDesempenho] = useState(false)
@@ -57,6 +58,7 @@ const dataGraph = {
 useEffect(() => {
     const fetchProjeto = async () => {
         const response = await getItemById(id);
+        console.log(response)
         setProjeto(response);
     };
     fetchProjeto();
@@ -64,7 +66,8 @@ useEffect(() => {
 
 useEffect(() => {
     const fetchEtapas = async () => {
-        const response = await getAllEtapas(nome);
+        console.log(id)
+        const response = await getAllEtapas(id);
         setEtapas(response);
 
         let execSum = 0;
@@ -102,33 +105,25 @@ useEffect(() => {
         setPlan(planSum);
     };
 
-    if (nome) {
+    if (id) {
         fetchEtapas();
     }
-}, [nome]);
+}, [id]);
 
 useEffect(() => {
     const fetchAnalises = async () => {
-        const analisesData = await getAllAnalise(nome);
+        const analisesData = await getAllAnalise(id);
+        const lastAnalise = await getLastAnalise(id);
+        setUltimaAnalise(lastAnalise)
         setAnalises(analisesData);
     };
 
-    if (nome) {
+    if (id) {
         fetchAnalises();
     }
-}, [nome]);
+}, [id]);
 
-// 🔹 Melhoria na lógica de última análise
-useEffect(() => {
-    if (analises.length > 0) {
 
-        const ultima = [...analises]
-            .sort((a, b) => new Date(b.Created) - new Date(a.Created))
-            .shift();
-
-        setUltimaAnalise(ultima);
-    }
-}, [analises]);
 
 const handleCadastroEtapa = (novaEtapa) => {
     setEtapas((prevEtapas) => [...prevEtapas, novaEtapa]);
@@ -155,7 +150,7 @@ const handleCadastroEtapa = (novaEtapa) => {
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             onSubmit={handleCadastroEtapa}
-            nome_projeto={nome}
+            id={id}
         />
         <DesempenhoForm
             isOpen={showDesempenho}
@@ -165,7 +160,7 @@ const handleCadastroEtapa = (novaEtapa) => {
         <AnaliseModal
             isOpen={showAnalise}
             onClose={() => setShowAnalise(false)}
-            nomeProjeto ={nome}
+            nomeProjeto ={id}
         />
         {/* Conteúdo Principal */}
         <main className="flex-1 p-6 bg-white rounded-lg shadow-md">
@@ -195,7 +190,7 @@ const handleCadastroEtapa = (novaEtapa) => {
           </div>
           <div>
             <p className="text-gray-800 font-semibold">Última Ánalise:</p>
-            <p className="text-gray-600">{ultimaAnalise.ANALISE}</p>
+            <p className="text-gray-600">{ultimaAnalise.analise}</p>
           </div>
         </div>
 
@@ -230,7 +225,7 @@ const handleCadastroEtapa = (novaEtapa) => {
                                   <th className="border p-2 text-left">Termino Planejado</th>
                                   <th className="border p-2 text-left">Ínicio Real</th>
                                   <th className="border p-2 text-left">Termino Real</th>
-
+                                  <th className="border p-2 text-left">Situação</th>
                                   <th className="border p-2 text-left">% Planejado</th>
                                   <th className="border p-2 text-left">% Executado</th>
                                   <th className="border p-2 text-left">Ação</th>
@@ -263,6 +258,11 @@ const handleCadastroEtapa = (novaEtapa) => {
                                       <td className="border p-2">
                                     {
                                     item.DT_TERMINO_REAL
+                                     }
+                                    </td>
+                                     <td className="border p-2">
+                                    {
+                                    item.SITUACAO
                                      }
                                     </td>
                                     <td className="border p-2">

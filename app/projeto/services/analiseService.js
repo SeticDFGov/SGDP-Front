@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL_ANALISE || "http://localhost:5000/api/analise";
+const API_URL = process.env.NEXT_PUBLIC_API_URL_ANALISE || "http://localhost:5148/api/projeto/analise";
 
 export const getAllAnalise = async (nome_projeto) => {
   try {
@@ -17,10 +17,9 @@ export const getLastAnalise = async (nome_projeto) => {
     if (!response.ok) throw new Error("Erro ao obter itens");
     const analises = await response.json();
     
-    // Ordena as análises pelo campo 'Created' para pegar a última
-    const lastAnalise = analises.sort((a, b) => new Date(b.Created) - new Date(a.Created))[0];
     
-    return lastAnalise;
+    console.log(analises)
+    return analises;
   } catch (error) {
     console.error(error);
     return null;
@@ -38,11 +37,11 @@ export const getItemById = async (id) => {
   }
 };
 
-export const createItem = async (itemData) => {
+export const createItem = async (itemData, id) => {
   try {
     console.log("Enviando dados:", JSON.stringify(itemData)); // Log para debug
 
-    const response = await fetch(`${API_URL}/items`, {
+    const response = await fetch(`${API_URL}/${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -55,7 +54,7 @@ export const createItem = async (itemData) => {
       throw new Error(`Erro ao criar item: ${errorText}`);
     }
 
-    return await response.json();
+    return await response.text();
   } catch (error) {
     console.error("Erro na requisição:", error.message);
     return null;

@@ -13,21 +13,28 @@ const CadastroDemanda = ({onClose}) => {
   const [categorias, setCategorias] = useState([])
   const [demandantes, setDemandantes] = useState([])
   const [formData, setFormData] = useState({
-    NM_DEMANDA: "",
-    DT_SOLICITACAO: "",
-    DT_ABERTURA: "",
-    DT_CONCLUSAO: "",
-    CATEGORIA: "",
-    STATUS: "",
-    NM_PO_SUBTDCR: "",
-    NM_PO_DEMANDANTE: "",
-    NM_AREA_DEMANDANTE :"",
-    UNIDADE: "",
-    NR_PROCESSO_SEI: "",
-    PERIODICO: "",
-    PERIODICIDADE: "",
-    PATROCINADOR: "",
-  });
+  NM_DEMANDA: "",
+  DT_SOLICITACAO: "",
+  DT_ABERTURA: "",
+  DT_CONCLUSAO: "",
+  categoria: {
+    categoriaId: "",
+    nome: "a"
+  },
+  STATUS: "",
+  NM_PO_SUBTDCR: "",
+  NM_PO_DEMANDANTE: "",
+  PATROCINADOR: "",
+  UNIDADE: "",
+  NR_PROCESSO_SEI: "",
+  PERIODICO: "",
+  PERIODICIDADE: "",
+  nM_AREA_DEMANDANTE: {
+    areaDemandanteID: "",
+    nM_DEMANDANTE: "a",
+    nM_SIGLA: "a"
+  }
+});
 
   const fetchItems = async () => {
     try {
@@ -54,61 +61,74 @@ const CadastroDemanda = ({onClose}) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    // Criar o corpo da requisição conforme o formato necessário
-    const body = {};
-
-if (formData.NM_DEMANDA) body.NM_DEMANDA = formData.NM_DEMANDA;
-if (formData.DT_SOLICITACAO) body.DT_SOLICITACAO = formData.DT_SOLICITACAO;
-if (formData.DT_ABERTURA) body.DT_ABERTURA = formData.DT_ABERTURA;
-if (formData.DT_CONCLUSAO) body.DT_CONCLUSAO = formData.DT_CONCLUSAO;
-if (formData.CATEGORIA) body.CATEGORIA = formData.CATEGORIA;
-if (formData.STATUS) body.STATUS = formData.STATUS;
-if (formData.NM_PO_SUBTDCR) body.PO_SUBTDCR = formData.NM_PO_SUBTDCR;
-if (formData.NM_PO_DEMANDANTE) body.NM_PO_DEMANDANTE = formData.NM_PO_DEMANDANTE;
-if (formData.UNIDADE) body.UNIDADE = formData.UNIDADE;
-if (formData.NR_PROCESSO_SEI) body.NR_PROCESSO_SEI = formData.NR_PROCESSO_SEI;
-if (formData.PERIODICO) body.PERIODICO = formData.PERIODICO;
-if (formData.PERIODICIDADE) body.PERIODICIDADE = formData.PERIODICIDADE;
-if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
-
-
-
-
-    // Enviar os dados via API (substitua a URL pela URL correta do SharePoint)
-    try {
-      const response = await createItem(body);
-
-      if (response) {
-        alert("Demanda cadastrada com sucesso!");
-        setFormData({
-          NM_DEMANDA: "",
-          DT_SOLICITACAO: "",
-          DT_ABERTURA: "",
-          DT_CONCLUSAO: "",
-          CATEGORIA: "",
-          STATUS: "",
-          NM_PO_SUBTDCR: "",
-          NM_PO_DEMANDANTE: "",
-          NM_AREA_DEMANDANTE:"",
-          UNIDADE: "",
-          NR_PROCESSO_SEI: "",
-          PERIODICO: "",
-          PERIODICIDADE: "",
-          PATROCINADOR: "",
-
-        })
-        onClose();; // Limpar os campos após sucesso
-        window.location.reload()
-      } else {
-        alert("Erro ao cadastrar demanda");
-      }
-    } catch (error) {
-      alert("Erro na requisição");
+  // Criar o corpo da requisição conforme o schema correto
+  const body = {
+    nM_DEMANDA: formData.NM_DEMANDA,
+    dT_SOLICITACAO: formData.DT_SOLICITACAO,
+    dT_ABERTURA: formData.DT_ABERTURA,
+    dT_CONCLUSAO: formData.DT_CONCLUSAO,
+    categoria: {
+      categoriaId: parseInt(formData.categoria.categoriaId), // Certificando que o ID seja número
+      nome: formData.categoria.nome
+    },
+    status: formData.STATUS,
+    nM_PO_SUBTDCR: formData.NM_PO_SUBTDCR,
+    nM_PO_DEMANDANTE: formData.NM_PO_DEMANDANTE,
+    patrocinador: formData.PATROCINADOR,
+    unidade: formData.UNIDADE,
+    nR_PROCESSO_SEI: formData.NR_PROCESSO_SEI,
+    periodico: formData.PERIODICO,
+    periodicidade: formData.PERIODICIDADE,
+    nM_AREA_DEMANDANTE: {
+      areaDemandanteID: parseInt(formData.nM_AREA_DEMANDANTE.areaDemandanteID),
+      nM_DEMANDANTE: formData.nM_AREA_DEMANDANTE.nM_DEMANDANTE,
+      nM_SIGLA: formData.nM_AREA_DEMANDANTE.nM_SIGLA
     }
   };
 
+  try {
+    console.log("Categoria selecionada:", formData.categoria.categoriaId);
+
+    const response = await createItem(body);
+
+   
+      alert("Demanda cadastrada com sucesso!");
+
+      // Resetar o formData
+      setFormData({
+        NM_DEMANDA: "",
+        DT_SOLICITACAO: "",
+        DT_ABERTURA: "",
+        DT_CONCLUSAO: "",
+        categoria: {
+          categoriaId: "",
+          nome: "a"
+        },
+        STATUS: "",
+        NM_PO_SUBTDCR: "",
+        NM_PO_DEMANDANTE: "",
+        PATROCINADOR: "",
+        UNIDADE: "",
+        NR_PROCESSO_SEI: "",
+        PERIODICO: "",
+        PERIODICIDADE: "",
+        nM_AREA_DEMANDANTE: {
+          areaDemandanteID: "",
+          nM_DEMANDANTE: "a",
+          nM_SIGLA: "a"
+        }
+      });
+
+      onClose(); // Fechar modal após sucesso
+      window.location.reload();
+    
+  } catch (error) {
+    alert("Erro na requisição");
+    console.error(error);
+  }
+};
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 text-black">
 
@@ -198,24 +218,32 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
 
         {/* Categoria */}
             <div className="flex flex-col">
-      <label htmlFor="CATEGORIA" className="text-sm font-semibold text-gray-700">
+      <label htmlFor="categoriaId" className="text-sm font-semibold text-gray-700">
         Categoria
       </label>
       <select
-        id="CATEGORIA"
-        name="CATEGORIA"
-        value={formData.CATEGORIA}
-        onChange={handleChange}
-        className="mt-1 p-2 border border-gray-300 rounded"
-
-      >
-        <option value="">Selecione uma categoria</option>
-        {categorias.map((item) => (
-          <option key={item.ID} value={item.NM_CATEGORIA}>
-            {item.NM_CATEGORIA}
-          </option>
-        ))}
-      </select>
+  id="categoriaId"
+  name="categoriaId"
+  value={formData.categoria.categoriaId || ""}
+  onChange={(e) => {
+    const value = e.target.value ? parseInt(e.target.value, 10) : "";
+    setFormData((prevState) => ({
+      ...prevState,
+      categoria: {
+        ...prevState.categoria,
+        categoriaId: value,
+      },
+    }));
+  }}
+  className="mt-1 p-2 border border-gray-300 rounded"
+>
+  <option value="">Selecione uma categoria</option>
+  {categorias.map((item) => (
+    <option key={item.CategoriaId} value={item.CategoriaId}>
+      {item.Nome}
+    </option>
+  ))}
+</select>
     </div>
 
         {/* Status */}
@@ -291,26 +319,35 @@ if (formData.PATROCINADOR) body.PATROCINADOR = formData.PATROCINADOR;
         </div>
 
         {/* Nome do Demandante */}
-        <div className="flex flex-col">
-          <label htmlFor="NM_AREA_DEMANDANTE" className="text-sm font-semibold text-gray-700">
-            Nome da Área Demandante
-          </label>
-          <select
-        id="NM_AREA_DEMANDANTE"
-        name="NM_AREA_DEMANDANTE"
-        value={formData.NM_AREA_DEMANDANTE}
-        onChange={handleChange}
-        className="mt-1 p-2 border border-gray-300 rounded"
+       <div className="flex flex-col">
+  <label htmlFor="areaDemandanteID" className="text-sm font-semibold text-gray-700">
+    Nome da Área Demandante
+  </label>
+  <select
+    id="areaDemandanteID"
+    name="areaDemandanteID"
+    value={formData.nM_AREA_DEMANDANTE.areaDemandanteID || ""}
+    onChange={(e) => {
+      const value = e.target.value ? parseInt(e.target.value, 10) : "";
+      setFormData((prevState) => ({
+        ...prevState,
+        nM_AREA_DEMANDANTE: {
+          ...prevState.nM_AREA_DEMANDANTE,
+          areaDemandanteID: value,
+        },
+      }));
+    }}
+    className="mt-1 p-2 border border-gray-300 rounded"
+  >
+    <option value="">Selecione uma área Demandante</option>
+    {demandantes.map((item) => (
+      <option key={item.ID} value={item.ID}>
+        {item.NM_DEMANDANTE}
+      </option>
+    ))}
+  </select>
+</div>
 
-      >
-        <option value="">Selecione uma área Demandante</option>
-        {demandantes.map((item) => (
-          <option key={item.ID} value={item.NM_DEMANDANTE}>
-            {item.NM_DEMANDANTE}
-          </option>
-        ))}
-      </select>
-        </div>
 
         {/* Unidade */}
 <div className="flex flex-col">
