@@ -63,7 +63,7 @@ const ProjetoForm = ({ onClose, isOpen }) => {
 
   setProjeto((prev) => ({
     ...prev,
-    // Para checkbox, usa checked; para outros campos, usa value
+    
     [name]: type === "checkbox" ? checked : value,
   }));
 };
