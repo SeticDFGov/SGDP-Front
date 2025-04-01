@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getItemById } from "@/app/projeto/services/projetoService";
 import { getAllEtapas, getAllItems } from "@/app/projeto/services/etapaSevice";
-import { getAllAnalise, getLastAnalise } from "@/app/projeto/services/analiseService"; 
+import {  getLastAnalise } from "@/app/projeto/services/analiseService"; 
 import 'material-icons/iconfont/material-icons.css';
 import Header from "@/app/demandas/components/Header";
 import { EtapaForm } from "@/app/projeto/components/EtapaForm";
@@ -20,7 +20,6 @@ export default function ProductPage() {
     const [projeto, setProjeto] = useState({});
     const [etapas, setEtapas] = useState([]);
     const [etapaSelecionada, setEtapaSelecionada] = useState(null);
-    const [analises, setAnalises] = useState([]);
     const [ultimaAnalise, setUltimaAnalise] = useState({}); 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -64,58 +63,14 @@ useEffect(() => {
     fetchProjeto();
 }, [id]);
 
-useEffect(() => {
-    const fetchEtapas = async () => {
-        console.log(id)
-        const response = await getAllEtapas(id);
-        setEtapas(response);
 
-        let execSum = 0;
-        let planSum = 0;
-
-        response.forEach((item) => {
-            execSum += parseFloat(item.PERCENT_EXEC_REAL) || 0;
-
-            const parseDate = (dateString) => {
-              if (!dateString || dateString === "undefined" || dateString === "null") {
-    return null; // Retorna null caso o dateString seja inválido
-  }
-                const [day, month, year] = dateString.split("-");
-                return new Date(year, month - 1, day);
-            };
-
-            const removeTime = (date) => {
-                const newDate = new Date(date);
-                newDate.setHours(0, 0, 0, 0);
-                return newDate;
-            };
-
-            const dtInicioPrevisto = parseDate(item.DT_INICIO_PREVISTO);
-            const dtTerminoPrevisto = parseDate(item.DT_TERMINO_PREVISTO);
-            const diffDays = (dtTerminoPrevisto - dtInicioPrevisto) / (1000 * 3600 * 24);
-
-            if (diffDays > 0) {
-                const diffToday = (removeTime(new Date()) - dtInicioPrevisto) / (1000 * 3600 * 24);
-                const planValue = (diffToday * 100) / diffDays;
-                planSum += parseFloat(planValue) || 0;
-            }
-        });
-
-        setExec(execSum);
-        setPlan(planSum);
-    };
-
-    if (id) {
-        fetchEtapas();
-    }
-}, [id]);
 
 useEffect(() => {
     const fetchAnalises = async () => {
-        const analisesData = await getAllAnalise(id);
+     
         const lastAnalise = await getLastAnalise(id);
         setUltimaAnalise(lastAnalise)
-        setAnalises(analisesData);
+        
     };
 
     if (id) {
