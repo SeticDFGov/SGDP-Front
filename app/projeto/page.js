@@ -184,7 +184,7 @@ export default function Projetos () {
             </thead>
             <tbody>
               {data.map((item) => (
-                <tr key={item.ID} className="shadow">
+                <tr key={item.projetoId} className="shadow">
                   <td className="border p-2">{item.NM_PROJETO}</td>
                   <td className="border p-2">{item.GERENTE_PROJETO}</td>
                   <td className="border p-2">{item.UNIDADE}</td>
@@ -195,7 +195,7 @@ export default function Projetos () {
                       <button
                         id="etapa"
                         className="button is-primary"
-                        onClick={() => router.push(`/projeto/etapa/${item.ID}`)}
+                        onClick={() => router.push(`/projeto/etapa/${item.projetoId}`)}
                       >
                         <span className="material-icons">sync</span>
                       </button>

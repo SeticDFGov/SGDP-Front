@@ -39,7 +39,7 @@ export const createItem = async (itemData) => {
       throw new Error(`Erro ao criar item: ${errorText}`);
     }
 
-    return await response.text();
+    return await response.text()
   } catch (error) {
     console.error("Erro na requisição:", error.message);
     return null;

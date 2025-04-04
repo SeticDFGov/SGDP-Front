@@ -60,7 +60,13 @@ useEffect(() => {
         console.log(response)
         setProjeto(response);
     };
+
+    const fetchEtapas = async () => {
+      const response = await getAllEtapas(id);
+      setEtapas(response)
+    }
     fetchProjeto();
+    fetchEtapas();
 }, [id]);
 
 
@@ -188,31 +194,40 @@ const handleCadastroEtapa = (novaEtapa) => {
                           </thead>
                           <tbody>
                               {etapas.map((item) => (
-                                  <tr key={item.ID} className="shadow">
+                                  <tr key={item.EtapaProjetoId} className="shadow">
                                       <td className="border p-2">{item.NM_ETAPA}</td>
                                       <td className="border p-2">{item.RESPONSAVEL_ETAPA}</td>
                                       <td className="border p-2">
                                         {
-                                        item.DT_INICIO_PREVISTO
-                                
+                                          item.DT_INICIO_PREVISTO ? 
+                                    new Date(item.DT_INICIO_PREVISTO).toLocaleDateString('pt-BR') : 
+                                    'Data não disponível'
                                 }
                                       </td>
                                       <td className="border p-2">
 
                                       {
-                                      item.DT_TERMINO_PREVISTO
-                                       }  
+                                      
+                                        item.DT_TERMINO_PREVISTO ? 
+                                    new Date(item.DT_TERMINO_PEVISTO).toLocaleDateString('pt-BR') : 
+                                    'Data não disponível'
+                }  
                                       </td>
                 
                                       <td className="border p-2">
                                         {
-                                         item.DT_INICIO_REAL
+                                         
+                                         item.DT_INICIO_REAL ? 
+                                    new Date(item.DT_INICIO_REAL).toLocaleDateString('pt-BR') : 
+                                    'Data não disponível'
                                         }
 
                                       </td>
                                       <td className="border p-2">
                                     {
-                                    item.DT_TERMINO_REAL
+                                    item.DT_TERMINO_REAL ? 
+                                    new Date(item.DT_TERMINO_REAL).toLocaleDateString('pt-BR') : 
+                                    'Data não disponível'
                                      }
                                     </td>
                                      <td className="border p-2">

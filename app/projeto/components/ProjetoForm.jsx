@@ -29,7 +29,7 @@ const ProjetoForm = ({ onClose, isOpen }) => {
     try {
       const response = await createItem(projeto);
 
-      if (response.ok) {
+      
         
 
         setProjeto({
@@ -49,9 +49,7 @@ const ProjetoForm = ({ onClose, isOpen }) => {
         console.log("Cadastro realizado com sucesso!");
         onClose();
         window.location.reload();
-      } else {
-        setError("Erro no momento do cadastro do Projeto");
-      }
+      
     } catch (error) {
       setError("Erro no momento do cadastro do Projeto");
       console.error("Erro ao enviar o formulário:", error);
@@ -143,9 +141,9 @@ const ProjetoForm = ({ onClose, isOpen }) => {
             required
           >
             <option value="">Selecione um template</option>
-            <option value="Desenvolvimento">Desenvolvimento</option>
+          
             <option value="Contratação pregão">Contratação pregão</option>
-            <option value="Geral">Geral</option>
+          
           </select>
         </div>
 <div>
@@ -183,12 +181,7 @@ const ProjetoForm = ({ onClose, isOpen }) => {
                 </label>
               </div>
 
-              <p className="mt-2 text-sm">
-                <strong>Valores:</strong>
-                <br /> PDTIC 24/27: {projeto.pdtiC2427 ? "Sim" : "Não"}
-                <br /> PROFISCO II: {projeto.profiscoii ? "Sim" : "Não"}
-                <br /> PTD 24/27: {projeto.ptD2427 ? "Sim" : "Não"}
-              </p>
+             
             </div>
           </div>
 
