@@ -211,7 +211,7 @@ const emptyToNull = (value) => (value === "" ? null : value);
 >
   <option value="">Selecione uma categoria</option>
   {categorias.map((item) => (
-    <option key={item.CategoriaId} value={item.Nome}>
+    <option key={item.Nome} value={item.Nome}>
       {item.Nome}
     </option>
   ))}
