@@ -17,10 +17,7 @@ const CadastroDemanda = ({onClose}) => {
   DT_SOLICITACAO: "",
   DT_ABERTURA: "",
   DT_CONCLUSAO: "",
-  categoria: {
-    categoriaId: "",
-    nome: "a"
-  },
+  categoria: "",
   STATUS: "",
   NM_PO_SUBTDCR: "",
   NM_PO_DEMANDANTE: "",
@@ -29,11 +26,7 @@ const CadastroDemanda = ({onClose}) => {
   NR_PROCESSO_SEI: "",
   PERIODICO: "",
   PERIODICIDADE: "",
-  nM_AREA_DEMANDANTE: {
-    areaDemandanteID: "",
-    nM_DEMANDANTE: "a",
-    nM_SIGLA: "a"
-  }
+  nM_AREA_DEMANDANTE:""
 });
 
   const fetchItems = async () => {
@@ -62,17 +55,15 @@ const CadastroDemanda = ({onClose}) => {
 
   const handleSubmit = async (e) => {
   e.preventDefault();
+const emptyToNull = (value) => (value === "" ? null : value);
 
-  // Criar o corpo da requisição conforme o schema correto
+
   const body = {
     nM_DEMANDA: formData.NM_DEMANDA,
-    dT_SOLICITACAO: formData.DT_SOLICITACAO,
-    dT_ABERTURA: formData.DT_ABERTURA,
-    dT_CONCLUSAO: formData.DT_CONCLUSAO,
-    categoria: {
-      categoriaId: parseInt(formData.categoria.categoriaId), // Certificando que o ID seja número
-      nome: formData.categoria.nome
-    },
+    dT_SOLICITACAO: emptyToNull(formData.DT_SOLICITACAO),
+    dT_ABERTURA: emptyToNull(formData.DT_ABERTURA),
+    dT_CONCLUSAO: emptyToNull(formData.DT_CONCLUSAO),
+    categoria: formData.categoria,
     status: formData.STATUS,
     nM_PO_SUBTDCR: formData.NM_PO_SUBTDCR,
     nM_PO_DEMANDANTE: formData.NM_PO_DEMANDANTE,
@@ -81,15 +72,12 @@ const CadastroDemanda = ({onClose}) => {
     nR_PROCESSO_SEI: formData.NR_PROCESSO_SEI,
     periodico: formData.PERIODICO,
     periodicidade: formData.PERIODICIDADE,
-    nM_AREA_DEMANDANTE: {
-      areaDemandanteID: parseInt(formData.nM_AREA_DEMANDANTE.areaDemandanteID),
-      nM_DEMANDANTE: formData.nM_AREA_DEMANDANTE.nM_DEMANDANTE,
-      nM_SIGLA: formData.nM_AREA_DEMANDANTE.nM_SIGLA
-    }
+    nM_AREA_DEMANDANTE: formData.nM_AREA_DEMANDANTE,
+     
   };
 
   try {
-    console.log("Categoria selecionada:", formData.categoria.categoriaId);
+    console.log("Categoria selecionada:", formData.categoria);
 
     const response = await createItem(body);
 
@@ -102,10 +90,7 @@ const CadastroDemanda = ({onClose}) => {
         DT_SOLICITACAO: "",
         DT_ABERTURA: "",
         DT_CONCLUSAO: "",
-        categoria: {
-          categoriaId: "",
-          nome: "a"
-        },
+        categoria: "",
         STATUS: "",
         NM_PO_SUBTDCR: "",
         NM_PO_DEMANDANTE: "",
@@ -114,11 +99,7 @@ const CadastroDemanda = ({onClose}) => {
         NR_PROCESSO_SEI: "",
         PERIODICO: "",
         PERIODICIDADE: "",
-        nM_AREA_DEMANDANTE: {
-          areaDemandanteID: "",
-          nM_DEMANDANTE: "a",
-          nM_SIGLA: "a"
-        }
+        nM_AREA_DEMANDANTE:""
       });
 
       onClose(); // Fechar modal após sucesso
@@ -222,24 +203,15 @@ const CadastroDemanda = ({onClose}) => {
         Categoria
       </label>
       <select
-  id="categoriaId"
-  name="categoriaId"
-  value={formData.categoria.categoriaId || ""}
-  onChange={(e) => {
-    const value = e.target.value ? parseInt(e.target.value, 10) : "";
-    setFormData((prevState) => ({
-      ...prevState,
-      categoria: {
-        ...prevState.categoria,
-        categoriaId: value,
-      },
-    }));
-  }}
+  id="categoria"
+  name="categoria"
+  value={formData.categoria || ""}
+  onChange={handleChange}
   className="mt-1 p-2 border border-gray-300 rounded"
 >
   <option value="">Selecione uma categoria</option>
   {categorias.map((item) => (
-    <option key={item.CategoriaId} value={item.CategoriaId}>
+    <option key={item.CategoriaId} value={item.Nome}>
       {item.Nome}
     </option>
   ))}
@@ -324,24 +296,15 @@ const CadastroDemanda = ({onClose}) => {
     Nome da Área Demandante
   </label>
   <select
-    id="areaDemandanteID"
-    name="areaDemandanteID"
-    value={formData.nM_AREA_DEMANDANTE.areaDemandanteID || ""}
-    onChange={(e) => {
-      const value = e.target.value ? parseInt(e.target.value, 10) : "";
-      setFormData((prevState) => ({
-        ...prevState,
-        nM_AREA_DEMANDANTE: {
-          ...prevState.nM_AREA_DEMANDANTE,
-          areaDemandanteID: value,
-        },
-      }));
-    }}
+    id="nM_AREA_DEMANDANTE"
+    name="nM_AREA_DEMANDANTE"
+    value={formData.nM_AREA_DEMANDANTE || ""}
+    onChange={handleChange}
     className="mt-1 p-2 border border-gray-300 rounded"
   >
     <option value="">Selecione uma área Demandante</option>
     {demandantes.map((item) => (
-      <option key={item.ID} value={item.ID}>
+      <option key={item.NM_DEMANDANTE} value={item.NM_DEMANDANTE}>
         {item.NM_DEMANDANTE}
       </option>
     ))}
