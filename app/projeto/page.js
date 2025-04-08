@@ -59,7 +59,7 @@ export default function Projetos () {
     }, [data]);
 
     const barData = {
-        labels: ["Concluído", "Em Andamento", "Atrasado"],
+        labels: ["Concluído", "Em Andamento", "Atrasado", "Não iniciado"],
         datasets: [
             {
                 label: "Projetos",
