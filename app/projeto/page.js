@@ -8,7 +8,7 @@ import { FaTrash, FaEdit , FaPlus, FaEye} from 'react-icons/fa';
 import { useRouter } from "next/navigation";
 import { Bar, Pie, Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PointElement, LineElement } from "chart.js";
-import { getAllEtapas } from "./services/etapaSevice";
+import { getAllEtapas, getSituacao } from "./services/etapaSevice";
 
 // Registrando os componentes necessários do Chart.js
 ChartJS.register(
@@ -29,7 +29,7 @@ export default function Projetos () {
   const [modalOpen, setIsModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
-  const [chartData, setChartData] = useState({ concluido: 0, andamento: 0, atrasado: 0 });
+  const [chartData, setChartData] = useState({});
   const [ total_SUBTDCR, setTotal_SUBTDCR ] = useState(0);
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -52,24 +52,9 @@ export default function Projetos () {
   // Dados fictícios para os gráficos
  useEffect(() => {
         const fetchProjetos = async () => {
-            let concluido = 0, andamento = 0, atrasado = 0;
-
-            for (const projeto of data) {
-
-             
-                let hasAtraso = false;
-                let hasAndamento = false;
-                let hasConcluido = false
-
-               
-
-                if (hasAtraso) atrasado++;
-                else if (hasAndamento) andamento++;
-                else if(hasConcluido) concluido++;
-            }
-
-            setChartData({ concluido, andamento, atrasado })
-        };
+          const data = await getSituacao();
+          setChartData(data)
+         };
         fetchProjetos();
     }, [data]);
 
@@ -78,8 +63,8 @@ export default function Projetos () {
         datasets: [
             {
                 label: "Projetos",
-                data: [chartData.concluido, chartData.andamento, chartData.atrasado],
-                backgroundColor: ["#4CAF50", "#FFC107", "#F44336"],
+                data: [chartData.Concluido, chartData.EmAndamento, chartData.Atrasado, chartData.NaoIniciado],
+                backgroundColor: ["#4CAF50", "#FFC107", "#F44336", "#000000"],
             }
         ]
     };
