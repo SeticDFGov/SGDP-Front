@@ -205,6 +205,7 @@ const emptyToNull = (value) => (value === "" ? null : value);
       <select
   id="categoria"
   name="categoria"
+  required
   value={formData.categoria || ""}
   onChange={handleChange}
   className="mt-1 p-2 border border-gray-300 rounded"
@@ -247,6 +248,7 @@ const emptyToNull = (value) => (value === "" ? null : value);
   <select
     id="NM_PO_SUBTDCR"
     name="NM_PO_SUBTDCR"
+    required
     value={formData.NM_PO_SUBTDCR}
     onChange={handleChange}
     className="mt-1 p-2 border border-gray-300 rounded"
@@ -298,6 +300,7 @@ const emptyToNull = (value) => (value === "" ? null : value);
   <select
     id="nM_AREA_DEMANDANTE"
     name="nM_AREA_DEMANDANTE"
+    required
     value={formData.nM_AREA_DEMANDANTE || ""}
     onChange={handleChange}
     className="mt-1 p-2 border border-gray-300 rounded"
