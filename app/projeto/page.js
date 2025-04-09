@@ -8,7 +8,7 @@ import { FaTrash, FaEdit , FaPlus, FaEye} from 'react-icons/fa';
 import { useRouter } from "next/navigation";
 import { Bar, Pie, Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PointElement, LineElement } from "chart.js";
-import { getAllEtapas, getSituacao } from "./services/etapaSevice";
+import { getAllEtapas, getSituacao, getTags } from "./services/etapaSevice";
 
 // Registrando os componentes necessários do Chart.js
 ChartJS.register(
@@ -30,6 +30,7 @@ export default function Projetos () {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
   const [chartData, setChartData] = useState({});
+  const [chartData2, setChartData2] = useState({});
   const [ total_SUBTDCR, setTotal_SUBTDCR ] = useState(0);
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -53,7 +54,9 @@ export default function Projetos () {
  useEffect(() => {
         const fetchProjetos = async () => {
           const data = await getSituacao();
+          const data2 = await getTags();
           setChartData(data)
+          setChartData2(data2)
          };
         fetchProjetos();
     }, [data]);
@@ -69,6 +72,16 @@ export default function Projetos () {
         ]
     };
 
+     const barTags = {
+        labels: ["PTD24/27", "PTDIC24/27", "PROFISCOII"],
+        datasets: [
+            {
+                label: "Projetos",
+                data: [chartData2.PTD2427, chartData2.PDTIC2427, chartData2.PROFISCOII],
+                backgroundColor: ["#000000", "#000000", "#000000"],
+            }
+        ]
+    };
 
   const lineData = {
       labels: ["Jan", "Fev", "Mar", "Abr", "Mai"],
@@ -129,11 +142,17 @@ export default function Projetos () {
       <div className="max-w-6xl mx-auto bg-white text-black">
     <div className="flex flex-wrap lg:flex-nowrap justify-center gap-4 p-4">
         <div className="w-full lg:w-1/3 bg-white shadow-lg rounded-2xl p-3 h-64 flex flex-col items-center justify-center">
-            <h3 className="text-lg font-semibold text-center pb-3">Situação da demanda</h3>
+            <h3 className="text-lg font-semibold text-center pb-3">Situação dos Projetos</h3>
             <div className="max-h-40">
             <Bar data={barData} options={{ responsive: true, maintainAspectRatio: false }} />
             </div>
 
+        </div>
+        <div className="w-full lg:w-1/3 bg-white shadow-lg rounded-2xl p-3 h-64 flex flex-col items-center justify-center">
+            <h3 className="text-lg font-semibold text-center pb-3">Tags dos Projetos</h3>
+            <div className="max-h-40">
+            <Bar data={barTags} options={{ responsive: true, maintainAspectRatio: false }} />
+            </div>
         </div>
     </div>
 </div>
