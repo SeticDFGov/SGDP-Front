@@ -4,7 +4,7 @@ export const createDetalhe = async (itemData) => {
   try {
     console.log("Enviando dados:", JSON.stringify(itemData)); // Log para debug
 
-    const response = await fetch(`${API_URL}/items`, {
+    const response = await fetch(`${API_URL}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -27,16 +27,8 @@ export const createDetalhe = async (itemData) => {
 
 export const getAllDetalhes = async (nameId) => {
   try {
-    console.log(nameId)
-    const response = await fetch(`${API_URL}/detalhes`,
-        {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({nameDemanda : nameId}), // Envia o objeto diretamente, sem "fields"
-    }
-    );
+    console.log(` asdasdas${nameId}`)
+    const response = await fetch(`${API_URL}/${nameId}`);
     if (!response.ok) throw new Error("Erro ao obter itens");
     return response.json();
   } catch (error) {

@@ -18,7 +18,7 @@ const DemandDetailsModal = ({ isOpen, onClose, demandaId , item}) => {
       // Chamada para a API
       const fetchDemandDetails = async () => {
         try {
-          const response = await getAllDetalhes(demandaId);
+          const response = await getAllDetalhes(item.ID);
           console.log(response);
           setDetailData(response);  // Atualiza o estado com os dados da demanda
         } catch (error) {
@@ -30,15 +30,15 @@ const DemandDetailsModal = ({ isOpen, onClose, demandaId , item}) => {
 
       fetchDemandDetails();
     }
-  }, [isOpen, demandaId]); // Dependências: chamada sempre que o modal for aberto e houver demandaId
+  }, [isOpen, demandaId]); 
 
   if (!isOpen) return null;
 
 const handleAddDetail = async () => {
   if (newDetail.trim()) {
-    const newDetailEntry = { NM_DEMANDA: demandaId, DETALHAMENTO: newDetail };
+    const newDetailEntry = { DEMANDA: item.ID, DETALHAMENTO: newDetail };
 
-    // Garante que sendDetail seja um array antes de atualizar
+ 
     setSendDetail((prevDetails) => [...(prevDetails || []), newDetailEntry]);
 
     try {
@@ -82,18 +82,8 @@ const handleAddDetail = async () => {
           <h3 className="font-semibold mb-2">Histórico de detalhamentos</h3>
             <div className="border-l-2 border-gray-300 pl-4">
               {detailData.map((item) => (
-                <div key={item.ID} className="mb-4">
-                  <p className="text-sm font-bold">
-                    {(() => {
-                      try {
-                        const data = new Date(item.Created);
-                        if (isNaN(data)) throw new Error("Data inválida");
-                        return data.toLocaleDateString("pt-BR");
-                      } catch {
-                        return "";
-                      }
-                    })()}
-                  </p>
+                <div key={item.detalheId} className="mb-4">
+                  
                   <p className="text-sm">{item.DETALHAMENTO}</p>
                 </div>
               ))}

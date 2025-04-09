@@ -49,7 +49,6 @@ const Dashboard = () => {
     setIsModalDetailOpen(true);
   };
 
-  // Fecha o modal
   const handleCloseDetailModal = () => {
     // Verifique se o modal está aberto antes de tentar fechá-lo
     if (isModalDetailOpen) {
@@ -651,7 +650,7 @@ return (
   <div className="flex justify-center items-center gap-2">
   <button
       className="text-[rgb(1,98,175,255)] hover:text-[rgb(1,78,140)] hover:scale-105"
-      onClick={() => { handleOpenDetailModal(item.NM_DEMANDA, item); setNomeId(item.NM_DEMANDA); }}
+      onClick={() => { handleOpenDetailModal(item.ID, item); setNomeId(item.NM_DEMANDA); }}
     >
       <span className="material-icons">visibility</span>
     </button>
