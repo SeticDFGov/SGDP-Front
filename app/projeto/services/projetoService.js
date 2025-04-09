@@ -22,6 +22,17 @@ export const getItemById = async (id) => {
   }
 };
 
+export const getQuantidade = async () => {
+  try {
+    const response = await fetch(`${API_URL}/quantidade`);
+    if (!response.ok) throw new Error(`Erro ao obter item ${id}`);
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
 export const createItem = async (itemData) => {
   try {
     console.log("Enviando dados:", JSON.stringify(itemData)); // Log para debug

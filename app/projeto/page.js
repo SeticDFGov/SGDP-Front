@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from "react";
-import { deleteItem, getAllItems } from "./services/projetoService";
+import { deleteItem, getAllItems, getQuantidade } from "./services/projetoService";
 import Header from "../demandas/components/Header";
 import ProjetoForm from "./components/ProjetoForm";
 import 'material-icons/iconfont/material-icons.css';
@@ -31,7 +31,7 @@ export default function Projetos () {
   const router = useRouter();
   const [chartData, setChartData] = useState({});
   const [chartData2, setChartData2] = useState({});
-  const [ total_SUBTDCR, setTotal_SUBTDCR ] = useState(0);
+  const [ total, setTotal] = useState({});
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
@@ -55,6 +55,8 @@ export default function Projetos () {
         const fetchProjetos = async () => {
           const data = await getSituacao();
           const data2 = await getTags();
+          const data3 = await getQuantidade();
+          setTotal(data3)
           setChartData(data)
           setChartData2(data2)
          };
@@ -114,7 +116,7 @@ export default function Projetos () {
           style={{ borderColor: "black", height: "auto" }}
         >
           <div className="text-left">
-            <h3 className="text-3xl font-bold">{total_SUBTDCR}</h3>
+            <h3 className="text-3xl font-bold">{total.SUBTDCR}</h3>
             <p className="text-gray-600">Projetos SUBTDCR</p>
           </div>
         </div>
@@ -124,7 +126,7 @@ export default function Projetos () {
           style={{ borderColor: "black", height: "auto" }}
         >
           <div className="text-left">
-            <h3 className="text-3xl font-bold">0</h3>
+            <h3 className="text-3xl font-bold">{total.SUBSIS}</h3>
             <p className="text-gray-600">Projetos SUBSIS</p>
           </div>
         </div>
@@ -134,7 +136,7 @@ export default function Projetos () {
           style={{ borderColor: "black", height: "auto" }}
         >
           <div className="text-left">
-            <h3 className="text-3xl font-bold">0</h3>
+            <h3 className="text-3xl font-bold">{total.SUBINFRA}</h3>
             <p className="text-gray-600">Projetos SUBINFRA</p>
           </div>
         </div>

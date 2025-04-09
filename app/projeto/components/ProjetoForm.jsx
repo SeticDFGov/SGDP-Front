@@ -107,6 +107,22 @@ const ProjetoForm = ({ onClose, isOpen }) => {
             value={projeto.UNIDADE}
             onChange={handleChange}
           />
+          <select
+            name="UNIDADE"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1"
+            value={projeto.UNIDADE}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Selecione uma Unidade</option>
+          
+            <option value="SUBSIS">SUBSIS</option>
+
+            <option value="SUBTDCR">SUBTDCR</option>
+
+            <option value="SUINFRA">SUBINFRA</option>
+          
+          </select>
         </div>
 
         <div>

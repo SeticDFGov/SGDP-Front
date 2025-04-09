@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getItemById } from "@/app/projeto/services/projetoService";
-import { getAllEtapas, getAllItems } from "@/app/projeto/services/etapaSevice";
+import { getAllEtapas, getAllItems, getPercent } from "@/app/projeto/services/etapaSevice";
 import {  getLastAnalise } from "@/app/projeto/services/analiseService"; 
 import 'material-icons/iconfont/material-icons.css';
 import Header from "@/app/demandas/components/Header";
@@ -27,7 +27,7 @@ export default function ProductPage() {
     const [showAnalise, setShowAnalise] = useState(false)
     const [exec, setExec] = useState(0)
     const [plan, setPlan] = useState(0)
-    
+    const count = 0;
 
 const dataGraph = {
     labels: ["Planejado", "Executado"],
@@ -54,6 +54,7 @@ const dataGraph = {
       y: { beginAtZero: true },
     },
   };
+
 useEffect(() => {
     const fetchProjeto = async () => {
         const response = await getItemById(id);
@@ -65,6 +66,13 @@ useEffect(() => {
       const response = await getAllEtapas(id);
       setEtapas(response)
     }
+
+    const fectPercent = async () => {
+      const response = await getPercent(id)
+      setExec(response.PERCENT_EXECUTADO)
+    }
+
+    fectPercent();
     fetchProjeto();
     fetchEtapas();
 }, [id]);

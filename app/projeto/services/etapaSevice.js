@@ -21,6 +21,15 @@ export const getSituacao = async () => {
   }
 };
 
+export const getPercent = async (id) => {
+  try {
+    const response = await fetch(`${API_URL}/percent/${id}`);
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
 
 export const getItemById = async (id) => {
   try {
