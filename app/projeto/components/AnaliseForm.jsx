@@ -50,8 +50,7 @@ export const AnaliseModal = ({ isOpen, onClose, nomeProjeto }) => {
       NM_PROJETO: Number(formData.NM_PROJETO), 
     };
 
-    console.log(dataToSend);
-
+    
     const response = await createItem(dataToSend);
     if (response.ok) {
       alert("Análise salva com sucesso!");
@@ -59,6 +58,8 @@ export const AnaliseModal = ({ isOpen, onClose, nomeProjeto }) => {
       onClose();
 
     }
+
+    window.location.reload()
   };
 
   return (

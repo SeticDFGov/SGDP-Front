@@ -159,7 +159,7 @@ const handleCadastroEtapa = (novaEtapa) => {
           </div>
           <div>
             <p className="text-gray-800 font-semibold">Última Ánalise:</p>
-            <p className="text-gray-600">{ultimaAnalise.analise}</p>
+            <p className="text-gray-600">{ultimaAnalise.ANALISE}</p>
           </div>
         </div>
 
