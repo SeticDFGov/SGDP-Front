@@ -146,14 +146,18 @@ export default function Projetos () {
         <div className="w-full lg:w-1/3 bg-white shadow-lg rounded-2xl p-3 h-64 flex flex-col items-center justify-center">
             <h3 className="text-lg font-semibold text-center pb-3">Situação dos Projetos</h3>
             <div className="max-h-40">
-            <Bar data={barData} options={{ responsive: true, maintainAspectRatio: false }} />
+            <Bar data={barData} options={{ responsive: true, maintainAspectRatio: false ,plugins: {
+      legend: { display: false },
+    },}} />
             </div>
 
         </div>
         <div className="w-full lg:w-1/3 bg-white shadow-lg rounded-2xl p-3 h-64 flex flex-col items-center justify-center">
             <h3 className="text-lg font-semibold text-center pb-3">Tags dos Projetos</h3>
             <div className="max-h-40">
-            <Bar data={barTags} options={{ responsive: true, maintainAspectRatio: false }} />
+            <Bar data={barTags} options={{ responsive: true, maintainAspectRatio: false,plugins: {
+      legend: { display: false },
+    }, }} />
             </div>
         </div>
     </div>
