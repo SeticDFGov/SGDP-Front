@@ -461,7 +461,7 @@ return (
             <canvas ref={demandanteChartRef} className="max-h-40"></canvas>
         </div>
         <div className="w-full lg:w-1/3 bg-white shadow-lg rounded-2xl p-3 h-64 flex flex-col items-center justify-center">
-            <h3 className="text-lg font-semibold text-center pb-3">Tempo Médio por Tipo</h3>
+            <h3 className="text-lg font-semibold text-center pb-3">Quantidade por Tipo</h3>
             <canvas ref={barChartRef} className="max-h-40"></canvas>
         </div>
     </div>
@@ -630,14 +630,20 @@ return (
                                 <td className="border p-2">
                                     {
                                          (() => {
-                                    try {
-                                    const data = new Date(item.DT_CONCLUSAO);
-                                    if (isNaN(data)) throw new Error("Data inválida");
-                                    return data.toLocaleDateString("pt-BR");
-                                    } catch {
-                                    return "";
-                                    }
-                                })()
+  try {
+    const data = new Date(item.DT_CONCLUSAO);
+    
+    // Verifica se a data é inválida ou se é 31/12/1969
+    if (isNaN(data) || data.toDateString() === new Date(0).toDateString()) {
+      throw new Error("Data inválida");
+    }
+
+    return data.toLocaleDateString("pt-BR");
+  } catch {
+    return "";
+  }
+})()
+
                                     }
                                 </td>
 
