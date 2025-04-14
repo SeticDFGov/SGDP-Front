@@ -45,16 +45,17 @@ export const DesempenhoForm = ({ onClose, isOpen, etapa }) => {
       [name]: value,
     }));
   };
-
+  const emptyToNull = (value) => (value === "" ? null : value);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const itemData = {
-      DT_INICIO_REAL: formData.DT_INICIO_REAL,
-      DT_TERMINO_REAL: formData.DT_TERMINO_REAL,
+      DT_INICIO_REAL: emptyToNull(formData.DT_INICIO_REAL),
+      DT_TERMINO_REAL: emptyToNull(formData.DT_TERMINO_REAL),
       PERCENT_EXEC_ETAPA: formData.PERCENT_EXEC_ETAPA,
       ANALISE: formData.ANALISE,
     };
+    console.log(itemData)
 
     await updateItem(etapa.EtapaProjetoId, itemData);
     alert("Etapa analisada com sucesso!");

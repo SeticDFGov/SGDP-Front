@@ -134,46 +134,52 @@ const handleAddDetail = async () => {
                 <p className="font-semibold">Data de Solicitação</p>
                 <p>{
                                          (() => {
-                                    try {
-                                    const data = new Date(item.DT_SOLICITACAO);
-                                    if (isNaN(data)) throw new Error("Data inválida");
-                                    return data.toLocaleDateString("pt-BR");
-                                    } catch {
-                                    return "";
-                                    }
-                                })()
+  try {
+    const date = new Date(item.DT_SOLICITACAO);
+    return new Intl.DateTimeFormat("pt-BR", {
+      timeZone: "UTC"
+    }).format(date);
+  } catch {
+    return "";
+  }
+})()
+
                                     }</p>
               </div>
               <div>
                 <p className="font-semibold">Data de Abertura</p>
                 <p>{
                                          (() => {
-                                    try {
-                                    const data = new Date(item.DT_ABERTURA);
-                                    if (isNaN(data)) throw new Error("Data inválida");
-                                    return data.toLocaleDateString("pt-BR");
-                                    } catch {
-                                    return "";
-                                    }
-                                })()
+  try {
+    const date = new Date(item.DT_ABERTURA);
+    return new Intl.DateTimeFormat("pt-BR", {
+      timeZone: "UTC"
+    }).format(date);
+  } catch {
+    return "";
+  }
+})()
+
                                     }</p>
               </div>
               <div>
                 <p className="font-semibold">Data de Conclusão</p>
                 <p>{
                                          (() => {
-                                    try {
-                                    const data = new Date(item.DT_CONCLUSAO);
-                                    if (isNaN(data)) throw new Error("Data inválida");
-                                    return data.toLocaleDateString("pt-BR");
-                                    } catch {
-                                    return "";
-                                    }
-                                })()
+  try {
+    const date = new Date(item.DT_CONCLUSAO);
+    return new Intl.DateTimeFormat("pt-BR", {
+      timeZone: "UTC"
+    }).format(date);
+  } catch {
+    return "";
+  }
+})()
+
                                     }</p>
               </div>
               <div>
-                <p className="font-semibold">Status</p>
+                <p className="font-semibold">Situação</p>
                 <p>{item.STATUS}</p>
               </div>
               <div>

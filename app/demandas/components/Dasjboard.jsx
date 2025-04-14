@@ -10,7 +10,22 @@ import { useRouter } from "next/navigation";
 import Header from "./Header";
 import DemandDetailsModal from "./Detalhamento";
 import { getAllDemandantes } from "../services/demandanteService";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PointElement, LineElement } from "chart.js";
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { optionsGraph } from "@/app/projeto/components/config/config";
 
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  PointElement,
+  LineElement,
+  ChartDataLabels
+);
 
 const Dashboard = () => {
   const [items, setItems] = useState([]);
@@ -63,7 +78,7 @@ const Dashboard = () => {
     const handleDelete = (id) => {
     if (window.confirm('Tem certeza que deseja excluir este item?')) {
       console.log(`Excluindo item com ID: ${id}`);
-      // Adicione a lógica para excluir aqui
+     
     }
   };
 
@@ -97,7 +112,7 @@ const Dashboard = () => {
 
 
   const handleDeleteItem = async (id) => {
-  // Exibe um alerta de confirmação
+ 
   const confirmDelete = window.confirm("Tem certeza que deseja excluir esta demanda?");
 
   if (!confirmDelete) return;
@@ -149,7 +164,7 @@ useEffect(() => {
   const fetchDemandantes = async () => {
     try {
       const response = await getAllDemandantes();
-      console.log("Resposta da API:", response);
+  
 
       if (!Array.isArray(response)) {
         console.error("Erro: A resposta da API não é um array!");
@@ -165,9 +180,9 @@ useEffect(() => {
         }
       });
 
-      console.log("Siglas Map Construído:", newSiglasMap);
+    
       setSiglasMap(newSiglasMap);
-      setIsDataLoaded(true); // Dados carregados
+      setIsDataLoaded(true); 
 
     } catch (error) {
       console.error("Erro ao buscar demandantes:", error);
@@ -186,7 +201,7 @@ useEffect(() => {
 }, [items, tmp, siglasMap]);
 
 const updateCharts = (data) => {
-  const categorias = {};
+
   const status = { Em_andamento: 0, Atrasados: 0, Realizadas: 0, Nao_iniciada: 0 };
   const demandante = {};
 
@@ -195,15 +210,8 @@ const updateCharts = (data) => {
   data.forEach((item) => {
 
 
-    // Contabilizar categorias
-    if (!categorias[item.CATEGORIA]) {
-      categorias[item.CATEGORIA] = { soma: 0, count: 0 };
-    }
-
-    categorias[item.CATEGORIA].soma += 1;
-    categorias[item.CATEGORIA].count += 1;
-
-    // Contabilizar status
+  
+    
     if (item.STATUS === "Em andamento") status["Em_andamento"] += 1;
     if (item.STATUS === "Não iniciada") status["Nao_iniciada"] += 1;
     if (item.STATUS === "Atrasado") status["Atrasados"] += 1;
@@ -244,13 +252,36 @@ const updateCharts = (data) => {
     ],
   },
     options: {
-      indexAxis: "y", // Inverte os eixos (X vira Y e Y vira   X)
-      plugins: {
-        legend: {
-          display: false,
-          position: "bottom", // Move a legenda para baixo
+      indexAxis: 'y', 
+     layout: {
+    padding: {
+      right: 50 // mais espaço pros rótulos
+    }
+  },
+    plugins: {
+        legend: { display: false },
+        datalabels: {
+            anchor: 'end',
+            align: 'end',
+            color: '#000',
+            font: {
+                weight: 'bold'
+            },
+            formatter: Math.round 
+        }
+    },
+    scales: {
+        x: {
+            display: false 
         },
-      },
+        y: {
+            ticks: {
+                font: {
+                    size: 14
+                }
+            }
+        }
+    }
     },
   });
 
@@ -298,51 +329,59 @@ const combinedData = demandanteLabels.map((label, index) => ({
 // Ordena os dados do maior para o menor com base no valor
 combinedData.sort((a, b) => b.value - a.value);
 
-// Separa os dados ordenados de volta em rótulos e valores
 const sortedLabels = combinedData.map(item => item.label);
 const sortedValues = combinedData.map(item => item.value);
 
-// Atualize o gráfico com os dados ordenados
 destroyChart(demandanteChartRef);
 demandanteChartRef.current.chartInstance = new Chart(demandanteChartRef.current, {
   type: "bar",
   data: {
-    labels: sortedLabels, // Rótulos ordenados
+    labels: sortedLabels, 
     datasets: [
       {
         label: "Quantidade de demandas por Demandante",
-        data: sortedValues, // Valores ordenados
+        data: sortedValues, 
         backgroundColor: "#1c2c34",
       },
     ],
   },
   options: {
-    indexAxis: "y", // Inverte os eixos (X vira Y e Y vira X)
+    indexAxis: 'y', 
+  
+  layout: {
+    padding: {
+      right: 50 // mais espaço pros rótulos
+    }
+  },
     plugins: {
-      legend: {
-        display: false,
-        position: "bottom", // Move a legenda para baixo
-      },
+        legend: { display: false },
+        datalabels: {
+            anchor: 'end',
+            align: 'end',
+            color: '#000',
+            font: {
+                weight: 'bold'
+            },
+            formatter: Math.round 
+        }
     },
+    scales: {
+        x: {
+            display: false 
+        },
+        y: {
+            ticks: {
+                font: {
+                    size: 14
+                }
+            }
+        }
+    }
   },
 });
 
 
-  // Gráfico de linha (fixo conforme o exemplo)
-  destroyChart(lineChartRef);
-  // lineChartRef.current.chartInstance = new Chart(lineChartRef.current, {
-  //   type: "line",
-  //   data: {
-  //     labels: ["Semana 1", "Semana 2", "Semana 3", "Semana 4"],
-  //     datasets: [
-  //       {
-  //         data: [10, 15, 8, 12],
-  //         borderColor: "#fc6161",
-  //         fill: true,
-  //       },
-  //     ],
-  //   },
-  // });
+  
 };
 
 return (
@@ -391,7 +430,7 @@ return (
                     style={{borderColor: "#1c2c34", height: "auto"}}>
                     <div className="text-left">
                         <h3 className="text-3xl font-bold">{nao}</h3>
-                        <p className="text-gray-600">Não iniciadas</p>
+                        <p className="text-gray-600">Não Iniciadas</p>
                     </div>
                     <span className="material-icons text-5xl" style={{color: "#1c2c34"}}>schedule</span>
                 </div>
@@ -453,11 +492,11 @@ return (
  <div className="max-w-6xl mx-auto bg-white text-black">
     <div className="flex flex-wrap lg:flex-nowrap justify-center gap-4 p-4">
         <div className="w-full lg:w-1/3 bg-white shadow-lg rounded-2xl p-3 h-64 flex flex-col items-center justify-center">
-            <h3 className="text-lg font-semibold text-center pb-3">Situação da demanda</h3>
+            <h3 className="text-lg font-semibold text-center pb-3">Situação das Demandas</h3>
             <canvas ref={doughnutChartRef} className="max-h-40"></canvas>
         </div>
         <div className="w-full lg:w-1/3 bg-white shadow-lg rounded-2xl p-3 h-64 flex flex-col items-center justify-center">
-            <h3 className="text-lg font-semibold text-center pb-3">Quantidade de demandas por Área demandante</h3>
+            <h3 className="text-lg font-semibold text-center pb-3">Quantidade de Demandas por Área Demandante</h3>
             <canvas ref={demandanteChartRef} className="max-h-40"></canvas>
         </div>
         <div className="w-full lg:w-1/3 bg-white shadow-lg rounded-2xl p-3 h-64 flex flex-col items-center justify-center">
@@ -481,6 +520,7 @@ return (
   <div
     onClick={handleOpenModal}
     className="cursor-pointer bg-[rgb(1,98,175,255)] hover:bg-[rgb(1,78,140)] text-white w-10 h-10 rounded-full hover:scale-105 flex items-center justify-center"
+    title="Criar nova Demanda"
   >
     <FaPlus className="text-white text-lg" />
   </div>
@@ -612,15 +652,19 @@ return (
                                 <td className="border p-2">{item.NM_DEMANDA}</td>
 
                               <td className="border p-2">
-                                {(() => {
-                                    try {
-                                    const data = new Date(item.DT_ABERTURA);
-                                    if (isNaN(data)) throw new Error("Data inválida");
-                                    return data.toLocaleDateString("pt-BR");
-                                    } catch {
-                                    return "";
-                                    }
-                                })()}
+                                {
+                                  (() => {
+  try {
+    const date = new Date(item.DT_ABERTURA);
+    return new Intl.DateTimeFormat("pt-BR", {
+      timeZone: "UTC"
+    }).format(date);
+  } catch {
+    return "";
+  }
+})()
+
+                                }
                                 </td>
                                 <td className="border p-2">{item.STATUS}</td>
                                 <td className="border p-2">{item.CATEGORIA}</td>

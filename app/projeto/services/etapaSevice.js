@@ -101,3 +101,16 @@ export const getTags = async () => {
   }
 };
 
+export const iniciarEtapa = async (itemData) => {
+  try {
+    const response = await fetch(`${API_URL}/iniciar`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(itemData),
+    });
+    return response.ok;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}

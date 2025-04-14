@@ -100,13 +100,7 @@ const ProjetoForm = ({ onClose, isOpen }) => {
 
         <div>
           <label className="block text-sm font-medium">Unidade</label>
-          <input
-            type="text"
-            name="UNIDADE"
-            className="w-full p-2 border border-gray-300 rounded mt-1 h-12"
-            value={projeto.UNIDADE}
-            onChange={handleChange}
-          />
+        
           <select
             name="UNIDADE"
             className="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1"
@@ -146,6 +140,8 @@ const ProjetoForm = ({ onClose, isOpen }) => {
             onChange={handleChange}
           />
         </div>
+
+
 
         <div>
           <label className="block text-sm font-medium">Template</label>

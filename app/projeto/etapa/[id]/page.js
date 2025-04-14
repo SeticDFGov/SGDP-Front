@@ -14,6 +14,7 @@ import { Bar } from "react-chartjs-2";
 import Chart from "chart.js/auto"; 
 import { DesempenhoForm } from "@/app/projeto/components/DesempenhoForm";
 import { CornerDownLeft } from "lucide-react";
+import InicioEtapa from "../../components/InicioForm";
 
 export default function ProductPage() {
     const { id } = useParams(); 
@@ -27,8 +28,8 @@ export default function ProductPage() {
     const [showAnalise, setShowAnalise] = useState(false)
     const [exec, setExec] = useState(0)
     const [plan, setPlan] = useState(0)
-    const count = 0;
-
+    const [ocupado, setOcupado] = useState(false);
+    const [showModalInicio, setShowModalInicio] = useState(false);
 const dataGraph = {
     labels: ["Planejado", "Executado"],
     datasets: [
@@ -58,18 +59,22 @@ const dataGraph = {
 useEffect(() => {
     const fetchProjeto = async () => {
         const response = await getItemById(id);
-        console.log(response)
+      
         setProjeto(response);
     };
 
     const fetchEtapas = async () => {
       const response = await getAllEtapas(id);
       setEtapas(response)
+      const total = response.reduce((soma, etapa) => soma + (etapa.PERCENT_TOTAL_ETAPA || 0), 0);
+      console.log(total)
+      setOcupado(Math.round(total) > 99)
     }
 
     const fectPercent = async () => {
       const response = await getPercent(id)
       setExec(response.PERCENT_EXECUTADO)
+      setPlan(response.PERCENT_PLANEJADO)
     }
 
     fectPercent();
@@ -86,6 +91,9 @@ useEffect(() => {
         setUltimaAnalise(lastAnalise)
         
     };
+
+
+    
 
     if (id) {
         fetchAnalises();
@@ -114,7 +122,11 @@ const handleCadastroEtapa = (novaEtapa) => {
 
 
 
-        {/* Modal de cadastro */}
+        <InicioEtapa
+            isOpen={showModalInicio}
+            onClose={() => setShowModalInicio(false)}
+            etapa={etapaSelecionada}
+        />
         <EtapaForm
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
@@ -181,10 +193,16 @@ const handleCadastroEtapa = (novaEtapa) => {
       </div>
     </div>
             <div>
-                 <div onClick={() => setIsModalOpen(true)} className="flex items-center space-x-2 bg-gray-100 p-4 rounded-lg shadow-md mt-4">
-                  <FaPlus className="text-blue-500 text-xl" />
-                  <span className="text-gray-700">Inserir Etapa ao projeto</span>
-              </div>
+                 {!ocupado && (
+  <div
+    onClick={() => setIsModalOpen(true)}
+    className="flex items-center space-x-2 bg-gray-100 p-4 rounded-lg shadow-md mt-4"
+  >
+    <FaPlus className="text-blue-500 text-xl" />
+    <span className="text-gray-700">Inserir Etapa ao projeto</span>
+  </div>
+)}
+
                 <table className="w-full border-collapse border">
                           <thead>
                               <tr className="bg-gray-50">
@@ -217,7 +235,7 @@ const handleCadastroEtapa = (novaEtapa) => {
                                       {
                                       
                                         item.DT_TERMINO_PREVISTO ? 
-                                    new Date(item.DT_TERMINO_PEVISTO).toLocaleDateString('pt-BR') : 
+                                    new Date(item.DT_TERMINO_PREVISTO).toLocaleDateString('pt-BR') : 
                                     'Data não disponível'
                 }  
                                       </td>
@@ -244,36 +262,9 @@ const handleCadastroEtapa = (novaEtapa) => {
                                      }
                                     </td>
                                     <td className="border p-2">
-  {(() => {
-    const parseDate = (dateString) => {
-      if (!dateString || dateString === "undefined" || dateString === "null") {
-    return null; // Retorna null caso o dateString seja inválido
+  {
+    item.PERCENT_PLANEJADO
   }
-      const [day, month, year] = dateString.split('-');
-      return new Date(year, month - 1, day); // mês começa em 0 no JavaScript
-    };
-
-    const dtInicioPrevisto = parseDate(item.DT_INICIO_PREVISTO);
-    const dtTerminoPrevisto = parseDate(item.DT_TERMINO_PREVISTO);
-
-    // Calculando a diferença em dias
-    const removeTime = (date) => {
-    const newDate = new Date(date);
-    newDate.setHours(0, 0, 0, 0); // Define a hora para 00:00:00
-    return newDate;
-};
-
-// Calcule a diferença considerando apenas o dia
-
-    const diffDays = (dtTerminoPrevisto - dtInicioPrevisto) / (1000 * 3600 * 24);
- 
-    if (diffDays > 0) {
-      const diffToday = (removeTime(new Date()) - dtInicioPrevisto) / (1000 * 3600 * 24);
-      return ((diffToday * 100) / diffDays).toFixed(2); // Calcula a porcentagem e formata com 2 casas decimais
-    }
-
-    return 0;
-  })()}
 </td>
 <td className="border p-2">
     {
@@ -282,17 +273,28 @@ const handleCadastroEtapa = (novaEtapa) => {
 </td>
 
                                     <td className="border p-2">
-                                        {
-                                            <button
+                                        {item.DT_INICIO_PREVISTO === null ? (
+                          <button
                             onClick={() => {
-                                setEtapaSelecionada(item)
-                                setShowDesempenho(true)}
-                            }
-                            className="px-4 py-2   rounded-md "
-                        >
-                            <span className="material-icons ">sync</span>
-                        </button>
-                                        }
+                              setEtapaSelecionada(item);
+                              setShowModalInicio(true); // ou o que for para iniciar
+                            }}
+                            className="px-4 py-2 rounded-md bg-green-500 text-white"
+                          >
+                            <span className="material-icons">play_arrow</span>
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setEtapaSelecionada(item);
+                              setShowDesempenho(true);
+                            }}
+                            className="px-4 py-2 rounded-md"
+                          >
+                            <span className="material-icons">sync</span>
+                          </button>
+                        )}
+
                                     </td>
 
                                      
