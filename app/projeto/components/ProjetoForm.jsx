@@ -153,7 +153,7 @@ const ProjetoForm = ({ onClose, isOpen }) => {
             required
           >
             <option value="">Selecione um template</option>
-          
+            <option value="Projeto">Projeto</option> 
             <option value="Contratação pregão">Contratação pregão</option>
           
           </select>

@@ -42,11 +42,11 @@ export const getItemById = async (id) => {
   }
 };
 
-export const createEtapa = async (itemData, id) => {
+export const createEtapa = async (itemData) => {
   try {
     console.log("Enviando dados:", JSON.stringify(itemData)); // Log para debug
 
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${API_URL}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

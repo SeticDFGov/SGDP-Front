@@ -3,13 +3,12 @@ import { createEtapa, createItem } from "../services/etapaSevice"; // Refira-se 
 
 export const EtapaForm = ({ onClose, isOpen, id }) => {
   const [formData, setFormData] = useState({
+    NM_PROJETO: id,
     NM_ETAPA: "",
     DT_INICIO_PREVISTO: "",
     DT_TERMINO_PREVISTO: "",
-    DT_INICIO_REAL: "",
-    DT_TERMINO_REAL: "",
     PERCENT_TOTAL_ETAPA: "",
-    PERCENT_EXECUTADO: "",
+    RESPONSAVEL_ETAPA:"" ,
 
   });
 
@@ -37,15 +36,14 @@ const handleSubmit = async (e) => {
 
   // Construindo o objeto de dados que será enviado para a API
   const itemData = {
+    NM_PROJETO: formData.NM_PROJETO,
     NM_ETAPA: formData.NM_ETAPA,
-    DT_INICIO_PREVISTO: formatDate(formData.DT_INICIO_PREVISTO),
-    DT_TERMINO_PREVISTO: formatDate(formData.DT_TERMINO_PREVISTO),
-    DT_INICIO_REAL: formatDate(formData.DT_INICIO_REAL),
-    DT_TERMINO_REAL: formatDate(formData.DT_TERMINO_REAL),
+    DT_INICIO_PREVISTO: formData.DT_INICIO_PREVISTO,
+    DT_TERMINO_PREVISTO: formData.DT_TERMINO_PREVISTO,
     PERCENT_TOTAL_ETAPA: formData.PERCENT_TOTAL_ETAPA,
-    PERCENT_EXECUTADO: formData.PERCENT_EXECUTADO,
     PERCENT_PLANEJADO: formData.PERCENT_PLANEJADO,
-    SITUA_x00c7__x00c3_O: formData.SITUA_x00c7__x00c3_O,
+    RESPONSAVEL_ETAPA:formData.RESPONSAVEL_ETAPA, 
+
   };
 
   // Envia os dados para a API
@@ -71,7 +69,18 @@ const handleSubmit = async (e) => {
               value={formData.NM_ETAPA}
               onChange={handleInputChange}
               className="w-full p-2 border border-gray-300 rounded-md"
-             
+              required
+            />
+          </div>
+           <div className="mb-4">
+            <label className="block text-sm font-medium">Responsável pela Etapa</label>
+            <input
+              type="text"
+              name="RESPONSAVEL_ETAPA"
+              value={formData.RESPONSAVEL_ETAPA}
+              onChange={handleInputChange}
+              className="w-full p-2 border border-gray-300 rounded-md"
+              required
             />
           </div>
           <div className="mb-4">
@@ -82,6 +91,7 @@ const handleSubmit = async (e) => {
               value={formData.DT_INICIO_PREVISTO}
               onChange={handleInputChange}
               className="w-full p-2 border border-gray-300 rounded-md"
+              required
              
             />
           </div>
@@ -93,7 +103,7 @@ const handleSubmit = async (e) => {
               value={formData.DT_TERMINO_PREVISTO}
               onChange={handleInputChange}
               className="w-full p-2 border border-gray-300 rounded-md"
-             
+              required
             />
           </div>
 
@@ -106,7 +116,7 @@ const handleSubmit = async (e) => {
               value={formData.PERCENT_TOTAL_ETAPA}
               onChange={handleInputChange}
               className="w-full p-2 border border-gray-300 rounded-md"
-            
+              required            
             />
           </div>
 

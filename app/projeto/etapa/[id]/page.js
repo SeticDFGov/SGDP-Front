@@ -219,7 +219,15 @@ const handleCadastroEtapa = (novaEtapa) => {
                               </tr>
                           </thead>
                           <tbody>
-                              {etapas.map((item) => (
+                              {
+                              !Array.isArray(etapas) ? (
+  <tr>
+    <td colSpan="100%" className="text-center p-4 text-gray-500">
+      Este projeto não contém etapas.
+    </td>
+  </tr>
+) :Array.isArray(etapas) &&
+                              etapas.map((item) => (
                                   <tr key={item.EtapaProjetoId} className="shadow">
                                       <td className="border p-2">{item.NM_ETAPA}</td>
                                       <td className="border p-2">{item.RESPONSAVEL_ETAPA}</td>

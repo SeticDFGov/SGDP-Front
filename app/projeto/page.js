@@ -42,7 +42,7 @@ export default function Projetos () {
       const handleItens = async () => {
           const response = await getAllItems();
           setData(response);
-          setTotal_SUBTDCR(response.length)
+        
       };
       handleItens();
   }, []);
