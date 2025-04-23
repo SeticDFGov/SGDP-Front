@@ -58,7 +58,7 @@ export default function Demandante() {
 
   return (
     <div className="text-black">
-        {/*<Header></Header>*/} 
+        <Header></Header> 
 
       {/* Seção Principal */}
       <div className="mx-auto bg-white mt-5">

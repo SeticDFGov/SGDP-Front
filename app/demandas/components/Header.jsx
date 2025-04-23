@@ -5,29 +5,45 @@ import { login } from "../services/authService";
 export const Header = () => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const router = useRouter()
-    const userInfo = JSON.parse(localStorage.getItem("user_info"));
+  const [userInfo, setUserInfo] = useState(null);
+  const router = useRouter();
 
-  // Puxa o nome completo ou displayName do usuário
-    const userName = userInfo?.display_name || userInfo?.nome_completo || "Usuário";
-    const handleLogout = () => {
-        localStorage.removeItem("authenticated")
-        setIsAuthenticated(false)
-        window.location.reload()
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const authStatus = localStorage.getItem("authenticated") === "true";
+      setIsAuthenticated(authStatus);
 
-
+      const user = localStorage.getItem("user_info");
+      if (user) {
+        try {
+          setUserInfo(JSON.parse(user));
+        } catch (e) {
+          console.error("Erro ao fazer parse de user_info:", e);
+        }
+      }
     }
-    const login1 = () => {
-  window.location.href = `${API_URL}/api/auth/login`;
-};
-
-    const handleAuthenticate = async () => {
-        await login()
-   }
-    useEffect(() => {
-    const authStatus = localStorage.getItem("authenticated") === "true";
-    setIsAuthenticated(authStatus);
   }, []);
+
+  const userName = userInfo?.display_name || userInfo?.nome_completo || "Usuário";
+
+  const handleLogout = () => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("authenticated");
+      localStorage.removeItem("user_info");
+      setIsAuthenticated(false);
+      router.push("/auth"); // ou window.location.reload() se quiser recarregar
+    }
+  };
+
+  const login1 = () => {
+    if (typeof window !== "undefined") {
+      window.location.href = `${API_URL}/api/auth/login`;
+    }
+  };
+
+  const handleAuthenticate = async () => {
+    await login1(); // ajustado para chamar a função correta
+  };
 
     return(
         <nav className="bg-[rgb(1,98,175,255)] gap-2 p-2" >
