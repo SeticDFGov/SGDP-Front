@@ -2,25 +2,29 @@
 
 import 'material-icons/iconfont/material-icons.css';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect , useState} from 'react';
 import Header from './demandas/components/Header';
 
 export default function HomePage() {
   const router = useRouter();
   
-  // Verifica se o usuário está autenticado
-  const isAuthenticated = localStorage.getItem("authenticated") === "true";
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Se o usuário não estiver autenticado, redireciona para a página de login
-    if (!isAuthenticated) {
-      router.push('/auth');
+    // Verifica se o código está rodando no lado do cliente
+    if (typeof window !== "undefined") {
+      const authStatus = localStorage.getItem("authenticated");
+      setIsAuthenticated(authStatus === "true");
+
+      // Se o usuário não estiver autenticado, redireciona para a página de login
+      if (authStatus !== "true") {
+        router.push('/auth');
+      }
     }
-  }, [isAuthenticated, router]);
+  }, [router]);
 
   // Se o usuário não estiver autenticado, renderiza nada até ser redirecionado
   if (!isAuthenticated) return null;
-
   return (
     <>
       <Header />
