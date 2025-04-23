@@ -12,16 +12,7 @@ export default function Demandante() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
-    const authStatus = localStorage.getItem("authenticated") === "true";
-    setIsAuthenticated(authStatus);
-  }, []);
-
-const handleAuthenticate = () => {
-    localStorage.removeItem("authenticated");
-     setIsAuthenticated(false)
-     window.location.reload()
-   }
+ 
   const handleDeleteItem = async (id) => {
   // Exibe um alerta de confirmação
   const confirmDelete = window.confirm("Tem certeza que deseja excluir esse demandante?");
