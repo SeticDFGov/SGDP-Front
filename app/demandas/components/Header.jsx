@@ -6,7 +6,10 @@ export const Header = () => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const router = useRouter()
+    const userInfo = JSON.parse(localStorage.getItem("user_info"));
 
+  // Puxa o nome completo ou displayName do usuário
+    const userName = userInfo?.display_name || userInfo?.nome_completo || "Usuário";
     const handleLogout = () => {
         localStorage.removeItem("authenticated")
         setIsAuthenticated(false)
@@ -60,7 +63,7 @@ export const Header = () => {
                         {isAuthenticated ? (
                             <div className="flex items-center space-x-4">
                                 <span className="material-icons text-white text-xl">person</span>
-                                <span className="text-white text-sm font-medium">{localStorage.getItem("userName")}</span>
+                                <span className="text-white text-sm font-medium">{userName}</span>
                                 <button onClick={() => handleLogout()} className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md text-sm font-medium">
                                     Logout
                                 </button>
