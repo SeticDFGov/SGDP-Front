@@ -13,9 +13,12 @@ export default function Demandante() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const authStatus = localStorage.getItem("authenticated") === "true";
-    setIsAuthenticated(authStatus);
+    if (typeof window !== "undefined") {
+      const authStatus = localStorage.getItem("authenticated") === "true";
+      setIsAuthenticated(authStatus);
+    }
   }, []);
+   
 
 const handleAuthenticate = () => {
     localStorage.removeItem("authenticated");
