@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import Dashboard from "./components/Dasjboard";
-
+import { useRouter } from "next/navigation";
 
 const Home = () => {
-  
+  const router = useRouter(); 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {

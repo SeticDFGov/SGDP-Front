@@ -5,13 +5,14 @@ import { deleteDemandante, getAllDemandantes } from "../services/demandanteServi
 import DemandanteForm from "../components/DemandanteForm";
 import 'material-icons/iconfont/material-icons.css';
 import Header from "../components/Header";
+import { useRouter } from "next/navigation";
 
 export default function Demandante() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [items, setItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+  const router = useRouter(); 
   useEffect(() => {
     // Verifica se o código está rodando no lado do cliente
     if (typeof window !== "undefined") {

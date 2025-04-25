@@ -15,7 +15,7 @@ import Chart from "chart.js/auto";
 import { DesempenhoForm } from "@/app/projeto/components/DesempenhoForm";
 import { CornerDownLeft } from "lucide-react";
 import InicioEtapa from "../../components/InicioForm";
-
+import { useRouter } from "next/navigation";
 export default function ProductPage() {
     const { id } = useParams(); 
     const [projeto, setProjeto] = useState({});
@@ -32,7 +32,7 @@ export default function ProductPage() {
     const [showModalInicio, setShowModalInicio] = useState(false);
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+    const router = useRouter(); 
     useEffect(() => {
       // Verifica se o código está rodando no lado do cliente
       if (typeof window !== "undefined") {

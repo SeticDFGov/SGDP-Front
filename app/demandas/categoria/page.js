@@ -5,13 +5,14 @@ import 'material-icons/iconfont/material-icons.css';
 import { deleteCategoria, getAllCategoria } from "../services/categoriaService";
 import CategoriaForm from "../components/CategoriaForm";
 import Header from "../components/Header";
+import { useRouter } from "next/navigation";
 
 export default function Demandante() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [items, setItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+  const router = useRouter(); 
   useEffect(() => {
     // Verifica se o código está rodando no lado do cliente
     if (typeof window !== "undefined") {
