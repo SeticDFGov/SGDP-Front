@@ -38,6 +38,19 @@ export default function Projetos () {
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
+
+  useEffect(() => {
+    // Verifica se o código está rodando no lado do cliente
+    if (typeof window !== "undefined") {
+      const authStatus = localStorage.getItem("authenticated");
+      setIsAuthenticated(authStatus === "true");
+
+      // Se o usuário não estiver autenticado, redireciona para a página de login
+      if (authStatus !== "true") {
+        router.push('/auth');
+      }
+    }
+  }, [router]);
   useEffect(() => {
       const handleItens = async () => {
           const response = await getAllItems();
