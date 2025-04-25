@@ -222,7 +222,7 @@ const handleCadastroEtapa = (novaEtapa) => {
                           <thead>
                               <tr className="bg-gray-50">
                                   <th className="border p-2 text-left">Nome da etapa</th>
-                                  <th className="border p-2 text-left">Responsável pela Etapa</th>
+                                  
                                   <th className="border p-2 text-left">Ínicio Planejado </th>
                                   <th className="border p-2 text-left">Termino Planejado</th>
                                   <th className="border p-2 text-left">Ínicio Real</th>
@@ -245,7 +245,6 @@ const handleCadastroEtapa = (novaEtapa) => {
                               etapas.map((item) => (
                                   <tr key={item.EtapaProjetoId} className="shadow">
                                       <td className="border p-2">{item.NM_ETAPA}</td>
-                                      <td className="border p-2">{item.RESPONSAVEL_ETAPA}</td>
                                       <td className="border p-2">
                                         {
                                           item.DT_INICIO_PREVISTO ? 
@@ -291,7 +290,7 @@ const handleCadastroEtapa = (novaEtapa) => {
 </td>
 <td className="border p-2">
     {
-        item.PERCENT_EXEC_REAL
+        item.PERCENT_EXEC_ETAPA
     }
 </td>
 
@@ -303,6 +302,7 @@ const handleCadastroEtapa = (novaEtapa) => {
                               setShowModalInicio(true); // ou o que for para iniciar
                             }}
                             className="px-4 py-2 rounded-md bg-green-500 text-white"
+                            title="Iniciar Etapa"
                           >
                             <span className="material-icons">play_arrow</span>
                           </button>
@@ -313,6 +313,7 @@ const handleCadastroEtapa = (novaEtapa) => {
                               setShowDesempenho(true);
                             }}
                             className="px-4 py-2 rounded-md"
+                            title="Aferir Etapa"
                           >
                             <span className="material-icons">sync</span>
                           </button>
