@@ -6,17 +6,20 @@ export const Header = () => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
+  const [isSUBINFRA, setIsSUBINFRA] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const authStatus = localStorage.getItem("authenticated") === "true";
+ 
       setIsAuthenticated(authStatus);
 
       const user = localStorage.getItem("user_info");
       if (user) {
         try {
           setUserInfo(JSON.parse(user));
+          setIsSUBINFRA(user?.SUBINFRA);
         } catch (e) {
           console.error("Erro ao fazer parse de user_info:", e);
         }
@@ -66,7 +69,7 @@ export const Header = () => {
                     <div className="hidden sm:ml-6 sm:block ">
                             <div className="flex space-x-4">
                                 <a href="/" className="bg-[rgb(4,99,172)] text-white rounded-md px-3 py-2 text-sm font-medium hover:bg-[rgb(1,78,140)]">Início</a>
-                                {isAuthenticated && (
+                                {isAuthenticated && !userInfo.SUBINFRA && (
                                     <>
 
                                         <a onClick={() => router.push("/demandas/categoria")} className="text-white hover:bg-[rgb(1,78,140)] rounded-md px-3 py-2 text-sm font-medium cursor-pointer">Cadastro de Tipos</a>

@@ -9,12 +9,18 @@ export default function HomePage() {
   const router = useRouter();
   
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+  const [isSUBINFRA, setIsSUBINFRA] = useState(false);
 
   useEffect(() => {
     // Verifica se o código está rodando no lado do cliente
     if (typeof window !== "undefined") {
       const authStatus = localStorage.getItem("authenticated");
+      const user = localStorage.getItem("user_info");
       setIsAuthenticated(authStatus === "true");
+      setUserInfo(JSON.parse(user));
+      setIsSUBINFRA(user?.SUBINFRA);
+
 
       // Se o usuário não estiver autenticado, redireciona para a página de login
       if (authStatus !== "true") {
@@ -32,7 +38,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* SGD - Sistema Gestão de Demanda */}
           <div
-            className={`flex flex-col items-center p-6 bg-white shadow-lg rounded-2xl cursor-pointer hover:bg-gray-200 transition ${!isAuthenticated && "pointer-events-none opacity-50"}`}
+            className={`flex flex-col items-center p-6 bg-white shadow-lg rounded-2xl cursor-pointer hover:bg-gray-200 transition ${!isAuthenticated ||  userInfo.SUBINFRA && "pointer-events-none opacity-50"}`}
             onClick={() => router.push('/demandas')}
           >
             <span className="material-icons text-blue-500 text-6xl">description</span>
@@ -50,7 +56,7 @@ export default function HomePage() {
 
           {/* SEGD - Sistema de Gestão da Estratégia de Governança Digital */}
           <div
-            className={`flex flex-col items-center p-6 bg-white shadow-lg rounded-2xl cursor-pointer hover:bg-gray-200 transition ${!isAuthenticated && "pointer-events-none opacity-50"}`}
+            className={`flex flex-col items-center p-6 bg-white shadow-lg rounded-2xl cursor-pointer hover:bg-gray-200 transition ${isAuthenticated && "pointer-events-none opacity-50"}`}
             onClick={() => router.push('/segd')}
           >
             <span className="material-icons text-gray-500 text-6xl">dashboard</span>
@@ -59,7 +65,7 @@ export default function HomePage() {
 
           {/* SIMI - Sistema de monitoramento de indicadores */}
           <div
-            className={`flex flex-col items-center p-6 bg-white shadow-lg rounded-2xl cursor-pointer hover:bg-gray-200 transition ${!isAuthenticated && "pointer-events-none opacity-50"}`}
+            className={`flex flex-col items-center p-6 bg-white shadow-lg rounded-2xl cursor-pointer hover:bg-gray-200 transition ${isAuthenticated && "pointer-events-none opacity-50"}`}
             onClick={() => router.push('/simi')}
           >
             <span className="material-icons text-gray-500 text-6xl">dashboard</span>
