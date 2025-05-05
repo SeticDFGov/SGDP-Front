@@ -97,6 +97,8 @@ export const DesempenhoForm = ({ onClose, isOpen, etapa }) => {
                 value={formData.PERCENT_EXEC_ETAPA}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
+                min={0}
+                max={100}
               />
             </div>
             <div className="mb-4 col-span-3">
