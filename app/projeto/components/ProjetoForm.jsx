@@ -132,13 +132,23 @@ const ProjetoForm = ({ onClose, isOpen }) => {
 
         <div>
           <label className="block text-sm font-medium">Área Demandante</label>
-          <input
-            type="text"
+         
+          <select
             name="NM_AREA_DEMANDANTE"
-            className="w-full p-2 border border-gray-300 rounded mt-1 h-12"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1"
             value={projeto.NM_AREA_DEMANDANTE}
             onChange={handleChange}
-          />
+            required
+          >
+            <option value="">Selecione uma Area</option>
+          
+            <option value="UBDMO">UBDMO</option>
+
+            <option value="URCA">URCA</option>
+
+            <option value="USCD">USCD</option>
+          
+          </select>
         </div>
 
 
