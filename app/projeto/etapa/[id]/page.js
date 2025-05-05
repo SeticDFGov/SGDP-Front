@@ -242,7 +242,10 @@ const handleCadastroEtapa = (novaEtapa) => {
     </td>
   </tr>
 ) :Array.isArray(etapas) &&
-                              etapas.map((item) => (
+                              etapas
+                              .slice()
+                              .sort((a,b) => a.EtapaProjetoId - b.EtapaProjetoId)
+                              .map((item) => (
                                   <tr key={item.EtapaProjetoId} className="shadow">
                                       <td className="border p-2">{item.NM_ETAPA}</td>
                                       <td className="border p-2">
