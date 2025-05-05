@@ -109,16 +109,19 @@ const handleSubmit = async (e) => {
 
      
           <div className="mb-4">
-            <label className="block text-sm font-medium">Percentual Total da Etapa</label>
-            <input
-              type="number"
-              name="PERCENT_TOTAL_ETAPA"
-              value={formData.PERCENT_TOTAL_ETAPA}
-              onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-md"
-              required            
-            />
-          </div>
+          <label className="block text-sm font-medium">Percentual Total da Etapa</label>
+          <input
+            type="number"
+            name="PERCENT_TOTAL_ETAPA"
+            value={formData.PERCENT_TOTAL_ETAPA}
+            onChange={handleInputChange}
+            className="w-full p-2 border border-gray-300 rounded-md"
+            required
+            min={0}
+            max={100}
+          />
+        </div>
+ 
 
        
 
