@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
 import 'material-icons/iconfont/material-icons.css';
 import { useRouter } from 'next/navigation';
-import { useEffect , useState} from 'react';
+import { useEffect, useState } from 'react';
 import Header from './demandas/components/Header';
 
 export default function HomePage() {
@@ -10,69 +10,84 @@ export default function HomePage() {
   
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
-  const [isSUBINFRA, setIsSUBINFRA] = useState(false);
 
   useEffect(() => {
-    // Verifica se o código está rodando no lado do cliente
     if (typeof window !== "undefined") {
       const authStatus = localStorage.getItem("authenticated");
       const user = localStorage.getItem("user_info");
+
       setIsAuthenticated(authStatus === "true");
       setUserInfo(JSON.parse(user));
-      setIsSUBINFRA(user?.SUBINFRA);
 
-
-      // Se o usuário não estiver autenticado, redireciona para a página de login
       if (authStatus !== "true") {
         router.push('/auth');
       }
     }
   }, [router]);
 
-  // Se o usuário não estiver autenticado, renderiza nada até ser redirecionado
   if (!isAuthenticated) return null;
+
+  const modules = [
+    {
+      icon: 'analytics',
+      title: 'SGD',
+      h2: 'Sistema de Gestão de Demandas',
+      color: 'text-white',
+      path: '/demandas',
+      disabled: userInfo?.SUBINFRA, // desativa se SUBINFRA === true
+    },
+    {
+      icon: 'assignment',
+      title: 'SGP',
+      h2: 'Sistema de Gestão de Projetos',
+      color: 'text-white',
+      path: '/projeto',
+      disabled: false,
+    },
+    {
+      icon: 'settings',
+      title: 'SEGD',
+      h2: 'Estratégia de Governança Digital',
+      color: 'text-white',
+      path: '/segd',
+      disabled: true, // sempre desativado como no original
+    },
+    {
+      icon: 'settings',
+      title: 'SIMI',
+      h2: 'Sistema de Monitoramento de Indicadores',
+      color: 'text-white',
+      path: '/simi',
+      disabled: true, // sempre desativado como no original
+    },
+  ];
+
   return (
     <>
-      <Header />
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* SGD - Sistema Gestão de Demanda */}
-          <div
-            className={`flex flex-col items-center p-6 bg-white shadow-lg rounded-2xl cursor-pointer hover:bg-gray-200 transition ${!isAuthenticated ||  userInfo.SUBINFRA && "pointer-events-none opacity-50"}`}
-            onClick={() => router.push('/demandas')}
-          >
-            <span className="material-icons text-blue-500 text-6xl">description</span>
-            <h2 className="mt-4 text-lg font-semibold text-gray-800">SGD - Sistema Gestão de Demanda</h2>
-          </div>
+    <div className='bg-gray-100 text-white min-h-screen flex items-center justify-center px-4'>
 
-          {/* SGP - Sistema Gestão de Projetos */}
-          <div
-            className={`flex flex-col items-center p-6 bg-white shadow-lg rounded-2xl cursor-pointer hover:bg-gray-200 transition ${!isAuthenticated && "pointer-events-none opacity-50"}`}
-            onClick={() => router.push('/projeto')}
-          >
-            <span className="material-icons text-green-500 text-6xl">dashboard</span>
-            <h2 className="mt-4 text-lg font-semibold text-gray-800">SGP - Sistema Gestão de Projetos</h2>
-          </div>
-
-          {/* SEGD - Sistema de Gestão da Estratégia de Governança Digital */}
-          <div
-            className={`flex flex-col items-center p-6 bg-white shadow-lg rounded-2xl cursor-pointer hover:bg-gray-200 transition ${isAuthenticated && "pointer-events-none opacity-50"}`}
-            onClick={() => router.push('/segd')}
-          >
-            <span className="material-icons text-gray-500 text-6xl">dashboard</span>
-            <h2 className="mt-4 text-lg font-semibold text-gray-800">SEGD - Sistema de Gestão da Estratégia de Governança Digital</h2>
-          </div>
-
-          {/* SIMI - Sistema de monitoramento de indicadores */}
-          <div
-            className={`flex flex-col items-center p-6 bg-white shadow-lg rounded-2xl cursor-pointer hover:bg-gray-200 transition ${isAuthenticated && "pointer-events-none opacity-50"}`}
-            onClick={() => router.push('/simi')}
-          >
-            <span className="material-icons text-gray-500 text-6xl">dashboard</span>
-            <h2 className="mt-4 text-lg font-semibold text-gray-800">SIMI - Sistema de Monitoramento de Indicadores</h2>
-          </div>
+    
+      <div className="max-w-5xl w-full">
+        <h1 class="text-3xl font-bold mb-8 text-center text-black">Selecione um Módulo</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl w-full">
+          {modules.map((mod, index) => (
+            <div
+              key={index}
+              className={`bg-blue-800 cursor-pointer rounded-2xl p-6 shadow-lg hover:bg-blue-700 transition-colors flex flex-col items-center text-center"
+                ${mod.disabled ? 'pointer-events-none opacity-50' : ''}`}
+              onClick={() => !mod.disabled && router.push(mod.path)}
+            >
+              <span className={`material-icons ${mod.color} text-6xl mb-2`}>
+                {mod.icon}
+              </span>
+              <h2 className="mt-2 text-lg font-semibold text-white">{mod.title}</h2>
+              <p class="text-sm text-blue-200 mt-2">{mod.h2}</p>
+            </div>
+          ))}
         </div>
+      </div>
       </div>
     </>
   );
 }
+
