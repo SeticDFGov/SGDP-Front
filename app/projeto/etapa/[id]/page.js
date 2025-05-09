@@ -16,6 +16,8 @@ import { DesempenhoForm } from "@/app/projeto/components/DesempenhoForm";
 import { CornerDownLeft } from "lucide-react";
 import InicioEtapa from "../../components/InicioForm";
 import { useRouter } from "next/navigation";
+import dayjs from 'dayjs'
+
 export default function ProductPage() {
     const { id } = useParams(); 
     const [projeto, setProjeto] = useState({});
@@ -251,7 +253,7 @@ const handleCadastroEtapa = (novaEtapa) => {
                                       <td className="border p-2">
                                         {
                                           item.DT_INICIO_PREVISTO ? 
-                                    new Date(item.DT_INICIO_PREVISTO).toLocaleDateString('pt-BR') : 
+                                    dayjs(item.DT_INICIO_PREVISTO).format('DD/MM/YYYY') : 
                                     'Data não disponível'
                                 }
                                       </td>
@@ -260,7 +262,7 @@ const handleCadastroEtapa = (novaEtapa) => {
                                       {
                                       
                                         item.DT_TERMINO_PREVISTO ? 
-                                    new Date(item.DT_TERMINO_PREVISTO).toLocaleDateString('pt-BR') : 
+                                    dayjs(item.DT_TERMINO_PREVISTO).format('DD/MM/YYYY') : 
                                     'Data não disponível'
                 }  
                                       </td>
@@ -269,7 +271,7 @@ const handleCadastroEtapa = (novaEtapa) => {
                                         {
                                          
                                          item.DT_INICIO_REAL ? 
-                                    new Date(item.DT_INICIO_REAL).toLocaleDateString('pt-BR') : 
+                                    dayjs(item.DT_INICIO_REAL).format('DD/MM/YYYY') : 
                                     'Data não disponível'
                                         }
 
@@ -277,7 +279,7 @@ const handleCadastroEtapa = (novaEtapa) => {
                                       <td className="border p-2">
                                     {
                                     item.DT_TERMINO_REAL ? 
-                                    new Date(item.DT_TERMINO_REAL).toLocaleDateString('pt-BR') : 
+                                    dayjs(item.DT_TERMINO_REAL).format('DD/MM/YYYY') : 
                                     'Data não disponível'
                                      }
                                     </td>
