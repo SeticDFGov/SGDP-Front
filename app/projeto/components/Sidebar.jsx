@@ -28,46 +28,24 @@ export default function Sidebar() {
 
       {/* Navegação */}
       <nav className="flex-1 overflow-y-auto">
-        {/* Dashboard */}
-        <button
-          className="flex items-center py-3 px-4 w-full bg-blue-700 text-white hover:text-white cursor-pointer"
-          onClick={() => router.push("/demandas/dashboard")}
-        >
-          <span className="material-icons mr-3">pie_chart</span>
-          <span className="link-text">Dashboard</span>
-        </button>
+  {/* Dashboard */}
+  <button
+    className="flex items-center py-3 px-4 w-full bg-blue-700 text-white hover:text-white cursor-pointer mb-2"
+    onClick={() => router.push("/projeto/dashboard")}
+  >
+    <span className="material-icons mr-3">pie_chart</span>
+    <span className="link-text">Dashboard</span>
+  </button>
 
-        {/* Dropdown */}
-        <div>
-          <button
-            onClick={toggleDropdown}
-            className="flex items-center w-full py-3 px-4 text-blue-300 hover:bg-blue-800 focus:outline-none hover:text-white"
-          >
-            <span className="material-icons mr-3">folder</span>
-            <span className="link-text flex-1 text-left">Área de trabalho</span>
-            <span className="material-icons">{dropdownOpen ? "expand_less" : "expand_more"}</span>
-          </button>
+  <button
+    className="flex items-center py-3 px-4 w-full bg-blue-700 text-white hover:text-white cursor-pointer"
+    onClick={() => router.push("/projeto")}
+  >
+    <span className="material-icons mr-3">view_kanban</span>
+    <span className="link-text">Projetos</span>
+  </button>
+</nav>
 
-          {dropdownOpen && (
-            <div className="flex flex-col ml-10 mt-1 space-y-1">
-              {[
-                { icon: "apps", text: "Demandas", href: "/demandas" },
-                { icon: "interests", text: "Tipos", href: "/demandas/categoria" },
-                { icon: "group", text: "Demandantes", href: "/demandas/demandante" },
-              ].map((item, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => router.push(item.href)}
-                  className="flex items-center py-3 px-4 text-blue-300 hover:bg-blue-800 hover:text-white"
-                >
-                  <span className="material-icons mr-3">{item.icon}</span>
-                  <span className="link-text">{item.text}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </nav>
 
       {/* Rodapé */}
       <div className="mt-auto p-4 border-t border-blue-700">

@@ -11,6 +11,7 @@ import { Bar, Pie, Line, Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PointElement, LineElement } from "chart.js";
 import { getAllEtapas, getSituacao, getTags } from "./services/etapaSevice";
 import { optionsGraph } from "./components/config/config";
+import Sidebar from "./components/Sidebar";
 
 // Registrando os componentes necessários do Chart.js
 ChartJS.register(
@@ -123,8 +124,8 @@ const barTags = {
 
   return (
 <>
-  <div className="bg-white">
-    <Header />
+  <div className="bg-white flex-1 flex flex-col ml-64">
+    <Sidebar></Sidebar> 
     <div className="max-w-6xl mx-auto bg-white mt p-4 ">
       <div className="mb-6">
         <h2 className="text-4xl font-semibold text-black">
@@ -132,60 +133,8 @@ const barTags = {
         </h2>
       </div>
 
-      {/* Cards centralizados */}
-      <div className="flex flex-wrap justify-center gap-4 mt-8 text-black pb-10">
-        <div
-          className="bg-white shadow-lg rounded-2xl p-3 flex border-2 w-60"
-          style={{ borderColor: "purple", height: "auto" }}
-        >
-          <div className="text-left">
-            <h3 className="text-3xl font-bold">{total.SUBTDCR}</h3>
-            <p className="text-gray-600">Projetos SUBTDCR</p>
-          </div>
-        </div>
-
-        <div
-          className="bg-white shadow-lg rounded-2xl p-3 flex border-2 w-60"
-          style={{ borderColor: "green", height: "auto" }}
-        >
-          <div className="text-left">
-            <h3 className="text-3xl font-bold">{total.SUBSIS}</h3>
-            <p className="text-gray-600">Projetos SUBSIS</p>
-          </div>
-        </div>
-
-        <div
-          className="bg-white shadow-lg rounded-2xl p-3 flex border-2 w-60"
-          style={{ borderColor: "orange", height: "auto" }}
-        >
-          <div className="text-left">
-            <h3 className="text-3xl font-bold">{total.SUBINFRA}</h3>
-            <p className="text-gray-600">Projetos SUBINFRA</p>
-          </div>
-        </div>
-      </div>
-      <div className="max-w-6xl mx-auto bg-white text-black">
-    <div className="flex flex-wrap lg:flex-nowrap justify-center gap-4 p-4">
-        <div className="w-full lg:w-1/3 bg-white shadow-lg rounded-2xl p-3 h-64 flex flex-col items-center justify-center">
-            <h3 className="text-lg font-semibold text-center pb-3">Situação dos Projetos</h3>
-            <div className="max-h-40">
-            <Doughnut data={doughnutData} options={{ responsive: true, maintainAspectRatio: false ,plugins: {
-     legend: {
-          display: true,
-          position: "bottom",
-        },
-    },}} />
-            </div>
-
-        </div>
-        <div className="w-full lg:w-1/3 bg-white shadow-lg rounded-2xl p-3 h-64 flex flex-col items-center justify-center">
-            <h3 className="text-lg font-semibold text-center pb-3">Tags dos Projetos</h3>
-            <div className="max-h-40">
-            <Bar data={barTags} options={optionsGraph} plugins={[ChartDataLabels]} />
-            </div>
-        </div>
-    </div>
-</div>
+      
+     
 
       <ProjetoForm onClose={handleCloseModal} isOpen={modalOpen} />
       <div className=" mb-6  justify-items-end">

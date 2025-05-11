@@ -68,7 +68,7 @@ export default function HomePage() {
 
     
       <div className="max-w-5xl w-full">
-        <h1 class="text-3xl font-bold mb-8 text-center text-black">Selecione um Módulo</h1>
+        <h1 className="text-3xl font-bold mb-8 text-center text-black">Selecione um Módulo</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl w-full">
           {modules.map((mod, index) => (
             <div
@@ -81,7 +81,7 @@ export default function HomePage() {
                 {mod.icon}
               </span>
               <h2 className="mt-2 text-lg font-semibold text-white">{mod.title}</h2>
-              <p class="text-sm text-blue-200 mt-2">{mod.h2}</p>
+              <p className="text-sm text-blue-200 mt-2">{mod.h2}</p>
             </div>
           ))}
         </div>

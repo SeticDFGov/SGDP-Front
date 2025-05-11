@@ -6,6 +6,7 @@ import DemandanteForm from "../components/DemandanteForm";
 import 'material-icons/iconfont/material-icons.css';
 import Header from "../components/Header";
 import { useRouter } from "next/navigation";
+import Sidebar from "../components/SIdebar";
 
 export default function Demandante() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -69,11 +70,11 @@ export default function Demandante() {
   }, []);
 
   return (
-    <div className="text-black">
-      <Header></Header> 
+    <div className="text-black flex-1 flex flex-col ml-64">
+     <Sidebar></Sidebar> 
 
       {/* Seção Principal */}
-      <div className="mx-auto bg-white mt-5">
+      <div className=" bg-white mt-5">
         <div className="p-4 max-w-6xl mx-auto bg-white mt-5 mb-5">
           <div className="max-w-6xl mx-auto mt p-4">
             <div className="mt-5 flex justify-between items-center">

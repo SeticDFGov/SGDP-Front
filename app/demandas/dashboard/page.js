@@ -334,11 +334,11 @@ return (
         <div className="flex-1 relative">
           <select className="w-full border rounded p-2 pl-4 pr-10 bg-white text-gray-900 appearance-none cursor-pointer transition">
             <option value="" disabled selected>Selecione o período</option>
-            <option>Todos</option>
-            <option>Última semana</option>
-            <option>Último mês</option>
-            <option>Últimos 6 meses</option>
-            <option>Último ano</option>
+            <option value="">Todos</option>
+            <option value="">Última semana</option>
+            <option value="">Último mês</option>
+            <option value="">Últimos 6 meses</option>
+            <option value="">Último ano</option>
           </select>
           {/* Ícone do Select */}
           <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
