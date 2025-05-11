@@ -169,9 +169,15 @@ const updateCharts = (data) => {
     }
   });
 
-  const labels = Object.keys(tmp); // Pega as categorias (chaves do objeto)
-  const valoresMedios = Object.values(tmp); // Pega os valores (valores do objeto)
+// Junta os pares (label, valor) em um array de objetos
+const pares = Object.entries(tmp); // [[label1, valor1], [label2, valor2], ...]
 
+// Ordena do maior para o menor valor
+pares.sort((a, b) => b[1] - a[1]);
+
+// Separa novamente os labels e os valoresMedios
+const labels = pares.map(par => par[0]);
+const valoresMedios = pares.map(par => par[1]);
 
   // Gráfico de categorias
   destroyChart(barChartRef);

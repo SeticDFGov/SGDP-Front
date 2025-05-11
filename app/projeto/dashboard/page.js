@@ -166,7 +166,7 @@ const barTags = {
         >
           <div className="text-left">
             <h3 className="text-3xl font-bold">{total.SUBTDCR}</h3>
-            <p className="text-gray-600">Projetos SUBTDCR</p>
+            <p className="text-gray-600">Projetos SUBGD</p>
           </div>
         </div>
 
@@ -210,7 +210,7 @@ const barTags = {
 
         {/* Gráficos: Demandante e Tempo Médio */}
         <div className="w-full lg:w-1/2 bg-white shadow-lg rounded-2xl p-4">
-          <div className="mb-6">
+          <div className="mb-6 h-full">
             <h3 className="text-xl font-semibold text-center mb-4">Tags dos Projetos</h3>
             <Bar data={barTags} options={optionsGraph} plugins={[ChartDataLabels]} />
           </div>

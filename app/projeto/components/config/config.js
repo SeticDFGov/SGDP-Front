@@ -1,5 +1,11 @@
 export const optionsGraph = {
-    indexAxis: 'y', 
+    layout: {
+        padding: {
+          right: 50 // mais espaço pros rótulos
+        }
+    },
+    indexAxis: 'y',
+    maintainAspectRatio: true,
     plugins: {
         legend: { display: false },
         datalabels: {

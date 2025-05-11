@@ -17,6 +17,7 @@ import { CornerDownLeft } from "lucide-react";
 import InicioEtapa from "../../components/InicioForm";
 import { useRouter } from "next/navigation";
 import dayjs from 'dayjs'
+import Sidebar from "../../components/Sidebar";
 
 export default function ProductPage() {
     const { id } = useParams(); 
@@ -129,8 +130,9 @@ const handleCadastroEtapa = (novaEtapa) => {
 
     return (
         <>
-       <Header />
-<div className="bg-gray-100 ">
+     
+<div className="bg-gray-100   flex flex-col ml-64">
+  <Sidebar></Sidebar>
     {/* Container Centralizado */}
     <div className="max-w-7xl mx-auto flex ">
         {/* Sidebar */}

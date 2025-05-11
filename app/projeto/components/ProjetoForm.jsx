@@ -21,6 +21,12 @@ const ProjetoForm = ({ onClose, isOpen }) => {
 
   });
 
+  const unidadeSub = [
+    'SUBINFRA',
+    'SUBGD',
+    'SUBSIS'
+  ]
+
   const [error, setError] = useState("");
  
   const handleSubmit = async (e) => {
@@ -109,12 +115,13 @@ const ProjetoForm = ({ onClose, isOpen }) => {
             required
           >
             <option value="">Selecione uma Unidade</option>
+            {
+              unidadeSub.map((item, index) => 
+                <option key={index} value={item}>{item}</option>
+              )
+            }
+
           
-            <option value="SUBSIS">SUBSIS</option>
-
-            <option value="SUBTDCR">SUBTDCR</option>
-
-            <option value="SUINFRA">SUBINFRA</option>
           
           </select>
         </div>

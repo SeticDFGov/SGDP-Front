@@ -1,14 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import 'material-icons/iconfont/material-icons.css';
 
 export default function Sidebar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const router = useRouter();
-  const user_info = useState({})
+  const [userInfo, setUserInfo] = useState({})
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const authStatus = localStorage.getItem("authenticated") === "true";
+ 
+      setIsAuthenticated(authStatus);
 
+      const user = localStorage.getItem("user_info");
+      if (user) {
+        try {
+          setUserInfo(JSON.parse(user));
+          setIsSUBINFRA(user?.SUBINFRA);
+        } catch (e) {
+          console.error("Erro ao fazer parse de user_info:", e);
+        }
+      }
+    }
+  }, []);
+
+  const userName = userInfo?.display_name || userInfo?.nome_completo || "Usuário";
 
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
@@ -51,7 +71,7 @@ export default function Sidebar() {
       <div className="mt-auto p-4 border-t border-blue-700">
         <div className="mb-2">
           <p className="text-sm">Bem-vindo</p>
-          <p className="text-sm font-bold">Antonio</p>
+          <p className="text-sm font-bold">{userName}</p>
         </div>
         <div className="flex flex-col space-y-2">
           <button
