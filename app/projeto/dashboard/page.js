@@ -197,10 +197,10 @@ const barTags = {
       <div className="flex flex-col lg:flex-row gap-4">
         {/* Gráfico: Status de demandas */}
         
-        <div className="w-full lg:w-1/2 bg-white shadow-lg rounded-2xl p-4">
+        <div className="w-full lg:w-1/2 bg-white shadow-lg rounded-2xl p-4 ">
         <h3 className="text-xl font-semibold text-center mb-4">Situação dos Projetos</h3>
         
-          <Doughnut data={doughnutData} options={{ responsive: true, maintainAspectRatio: false ,plugins: {
+          <Doughnut data={doughnutData} options={{ responsive: true ,plugins: {
      legend: {
           display: true,
           position: "bottom",
