@@ -256,7 +256,8 @@ const handleCadastroEtapa = (novaEtapa) => {
                                       <td className="border p-2">
                                         {
                                           item.DT_INICIO_PREVISTO ? 
-                                    dayjs(item.DT_INICIO_PREVISTO).local().format('DD/MM/YYYY') : 
+                                          dayjs(item.DT_TERMINO_REAL).format('DD/MM/YYYY')
+                                          : 
                                     'Data não disponível'
                                 }
                                       </td>
@@ -265,7 +266,8 @@ const handleCadastroEtapa = (novaEtapa) => {
                                       {
                                       
                                         item.DT_TERMINO_PREVISTO ? 
-                                    dayjs.utc(item.DT_TERMINO_PREVISTO).local().format('DD/MM/YYYY') : 
+                                        dayjs(item.DT_TERMINO_REAL).format('DD/MM/YYYY')
+                                        : 
                                     'Data não disponível'
                 }  
                                       </td>
@@ -274,7 +276,8 @@ const handleCadastroEtapa = (novaEtapa) => {
                                         {
                                          
                                          item.DT_INICIO_REAL ? 
-                                    dayjs.utc(item.DT_INICIO_REAL).local().format('DD/MM/YYYY') : 
+                                         dayjs(item.DT_TERMINO_REAL).format('DD/MM/YYYY')
+                                         : 
                                     'Data não disponível'
                                         }
 
@@ -282,7 +285,8 @@ const handleCadastroEtapa = (novaEtapa) => {
                                       <td className="border p-2">
                                     {
                                     item.DT_TERMINO_REAL ? 
-  dayjs.utc(item.DT_TERMINO_REAL).local().format('DD/MM/YYYY') :  
+                                    dayjs(item.DT_TERMINO_REAL).format('DD/MM/YYYY')
+                                    :  
                                     'Data não disponível'
                                      }
                                     </td>
