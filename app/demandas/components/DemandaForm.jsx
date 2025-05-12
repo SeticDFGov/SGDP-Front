@@ -111,7 +111,7 @@ const emptyToNull = (value) => (value === "" ? null : value);
   }
 };
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 text-black">
+    <div className="fixed z-50 inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 text-black">
 
 
      <form onSubmit={handleSubmit} className="space-y-4 p-6 bg-white rounded-lg shadow-md text-black">

@@ -36,7 +36,7 @@ export const InicioEtapa = ({ onClose, isOpen, etapa }) => {
 
   return (
     isOpen && (
-      <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+      <div className="fixed  z-50 inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
         <div className="bg-white p-6 rounded-md w-[1200px] shadow-lg">
           <h2 className="text-xl font-semibold mb-4">Iniciar Etapa</h2>
           <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

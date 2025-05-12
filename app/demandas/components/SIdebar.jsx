@@ -53,7 +53,7 @@ export default function Sidebar() {
       <nav className="flex-1 overflow-y-auto">
         {/* Dashboard */}
         <button
-          className="flex items-center py-3 px-4 w-full bg-blue-700 text-white hover:text-white cursor-pointer"
+          className="flex items-center py-3 px-4 w-full bg-blue-900 text-blue-300 hover:text-white cursor-pointer"
           onClick={() => router.push("/demandas/dashboard")}
         >
           <span className="material-icons mr-3">pie_chart</span>

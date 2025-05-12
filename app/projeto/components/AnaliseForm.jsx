@@ -64,7 +64,7 @@ export const AnaliseModal = ({ isOpen, onClose, nomeProjeto }) => {
 
   return (
     isOpen && (
-      <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+      <div className="fixed z-50 inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
         <div className="bg-white p-6 rounded-md w-[600px] shadow-lg">
           <h2 className="text-xl font-semibold mb-4">Nova Análise</h2>
           <div className="border-b pb-4 mb-4">

@@ -124,66 +124,74 @@ const barTags = {
 
   return (
 <>
+ 
   <div className="bg-white flex-1 flex flex-col ml-64">
     <Sidebar></Sidebar> 
-    <div className="max-w-6xl mx-auto bg-white mt p-4 ">
-      <div className="mb-6">
-        <h2 className="text-4xl font-semibold text-black">
-          Bem-vindo ao sistema de gestão de projetos da SETIC
-        </h2>
-      </div>
+  
+     
 
       
      
 
-      <ProjetoForm onClose={handleCloseModal} isOpen={modalOpen} />
+     
       <div className=" mb-6  justify-items-end">
+    
 
 
-{isAuthenticated && (
-  <div
-    onClick={handleOpenModal}
-    className="cursor-pointer bg-[rgb(1,98,175,255)] hover:bg-[rgb(1,78,140)] text-white w-10 h-10 rounded-full hover:scale-105 flex items-center justify-center"
-      title="Criar novo Projeto"
-  >
-    <FaPlus className="text-white text-lg"  />
-  </div>
-)}
+
 
 
 </div>
 
-      <div className="flex gap-4 text-black bg-white">
-        <div className="flex-1 overflow-x-auto mt-2">
-          <table className="w-full border-collapse border">
+     <div class="flex-1 flex flex-col">
+      <div className="flex-1 p-4 bg-white rounded-lg ">
+        <div className="overflow-x-auto">
+          <ProjetoForm onClose={handleCloseModal} isOpen={modalOpen} />
+
+           <div class="flex justify-between items-center mb-4">
+                    <p class="text-gray-600">Resultados encontrados</p>
+                    <div class="flex space-x-2">
+                        <button class="border rounded-lg py-2 px-4 flex items-center bg-blue-800 text-white" onClick={handleOpenModal}>
+                            <span class="material-icons mr-2" >add</span> Adicionar Projeto
+                        </button>
+                        <button class="border rounded-lg py-2 px-4">
+                            <span class="material-icons">view_list</span>
+                        </button>
+                        <button class="border rounded-lg py-2 px-4">
+                            <span class="material-icons">view_module</span>
+                        </button>
+                    </div>
+                </div>
+
+          <table className="w-full border-collapse  ">
             <thead>
-              <tr className="bg-gray-50">
-                <th className="border p-2 text-left">Nome do projeto</th>
-                <th className="border p-2 text-left">Gerente do Projeto</th>
-                <th className="border p-2 text-left">Número Processo SEI</th>
-                <th className="border p-2 text-left">Unidade</th>
-                <th className="border p-2 text-left">Área Demandante</th>
-                <th className="border p-2 text-left">Ano</th>
-                {isAuthenticated && <th className="border p-2 text-left">Ação</th>}
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left text-gray-600">Nome do projeto</th>
+                <th className="border p-3 text-left text-gray-600">Gerente do Projeto</th>
+                <th className="border p-3 text-left text-gray-600">Número Processo SEI</th>
+                <th className="border p-3 text-left text-gray-600">Unidade</th>
+                <th className="border p-3 text-left text-gray-600">Área Demandante</th>
+                <th className="border p-3 text-left text-gray-600">Ano</th>
+                {isAuthenticated && <th className="border p-3 text-left text-gray-600">Ação</th>}
               </tr>
             </thead>
             <tbody>
               {data.map((item) => (
-                <tr key={item.projetoId} className="shadow">
-                  <td className="border p-2">{item.NM_PROJETO}</td>
-                  <td className="border p-2">{item.GERENTE_PROJETO}</td>
-                  <td className="border p-2">{item.NR_PROCESSO_SEI}</td>
-                  <td className="border p-2">{item.UNIDADE}</td>
-                  <td className="border p-2">{item.NM_AREA_DEMANDANTE}</td>
-                  <td className="border p-2">{item.ANO}</td>
+                <tr key={item.projetoId} className="">
+                  <td className="border p-3">{item.NM_PROJETO}</td>
+                  <td className="border p-3">{item.GERENTE_PROJETO}</td>
+                  <td className="border p-3">{item.NR_PROCESSO_SEI}</td>
+                  <td className="border p-3">{item.UNIDADE}</td>
+                  <td className="border p-3">{item.NM_AREA_DEMANDANTE}</td>
+                  <td className="border p-3">{item.ANO}</td>
                   {isAuthenticated && (
-                    <td className="border p-2 flex gap-2 justify-center">
+                    <td className="border p-3">
                       <button
                         id="etapa"
                         className="button is-primary"
                         onClick={() => router.push(`/projeto/etapa/${item.projetoId}`)}
                       >
-                        <span className="material-icons">sync</span>
+                        <span className="material-icons">chevron_right</span>
                       </button>
                     </td>
                   )}
@@ -201,7 +209,7 @@ const barTags = {
             </button>
           </div>
         </div>
-      </div>
+        </div>   
     </div>
   </div>
 </>

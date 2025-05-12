@@ -57,7 +57,7 @@ const handleAddDetail = async () => {
 
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded" >
+    <div className="fixed z-50 inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded" >
       <div className="bg-white p-6  shadow-lg w-3/4 max-w-4xl ">
       <div className="mt-4 flex justify-between items-center mb-4">
   <div className="">

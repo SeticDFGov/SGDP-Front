@@ -50,19 +50,19 @@ export default function Sidebar() {
       <nav className="flex-1 overflow-y-auto">
   {/* Dashboard */}
   <button
-    className="flex items-center py-3 px-4 w-full bg-blue-700 text-white hover:text-white cursor-pointer mb-2"
+    className="flex items-center py-3 px-4 w-full text-blue-300 bg-blue-900 hover:bg-blue-800  hover:text-white cursor-pointer mb-2"
     onClick={() => router.push("/projeto/dashboard")}
   >
-    <span className="material-icons mr-3">pie_chart</span>
-    <span className="link-text">Dashboard</span>
+    <span className="material-icons mr-3 ">pie_chart</span>
+    <span className="link-text ">Dashboard</span>
   </button>
 
   <button
-    className="flex items-center py-3 px-4 w-full bg-blue-700 text-white hover:text-white cursor-pointer"
+    className="flex items-center py-3 px-4 w-full bg-blue-900 text-blue-300 hover:bg-blue-800 hover:text-white cursor-pointer"
     onClick={() => router.push("/projeto")}
   >
-    <span className="material-icons mr-3">view_kanban</span>
-    <span className="link-text">Projetos</span>
+    <span className="material-icons mr-3  ">view_kanban</span>
+    <span className="link-text  ">Projetos</span>
   </button>
 </nav>
 

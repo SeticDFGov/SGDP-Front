@@ -184,105 +184,11 @@ return (
          <div className=" mb-6  justify-items-end">
 
 
-          {isAuthenticated && (
-            <div
-              onClick={handleOpenModal}
-              className="cursor-pointer bg-[rgb(1,98,175,255)] hover:bg-[rgb(1,78,140)] text-white w-10 h-10 rounded-full hover:scale-105 flex items-center justify-center"
-              title="Criar nova Demanda"
-            >
-              <FaPlus className="text-white text-lg" />
-            </div>
-          )}
+         
 
 
 </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
-
-                <div className="flex-1 relative">
-                   <select
-                    defaultValue=""
-                    className="w-full border rounded p-2 pl-4 pr-10 bg-white text-gray-900 appearance-none"
-                    >
-                    <option value="" >
-                        Selecione uma categoria
-                    </option>
-                    <option value="todas">Todas</option>
-                    <option value="categoria">Categoria</option>
-                    </select>
-
-
-                    <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-900" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fillRule="evenodd"
-                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                clipRule="evenodd" />
-                        </svg>
-                    </div>
-                </div>
-                <div className="flex-1 relative">
-                    <select
-  defaultValue=""
-  className="w-full border rounded p-2 pl-4 pr-10 bg-white text-gray-900 appearance-none"
->
-  <option value="" >
-    Selecione a unidade
-  </option>
-  <option value="todas">Todas</option>
-  <option value="CGOV">CGOV</option>
-  <option value="UCR">UCR</option>
-  <option value="UPTD">UPTD</option>
-</select>
-
-
-                    <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-900" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fillRule="evenodd"
-                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                clipRule="evenodd" />
-                        </svg>
-                    </div>
-                </div>
-                <div className="flex-1 relative">
-                    <select
-  defaultValue=""
-  className="w-full border rounded p-2 pl-4 pr-10 bg-white text-gray-900 appearance-none"
->
-  <option value="" >
-    Selecione a situação
-  </option>
-  <option value="Atrasado">Atrasado</option>
-  <option value="Em andamento">Em andamento</option>
-  <option value="Concluído">Não iniciada</option>
-  <option value="Concluído">Concluído</option>
-</select>
-
-
-                    <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-900" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fillRule="evenodd"
-                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                clipRule="evenodd" />
-                        </svg>
-                    </div>
-                </div>
-                <div className="flex-1 relative">
-                    <input type="text" placeholder="Buscar"
-                        className="w-full border rounded p-2 pl-4 pr-10 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-
-                    <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-900" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fillRule="evenodd"
-                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1111.32 3.906l4.387 4.387a1 1 0 01-1.414 1.414l-4.387-4.387A6 6 0 012 8z"
-                                clipRule="evenodd" />
-                        </svg>
-                    </div>
-                </div>
-
-            </div>
+     
 
            <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
             <CadastroDemanda onClose = {handleCloseModal} ></CadastroDemanda>
@@ -294,29 +200,42 @@ return (
               <DemandDetailsModal isOpen={isModalDetailOpen} onClose={handleCloseDetailModal} demandaId={nomeId} item = {detail}>
 
               </DemandDetailsModal>
-
+<div class="flex justify-between items-center mb-4">
+                    <p class="text-gray-600">Resultados encontrados</p>
+                    <div class="flex space-x-2">
+                        <button class="border rounded-lg py-2 px-4 flex items-center bg-blue-800 text-white" onClick={handleOpenModal}>
+                            <span class="material-icons mr-2" >add</span> Adicionar Demanda
+                        </button>
+                        <button class="border rounded-lg py-2 px-4">
+                            <span class="material-icons">view_list</span>
+                        </button>
+                        <button class="border rounded-lg py-2 px-4">
+                            <span class="material-icons">view_module</span>
+                        </button>
+                    </div>
+                </div>
             <div className="flex gap-4 text-black">
-
+                
                 <div className="flex-1 overflow-x-auto mt-2">
                     <table className="w-full border-collapse border">
                         <thead>
                             <tr className="bg-gray-50">
-                                <th className="border p-2 text-left">Nome Demanda</th>
-                                <th className="border p-2 text-left">Data de Abertura</th>
-                                <th className="border p-2 text-left">Situação</th>
-                                <th className="border p-2 text-left">Tipo</th>
-                                <th className="border p-2 text-left">Área Demandante</th>
-                                {isAuthenticated && <th className="border p-2 text-left">Responsável</th>
+                                <th className="border p-3 text-left text-gray-600">Nome Demanda</th>
+                                <th className="border p-3 text-left text-gray-600">Data de Abertura</th>
+                                <th className="border p-3 text-left text-gray-600">Situação</th>
+                                <th className="border p-3 text-left text-gray-600">Tipo</th>
+                                <th className="border p-3 text-left text-gray-600">Área Demandante</th>
+                                {isAuthenticated && <th className="border p-3 text-left text-gray-600">Responsável</th>
 }
-                                <th className="border p-2 text-left">Data da Conclusão</th>
-                                <th className="border p-2 text-left">Unidade SUBTDCR</th>
-                                {isAuthenticated && <th className="border p-2 text-left">Ações</th>}
+                                <th className="border p-3 text-left text-gray-600">Data da Conclusão</th>
+                                <th className="border p-3 text-left text-gray-600">Unidade SUBTDCR</th>
+                                {isAuthenticated && <th className="border p-3 text-left text-gray-600">Ações</th>}
 
                             </tr>
                         </thead>
                         <tbody>
                             {items.map((item) => (
-                                <tr key={item.ID} className="shadow">
+                                <tr key={item.ID} className="">
                                 <td className="border p-2">{item.NM_DEMANDA}</td>
 
                               <td className="border p-2">
