@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import 'material-icons/iconfont/material-icons.css';
 
 export default function Sidebar() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isSUBINFRA, setIsSUBINFRA] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const router = useRouter();
   const [userInfo, setUserInfo] = useState({})
