@@ -256,7 +256,7 @@ const handleCadastroEtapa = (novaEtapa) => {
                                       <td className="border p-2">
                                         {
                                           item.DT_INICIO_PREVISTO ? 
-                                          dayjs(item.DT_TERMINO_REAL).format('DD/MM/YYYY')
+                                          new Date(item.DT_INICIO_PREVISTO) 
                                           : 
                                     'Data não disponível'
                                 }
@@ -266,7 +266,7 @@ const handleCadastroEtapa = (novaEtapa) => {
                                       {
                                       
                                         item.DT_TERMINO_PREVISTO ? 
-                                        dayjs(item.DT_TERMINO_REAL).format('DD/MM/YYYY')
+                                        new Date(item.DT_TERMINO_PREVISTO)
                                         : 
                                     'Data não disponível'
                 }  
@@ -276,7 +276,7 @@ const handleCadastroEtapa = (novaEtapa) => {
                                         {
                                          
                                          item.DT_INICIO_REAL ? 
-                                         dayjs(item.DT_TERMINO_REAL).format('DD/MM/YYYY')
+                                         new Date(item.DT_INICIO_REAL)
                                          : 
                                     'Data não disponível'
                                         }
@@ -285,7 +285,7 @@ const handleCadastroEtapa = (novaEtapa) => {
                                       <td className="border p-2">
                                     {
                                     item.DT_TERMINO_REAL ? 
-                                    dayjs(item.DT_TERMINO_REAL).format('DD/MM/YYYY')
+                                    new Date(item.DT_TERMINO_REAL)
                                     :  
                                     'Data não disponível'
                                      }
