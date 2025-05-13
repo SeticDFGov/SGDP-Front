@@ -174,176 +174,133 @@ useEffect(() => {
 
 return (
   <>
- 
-    
-     <div className="bg-white bg-white flex-1 flex flex-col ml-64">
+
+
+    <div className="bg-white bg-white flex-1 flex flex-col ml-64">
       <Sidebar></Sidebar>
-      <div className="mx-auto bg-white ">
-       <div className="mx-auto bg-white mt-5">
-        <div className="p-4 max-w-6xl mx-auto bg-white mt-5 mb-5">
-         <div className=" mb-6  justify-items-end">
+      <div class="flex-1 flex flex-col">
+        <main class="flex-1 p-4 bg-white rounded-lg ">
+          <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+            <CadastroDemanda onClose={handleCloseModal} ></CadastroDemanda>
+          </Modal>
+          <Modal isOpen={isModalEditOpen} onClose={handleCloseEditModal}>
+            <EditFormModal itemId={selectedItemId} onClose={handleCloseEditModal}></EditFormModal>
+          </Modal>
+          <DemandDetailsModal isOpen={isModalDetailOpen} onClose={handleCloseDetailModal} demandaId={nomeId} item={detail}>
+          </DemandDetailsModal>
+          <div class="flex justify-between items-center mb-4">
+            <p class="text-gray-600">Resultados encontrados</p>
+            <div class="flex space-x-2">
+              <button class="border rounded-lg py-2 px-4 flex items-center bg-blue-800 text-white" onClick={handleOpenModal}>
+                <span class="material-icons mr-2" >add</span> Adicionar Demanda
+              </button>
+              <button class="border rounded-lg py-2 px-4">
+                <span class="material-icons">view_list</span>
+              </button>
+              <button class="border rounded-lg py-2 px-4">
+                <span class="material-icons">view_module</span>
+              </button>
+            </div>
+          </div>
+          <div className="flex gap-4 text-black">
+            <div className="flex-1 overflow-x-auto mt-2">
+              <table className="w-full border-collapse border">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="border p-3 text-left text-gray-600">Nome Demanda</th>
+                    <th className="border p-3 text-left text-gray-600">Data de Abertura</th>
+                    <th className="border p-3 text-left text-gray-600">Situação</th>
+                    <th className="border p-3 text-left text-gray-600">Tipo</th>
+                    <th className="border p-3 text-left text-gray-600">Área Demandante</th>
+                    {isAuthenticated && <th className="border p-3 text-left text-gray-600">Responsável</th>
+                    }
+                    <th className="border p-3 text-left text-gray-600">Data da Conclusão</th>
+                    <th className="border p-3 text-left text-gray-600">Unidade SUBTDCR</th>
+                    {isAuthenticated && <th className="border p-3 text-left text-gray-600">Ações</th>}
+                  </tr>
+                </thead>
+                <tbody>
+                  {items.map((item) => (
+                    <tr key={item.ID} className="">
+                      <td className="border p-2">{item.NM_DEMANDA}</td>
+                      <td className="border p-2">
+                        {
+                          (() => {
+                            try {
+                              const date = new Date(item.DT_ABERTURA);
+                              return new Intl.DateTimeFormat("pt-BR", {
+                                timeZone: "UTC"
+                              }).format(date);
+                            } catch {
+                              return "";
+                            }
+                          })()
 
+                        }
+                      </td>
+                      <td className="border p-2">{item.STATUS}</td>
+                      <td className="border p-2">{item.CATEGORIA}</td>
+                      <td className="border p-2">{item.NM_AREA_DEMANDANTE}</td>
+                      {isAuthenticated && <td className="border p-2">{item.NM_PO_SUBTDCR}</td>
+                      }
+                      <td className="border p-2">
+                        {
+                          (() => {
+                            try {
+                              const data = new Date(item.DT_CONCLUSAO);
 
-         
+                              // Verifica se a data é inválida ou se é 31/12/1969
+                              if (isNaN(data) || data.toDateString() === new Date(0).toDateString()) {
+                                throw new Error("Data inválida");
+                              }
 
+                              return data.toLocaleDateString("pt-BR");
+                            } catch {
+                              return "";
+                            }
+                          })()
 
-</div>
-     
+                        }
+                      </td>
+                      <td className="border p-2">{item.UNIDADE}</td>
+                      {isAuthenticated && (
+                        <td className="border p-2 justify-center gap-2">
+                          <div className="flex justify-center items-center gap-2">
+                            <button
+                              className="text-gray-500 hover:text-gray-700"
+                              onClick={() => { handleOpenDetailModal(item.ID, item); setNomeId(item.NM_DEMANDA); }}
+                            >
+                              <span className="material-icons">visibility</span>
+                            </button>
+                            <button
+                              className="text-gray-500 hover:text-gray-700"
+                              onClick={() => handleDeleteItem(item.ID)}
+                            >
+                              <span className="material-icons">delete</span>
+                            </button>
+                            <button
+                              className="text-gray-500 hover:text-gray-700"
+                              onClick={() => handleOpenEditModal(item.ID)}
+                            >
+                              <span className="material-icons">arrow_forward_ios</span>
+                            </button>
+                          </div>
 
-           <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-            <CadastroDemanda onClose = {handleCloseModal} ></CadastroDemanda>
-           </Modal>
-
-           <Modal isOpen={isModalEditOpen} onClose={handleCloseEditModal}>
-            <EditFormModal itemId = {selectedItemId} onClose={handleCloseEditModal}></EditFormModal>
-           </Modal>
-              <DemandDetailsModal isOpen={isModalDetailOpen} onClose={handleCloseDetailModal} demandaId={nomeId} item = {detail}>
-
-              </DemandDetailsModal>
-<div class="flex justify-between items-center mb-4">
-                    <p class="text-gray-600">Resultados encontrados</p>
-                    <div class="flex space-x-2">
-                        <button class="border rounded-lg py-2 px-4 flex items-center bg-blue-800 text-white" onClick={handleOpenModal}>
-                            <span class="material-icons mr-2" >add</span> Adicionar Demanda
-                        </button>
-                        <button class="border rounded-lg py-2 px-4">
-                            <span class="material-icons">view_list</span>
-                        </button>
-                        <button class="border rounded-lg py-2 px-4">
-                            <span class="material-icons">view_module</span>
-                        </button>
-                    </div>
-                </div>
-            <div className="flex gap-4 text-black">
-                
-                <div className="flex-1 overflow-x-auto mt-2">
-                    <table className="w-full border-collapse border">
-                        <thead>
-                            <tr className="bg-gray-50">
-                                <th className="border p-3 text-left text-gray-600">Nome Demanda</th>
-                                <th className="border p-3 text-left text-gray-600">Data de Abertura</th>
-                                <th className="border p-3 text-left text-gray-600">Situação</th>
-                                <th className="border p-3 text-left text-gray-600">Tipo</th>
-                                <th className="border p-3 text-left text-gray-600">Área Demandante</th>
-                                {isAuthenticated && <th className="border p-3 text-left text-gray-600">Responsável</th>
-}
-                                <th className="border p-3 text-left text-gray-600">Data da Conclusão</th>
-                                <th className="border p-3 text-left text-gray-600">Unidade SUBTDCR</th>
-                                {isAuthenticated && <th className="border p-3 text-left text-gray-600">Ações</th>}
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {items.map((item) => (
-                                <tr key={item.ID} className="">
-                                <td className="border p-2">{item.NM_DEMANDA}</td>
-
-                              <td className="border p-2">
-                                {
-                                  (() => {
-  try {
-    const date = new Date(item.DT_ABERTURA);
-    return new Intl.DateTimeFormat("pt-BR", {
-      timeZone: "UTC"
-    }).format(date);
-  } catch {
-    return "";
-  }
-})()
-
-                                }
-                                </td>
-                                <td className="border p-2">{item.STATUS}</td>
-                                <td className="border p-2">{item.CATEGORIA}</td>
-                                <td className="border p-2">{item.NM_AREA_DEMANDANTE}</td>
-                                {isAuthenticated && <td className="border p-2">{item.NM_PO_SUBTDCR}</td>
- }
-                                <td className="border p-2">
-                                    {
-                                         (() => {
-  try {
-    const data = new Date(item.DT_CONCLUSAO);
-    
-    // Verifica se a data é inválida ou se é 31/12/1969
-    if (isNaN(data) || data.toDateString() === new Date(0).toDateString()) {
-      throw new Error("Data inválida");
-    }
-
-    return data.toLocaleDateString("pt-BR");
-  } catch {
-    return "";
-  }
-})()
-
-                                    }
-                                </td>
-
-
-
-                                <td className="border p-2">{item.UNIDADE}</td>
-
-                                {isAuthenticated && (
-<td className="border p-2 justify-center gap-2">
-  <div className="flex justify-center items-center gap-2">
-  <button
-      className="text-[rgb(1,98,175,255)] hover:text-[rgb(1,78,140)] hover:scale-105"
-      onClick={() => { handleOpenDetailModal(item.ID, item); setNomeId(item.NM_DEMANDA); }}
-    >
-      <span className="material-icons">visibility</span>
-    </button>
-    <button
-        className="text-[rgb(1,98,175,255)] hover:text-[rgb(1,78,140)] hover:scale-105"
-        onClick={() => handleDeleteItem(item.ID)}
-      >
-      <span className="material-icons">delete</span>
-      </button>
-      <button
-        className="text-[rgb(1,98,175,255)] hover:text-[rgb(1,78,140)] hover:scale-105"
-        onClick={() => handleOpenEditModal(item.ID)}
-      >
-      <span className="material-icons">edit</span>
-      </button>
-  </div>
-
-</td>
-)}
-
-
-
-
-
-
-
-</tr>
-                            ))}
-
-
-                        </tbody>
-                    </table>
-
-                    <div className="pagination mx-auto mt-5" style={{textAlign: "center"}}>
-                        <button id="prev" className="button is-primary">
-                            <span className="material-icons">chevron_left</span>
-                        </button>
-
-                        <button id="next" className="button is-primary">
-                            <span className="material-icons">chevron_right</span>
-                        </button>
-                    </div>
-                </div>
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
 
             </div>
 
+          </div>
 
-        </div>
+        </main>
+      </div>
     </div>
 
-
-
-
-  </div>
-
- </div>
   </>
 );
 
