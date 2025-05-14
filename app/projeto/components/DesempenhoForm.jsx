@@ -102,6 +102,7 @@ export const DesempenhoForm = ({ onClose, isOpen, etapa }) => {
                 className="w-full p-2 border border-gray-300 rounded-md"
                 min={0}
                 max={100}
+                required
               />
             </div>
             <div className="mb-4 col-span-3">
