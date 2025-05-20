@@ -127,21 +127,6 @@ const barTags = {
  
   <div className="bg-white flex-1 flex flex-col ml-64">
     <Sidebar></Sidebar> 
-  
-     
-
-      
-     
-
-     
-      <div className=" mb-6  justify-items-end">
-    
-
-
-
-
-
-</div>
 
      <div class="flex-1 flex flex-col">
       <div className="flex-1 p-4 bg-white rounded-lg ">
@@ -154,38 +139,32 @@ const barTags = {
                         <button class="border rounded-lg py-2 px-4 flex items-center bg-blue-800 text-white" onClick={handleOpenModal}>
                             <span class="material-icons mr-2" >add</span> Adicionar Projeto
                         </button>
-                        <button class="border rounded-lg py-2 px-4">
-                            <span class="material-icons">view_list</span>
-                        </button>
-                        <button class="border rounded-lg py-2 px-4">
-                            <span class="material-icons">view_module</span>
-                        </button>
                     </div>
                 </div>
 
-          <table className="w-full border-collapse  ">
+          <table className="w-full border-collapse ">
             <thead>
-              <tr className="bg-gray-100">
-                <th className="border p-3 text-left text-gray-600">Nome do projeto</th>
-                <th className="border p-3 text-left text-gray-600">Gerente do Projeto</th>
-                <th className="border p-3 text-left text-gray-600">Número Processo SEI</th>
-                <th className="border p-3 text-left text-gray-600">Unidade</th>
-                <th className="border p-3 text-left text-gray-600">Área Demandante</th>
-                <th className="border p-3 text-left text-gray-600">Ano</th>
-                {isAuthenticated && <th className="border p-3 text-left text-gray-600">Ação</th>}
+              <tr className="bg-gray-100 border-b">
+                <th className="text-left text-gray-600 p-3">Nome do projeto</th>
+                <th className="text-left text-gray-600 p-3">Gerente do Projeto</th>
+                <th className="text-left text-gray-600 p-3">Número Processo SEI</th>
+                <th className="text-left text-gray-600 p-3">Unidade</th>
+                <th className="text-left text-gray-600 p-3">Área Demandante</th>
+                <th className="text-left text-gray-600 p-3">Ano</th>
+                {isAuthenticated && <th className="p-3 text-left text-gray-600">Ação</th>}
               </tr>
             </thead>
             <tbody>
               {data.map((item) => (
-                <tr key={item.projetoId} className="">
-                  <td className="border p-3">{item.NM_PROJETO}</td>
-                  <td className="border p-3">{item.GERENTE_PROJETO}</td>
-                  <td className="border p-3">{item.NR_PROCESSO_SEI}</td>
-                  <td className="border p-3">{item.UNIDADE}</td>
-                  <td className="border p-3">{item.NM_AREA_DEMANDANTE}</td>
-                  <td className="border p-3">{item.ANO}</td>
+                <tr key={item.projetoId} className="border-b hover:bg-gray-50">
+                  <td className="p-3">{item.NM_PROJETO}</td>
+                  <td className="p-3">{item.GERENTE_PROJETO}</td>
+                  <td className="p-3">{item.NR_PROCESSO_SEI}</td>
+                  <td className="p-3">{item.UNIDADE}</td>
+                  <td className="p-3">{item.NM_AREA_DEMANDANTE}</td>
+                  <td className="p-3">{item.ANO}</td>
                   {isAuthenticated && (
-                    <td className="border p-3">
+                    <td className=" p-3">
                       <button
                         id="etapa"
                         className="button is-primary"
@@ -199,15 +178,6 @@ const barTags = {
               ))}
             </tbody>
           </table>
-
-          <div className="pagination mx-auto mt-5 text-center">
-            <button id="prev" className="button is-primary">
-              <span className="material-icons">chevron_left</span>
-            </button>
-            <button id="next" className="button is-primary">
-              <span className="material-icons">chevron_right</span>
-            </button>
-          </div>
         </div>
         </div>   
     </div>

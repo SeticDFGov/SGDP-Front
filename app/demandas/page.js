@@ -194,36 +194,31 @@ return (
               <button class="border rounded-lg py-2 px-4 flex items-center bg-blue-800 text-white" onClick={handleOpenModal}>
                 <span class="material-icons mr-2" >add</span> Adicionar Demanda
               </button>
-              <button class="border rounded-lg py-2 px-4">
-                <span class="material-icons">view_list</span>
-              </button>
-              <button class="border rounded-lg py-2 px-4">
-                <span class="material-icons">view_module</span>
-              </button>
+
             </div>
           </div>
           <div className="flex gap-4 text-black">
             <div className="flex-1 overflow-x-auto mt-2">
-              <table className="w-full border-collapse border">
+              <table className="w-full border-collapse ">
                 <thead>
-                  <tr className="bg-gray-50">
-                    <th className="border p-3 text-left text-gray-600">Nome Demanda</th>
-                    <th className="border p-3 text-left text-gray-600">Data de Abertura</th>
-                    <th className="border p-3 text-left text-gray-600">Situação</th>
-                    <th className="border p-3 text-left text-gray-600">Tipo</th>
-                    <th className="border p-3 text-left text-gray-600">Área Demandante</th>
-                    {isAuthenticated && <th className="border p-3 text-left text-gray-600">Responsável</th>
+                  <tr className="bg-gray-50 border-b">
+                    <th className=" p-3 text-left text-gray-600">Nome Demanda</th>
+                    <th className=" p-3 text-left text-gray-600">Data de Abertura</th>
+                    <th className=" p-3 text-left text-gray-600">Situação</th>
+                    <th className=" p-3 text-left text-gray-600">Tipo</th>
+                    <th className=" p-3 text-left text-gray-600">Área Demandante</th>
+                    {isAuthenticated && <th className=" p-3 text-left text-gray-600">Responsável</th>
                     }
-                    <th className="border p-3 text-left text-gray-600">Data da Conclusão</th>
-                    <th className="border p-3 text-left text-gray-600">Unidade SUBTDCR</th>
-                    {isAuthenticated && <th className="border p-3 text-left text-gray-600">Ações</th>}
+                    <th className=" p-3 text-left text-gray-600">Data da Conclusão</th>
+                    <th className=" p-3 text-left text-gray-600">Unidade SUBTDCR</th>
+                    {isAuthenticated && <th className=" p-3 text-left text-gray-600">Ações</th>}
                   </tr>
                 </thead>
                 <tbody>
                   {items.map((item) => (
-                    <tr key={item.ID} className="">
-                      <td className="border p-2">{item.NM_DEMANDA}</td>
-                      <td className="border p-2">
+                    <tr key={item.ID} className="border-b">
+                      <td className=" p-3">{item.NM_DEMANDA}</td>
+                      <td className=" p-3">
                         {
                           (() => {
                             try {
@@ -238,12 +233,12 @@ return (
 
                         }
                       </td>
-                      <td className="border p-2">{item.STATUS}</td>
-                      <td className="border p-2">{item.CATEGORIA}</td>
-                      <td className="border p-2">{item.NM_AREA_DEMANDANTE}</td>
-                      {isAuthenticated && <td className="border p-2">{item.NM_PO_SUBTDCR}</td>
+                      <td className=" p-3">{item.STATUS}</td>
+                      <td className=" p-3">{item.CATEGORIA}</td>
+                      <td className=" p-3">{item.NM_AREA_DEMANDANTE}</td>
+                      {isAuthenticated && <td className="p-3">{item.NM_PO_SUBTDCR}</td>
                       }
-                      <td className="border p-2">
+                      <td className="p-3">
                         {
                           (() => {
                             try {
@@ -262,9 +257,9 @@ return (
 
                         }
                       </td>
-                      <td className="border p-2">{item.UNIDADE}</td>
+                      <td className="p-3">{item.UNIDADE}</td>
                       {isAuthenticated && (
-                        <td className="border p-2 justify-center gap-2">
+                        <td className="p-3 justify-center gap-2">
                           <div className="flex justify-center items-center gap-2">
                             <button
                               className="text-gray-500 hover:text-gray-700"
