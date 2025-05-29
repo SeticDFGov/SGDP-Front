@@ -84,11 +84,19 @@ export default function ProductPage() {
 
     const fetchEtapas = async () => {
       const response = await getAllEtapas(id);
-      setEtapas(response)
-      const total = response.reduce((soma, etapa) => soma + (etapa.PERCENT_TOTAL_ETAPA || 0), 0);
-      console.log(total)
-      setOcupado(Math.round(total) > 99)
-    }
+      
+      const etapasOrdenadas = response.sort((a, b) => a.Order - b.Order);
+      console.log(etapasOrdenadas)
+      setEtapas(etapasOrdenadas);
+    
+      const total = etapasOrdenadas.reduce(
+        (soma, etapa) => soma + (etapa.PERCENT_TOTAL_ETAPA || 0),
+        0
+      );
+    
+      setOcupado(Math.round(total) > 99);
+    };
+     
 
     const fectPercent = async () => {
       const response = await getPercent(id)
@@ -245,7 +253,6 @@ export default function ProductPage() {
                     ) : Array.isArray(etapas) &&
                     etapas
                       .slice()
-                      .sort((a, b) => a.EtapaProjetoId - b.EtapaProjetoId)
                       .map((item) => (
                         <tr key={item.EtapaProjetoId} className="border-b hover:bg-gray-50">
                           <td className=" p-3">{item.NM_ETAPA}</td>
