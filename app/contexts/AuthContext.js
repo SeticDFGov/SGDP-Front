@@ -22,10 +22,13 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [Token, setToken] = useState(null)
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    
     if (token) {
+      setToken(token)
       try {
         const decoded = jwtDecode(token);
         const mappedUser = mapUserClaims(decoded);
@@ -67,7 +70,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user, loading }}>
+    <AuthContext.Provider value={{ user, Token,login, logout, isAuthenticated: !!user, loading }}>
       {children}
     </AuthContext.Provider>
   );

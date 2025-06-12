@@ -9,9 +9,13 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useRouter } from "next/navigation";
 import { Bar, Pie, Line, Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PointElement, LineElement } from "chart.js";
-import { getAllEtapas, getSituacao, getTags } from "./services/etapaSevice";
+import { getAllEtapas, getSituacao, getTags } from "./services/etapaService";
 import { optionsGraph } from "./components/config/config";
 import Sidebar from "./components/Sidebar";
+import { useProjetoApi } from "./hooks/projetoHook";
+import { useAuth } from "../contexts/AuthContext";
+import { useEtapaApi } from "./hooks/etapaHook";
+
 
 // Registrando os componentes necessários do Chart.js
 ChartJS.register(
@@ -28,98 +32,44 @@ ChartJS.register(
 );
 
 export default function Projetos () {
-
+  const { getAllItems, getQuantidade } = useProjetoApi();
+  const {getSituacao, getTags} = useEtapaApi();
+  const { isAuthenticated, loading, Token } = useAuth();
   const [data, setData] = useState([]);
   const [modalOpen, setIsModalOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const router = useRouter();
   const [chartData, setChartData] = useState({});
   const [chartData2, setChartData2] = useState({});
-  const [ total, setTotal] = useState({});
+  const [total, setTotal] = useState({});
+  const router = useRouter();
+
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-
+  
   useEffect(() => {
-    // Verifica se o código está rodando no lado do cliente
-    if (typeof window !== "undefined") {
-      const authStatus = localStorage.getItem("authenticated");
-      setIsAuthenticated(authStatus === "true");
-
-      // Se o usuário não estiver autenticado, redireciona para a página de login
-      if (authStatus !== "true") {
-        router.push('/auth');
-      }
+    if (!loading && !isAuthenticated) {
+      router.push("/auth");
     }
-  }, [router]);
-  useEffect(() => {
-      const handleItens = async () => {
-          const response = await getAllItems();
-          setData(response);
-        
-      };
-      handleItens();
-  }, []);
+  }, [loading, isAuthenticated, router]);
 
+  
+useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await getAllItems();
+        console.log(response)
+        setData(response);
+      } catch (error) {
+        console.error("Erro ao carregar projetos:", error);
+      }
+    };
 
-  useEffect(() => {
-      const authStatus = localStorage.getItem("authenticated") === "true";
-      setIsAuthenticated(authStatus);
-  }, []);
-
-  // Dados fictícios para os gráficos
- useEffect(() => {
-        const fetchProjetos = async () => {
-          const data = await getSituacao();
-          const data2 = await getTags();
-          const data3 = await getQuantidade();
-          setTotal(data3)
-          setChartData(data)
-          setChartData2(data2)
-         };
-        fetchProjetos();
-    }, [data]);
-
-   const doughnutData = {
-    labels: ["Concluído", "Em Andamento", "Atrasado", "Não iniciado"],
-    datasets: [
-        {
-            label: "Projetos",
-            data: [
-                chartData.Concluido,
-                chartData.EmAndamento,
-                chartData.Atrasado,
-                chartData.NaoIniciado
-            ],
-            backgroundColor: ["#4CAF50", "#FFC107", "#F44336", "#000000"],
-        }
-    ]
-};
-
-
-    const combinedData = [
-    { label: "PTD24/27", value: chartData2.PTD2427 },
-    { label: "PTDIC24/27", value: chartData2.PDTIC2427 },
-    { label: "PROFISCOII", value: chartData2.PROFISCOII }
-];
-
-combinedData.sort((a, b) => b.value - a.value);
-
-const sortedLabels = combinedData.map(item => item.label);
-const sortedValues = combinedData.map(item => item.value);
-
-const barTags = {
-    labels: sortedLabels,
-    datasets: [
-        {
-            label: "Projetos",
-            data: sortedValues,
-            backgroundColor: ["#000000", "#000000", "#000000"]
-        }
-    ]
-};
-
-
+    if (!loading && isAuthenticated  && data.length === 0) {
+      fetchItems();
+    }
+  }, [loading, isAuthenticated]);
+  
+  
 
 
   return (

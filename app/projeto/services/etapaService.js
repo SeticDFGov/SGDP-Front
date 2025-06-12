@@ -1,8 +1,16 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL_ETAPA || "http://localhost:5148/api/etapa";
 
-export const getAllEtapas = async (id) => {
+
+const getAuthHeaders = (token) => ({
+  Authorization: `Bearer ${token}`,
+  "Content-Type": "application/json",
+});
+
+export const getAllEtapas = async (id, token) => {
   try {
-    const response = await fetch(`${API_URL}/${id}`);
+    const response = await fetch(`${API_URL}/${id}`, {
+      headers: getAuthHeaders(token),
+    });
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -10,10 +18,11 @@ export const getAllEtapas = async (id) => {
   }
 };
 
-
-export const getSituacao = async () => {
+export const getSituacao = async (token) => {
   try {
-    const response = await fetch(`${API_URL}/situacao`);
+    const response = await fetch(`${API_URL}/situacao`, {
+      headers: getAuthHeaders(token),
+    });
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -21,9 +30,11 @@ export const getSituacao = async () => {
   }
 };
 
-export const getPercent = async (id) => {
+export const getPercent = async (id, token) => {
   try {
-    const response = await fetch(`${API_URL}/percent/${id}`);
+    const response = await fetch(`${API_URL}/percent/${id}`, {
+      headers: getAuthHeaders(token),
+    });
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -31,9 +42,11 @@ export const getPercent = async (id) => {
   }
 };
 
-export const getItemById = async (id) => {
+export const getItemById = async (id, token) => {
   try {
-    const response = await fetch(`${API_URL}/api/byid/${id}`);
+    const response = await fetch(`${API_URL}/api/byid/${id}`, {
+      headers: getAuthHeaders(token),
+    });
     if (!response.ok) throw new Error(`Erro ao obter item ${id}`);
     return await response.json();
   } catch (error) {
@@ -42,16 +55,12 @@ export const getItemById = async (id) => {
   }
 };
 
-export const createEtapa = async (itemData) => {
+export const createEtapa = async (itemData, token) => {
   try {
-    console.log("Enviando dados:", JSON.stringify(itemData)); // Log para debug
-
     const response = await fetch(`${API_URL}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(itemData), // Envia o objeto diretamente, sem "fields"
+      headers: getAuthHeaders(token),
+      body: JSON.stringify(itemData),
     });
 
     if (!response.ok) {
@@ -66,12 +75,11 @@ export const createEtapa = async (itemData) => {
   }
 };
 
-
-export const updateItem = async (id, itemData) => {
+export const updateItem = async (id, itemData, token) => {
   try {
     const response = await fetch(`${API_URL}/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: getAuthHeaders(token),
       body: JSON.stringify(itemData),
     });
     return response.ok;
@@ -81,9 +89,12 @@ export const updateItem = async (id, itemData) => {
   }
 };
 
-export const deleteItem = async (id) => {
+export const deleteItem = async (id, token) => {
   try {
-    const response = await fetch(`${API_URL}/items/${id}`, { method: "DELETE" });
+    const response = await fetch(`${API_URL}/items/${id}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(token),
+    });
     return response.ok;
   } catch (error) {
     console.error(error);
@@ -91,9 +102,11 @@ export const deleteItem = async (id) => {
   }
 };
 
-export const getTags = async () => {
+export const getTags = async (token) => {
   try {
-    const response = await fetch(`${API_URL}/tags`);
+    const response = await fetch(`${API_URL}/tags`, {
+      headers: getAuthHeaders(token),
+    });
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -101,11 +114,11 @@ export const getTags = async () => {
   }
 };
 
-export const iniciarEtapa = async (itemData) => {
+export const iniciarEtapa = async (itemData, token) => {
   try {
     const response = await fetch(`${API_URL}/iniciar`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: getAuthHeaders(token),
       body: JSON.stringify(itemData),
     });
     return response.ok;
@@ -113,4 +126,4 @@ export const iniciarEtapa = async (itemData) => {
     console.error(error);
     return false;
   }
-}
+};

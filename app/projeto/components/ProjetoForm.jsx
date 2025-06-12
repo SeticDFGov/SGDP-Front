@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { createItem, fetchTemplates } from "../services/projetoService";
+import { useProjetoApi } from "../hooks/projetoHook";
 
 const ProjetoForm = ({ onClose, isOpen }) => {
   if (!isOpen) return null;
+  const {createItem} = useProjetoApi()
+  
 
   const [projeto, setProjeto] = useState({
     NM_PROJETO: "",
@@ -160,7 +162,36 @@ return (
             <option value="Contratação pregão">Contratação pregão</option>
           </select>
         </div>
+            <div>
+          <label className="block text-sm font-medium mb-1">Esteira da demanda</label>
+          <select
+            name="TEMPLATE"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
+            value={projeto.TEMPLATE}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Selecione a qual esteira ela pertence</option>
+            <option value="Projeto">Aquisição de Equipamentos</option>
+            
+                        <option value="Contratação pregão">Aquisição de Soluções</option>
+                        <option value="Contratação pregão">Contratação de Capacitação</option>
+                        <option value="Contratação pregão">Contratação de Serviços</option>
+                       
+                        <option value="Contratação pregão"> Desenvolvimento de Soluções</option>
 
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1">Valor Planejado da demanda</label>
+          <input
+            type="text"
+            name="NR_PROCESSO_SEI"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
+            value={projeto.NR_PROCESSO_SEI}
+            onChange={handleChange}
+          />
+        </div>
         <div>
           <label className="block text-sm font-medium mb-2">Tags</label>
           <div className="flex flex-col space-y-2">
