@@ -1,18 +1,22 @@
-import { useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { useRouter } from 'next/router';
+'use client';
+
+import { useContext, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import {  useAuth } from '@/app/contexts/AuthContext';
 
 export default function PrivateRoute({ children }) {
-  const { isAuthenticated } = useAuth();
   const router = useRouter();
+   const { isAuthenticated, loading } = useAuth();
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login');
+    if (!loading && !isAuthenticated) {
+      router.push('/auth'); // ou onde for sua rota pública
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, loading]);
 
-  if (!isAuthenticated) return null;
+  if (loading) {
+    return <div className="text-center mt-10">Carregando...</div>;
+  }
 
-  return children;
+  return isAuthenticated ? children : null;
 }

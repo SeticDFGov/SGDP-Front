@@ -3,34 +3,26 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import 'material-icons/iconfont/material-icons.css';
+import { useAuth } from "@/app/contexts/AuthContext";
 
 export default function Sidebar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const router = useRouter();
   const [userInfo, setUserInfo] = useState({})
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const authStatus = localStorage.getItem("authenticated") === "true";
+  const { user, loading } = useAuth(); 
  
-      setIsAuthenticated(authStatus);
+ console.log('Dados do usuário:', user);
+ if (loading) {
+    
+    return <div>Carregando...</div>;
+  }
 
-      const user = localStorage.getItem("user_info");
-      if (user) {
-        try {
-          setUserInfo(JSON.parse(user));
-          setIsSUBINFRA(user?.SUBINFRA);
-        } catch (e) {
-          console.error("Erro ao fazer parse de user_info:", e);
-        }
-      }
-    }
-  }, []);
-
-  const userName = userInfo?.display_name || userInfo?.nome_completo || "Usuário";
-
-
+  if (!user) {
+    
+    return <div>Você precisa estar logado.</div>;
+  }
+  
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
   const handleLogout = () => {
@@ -71,7 +63,7 @@ export default function Sidebar() {
       <div className="mt-auto p-4 border-t border-blue-700">
         <div className="mb-2">
           <p className="text-sm">Bem-vindo</p>
-          <p className="text-sm font-bold">{userName}</p>
+          <p className="text-sm font-bold">{user.nome}</p>
         </div>
         <div className="flex flex-col space-y-2">
           <button

@@ -5,16 +5,17 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Header from './demandas/components/Header';
 import PrivateRoute from './components/PrivateRoute';
+import { AuthProvider } from './contexts/AuthContext';
 
 export default function HomePage() {
   const router = useRouter();
   
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
   const [userInfo, setUserInfo] = useState(null);
 
   
 
-  if (!isAuthenticated) return null;
+ 
 
   const modules = [
     {
@@ -77,7 +78,7 @@ export default function HomePage() {
         </div>
       </div>
       </div>
-      </PrivateRoute>
+    </PrivateRoute>
     </>
   );
 }
