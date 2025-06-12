@@ -6,13 +6,20 @@ import {  useAuth } from '@/app/contexts/AuthContext';
 
 export default function PrivateRoute({ children }) {
   const router = useRouter();
-   const { isAuthenticated, loading } = useAuth();
+   const { user,isAuthenticated, loading } = useAuth();
+useEffect(() => {
+  if (loading) return;
 
-  useEffect(() => {
-    if (!loading && !isAuthenticated) {
-      router.push('/auth'); // ou onde for sua rota pública
-    }
-  }, [isAuthenticated, loading]);
+  if (!isAuthenticated) {
+    router.push('/auth');
+    return;
+  }
+  console.log('user', user);
+  if (!user?.unidade) {
+    router.push('/auth/unidade');
+  }
+}, [isAuthenticated, loading, user, router]);
+;
 
   if (loading) {
     return <div className="text-center mt-10">Carregando...</div>;
