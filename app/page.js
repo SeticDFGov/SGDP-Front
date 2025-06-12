@@ -4,6 +4,7 @@ import 'material-icons/iconfont/material-icons.css';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Header from './demandas/components/Header';
+import PrivateRoute from './components/PrivateRoute';
 
 export default function HomePage() {
   const router = useRouter();
@@ -11,19 +12,7 @@ export default function HomePage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const authStatus = localStorage.getItem("authenticated");
-      const user = localStorage.getItem("user_info");
-
-      setIsAuthenticated(authStatus === "true");
-      setUserInfo(JSON.parse(user));
-
-      if (authStatus !== "true") {
-        router.push('/auth');
-      }
-    }
-  }, [router]);
+  
 
   if (!isAuthenticated) return null;
 
@@ -64,6 +53,7 @@ export default function HomePage() {
 
   return (
     <>
+    <PrivateRoute>
     <div className='bg-gray-100 text-white min-h-screen flex items-center justify-center px-4'>
 
     
@@ -87,6 +77,7 @@ export default function HomePage() {
         </div>
       </div>
       </div>
+      </PrivateRoute>
     </>
   );
 }
