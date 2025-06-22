@@ -15,6 +15,8 @@ function AdminPageContent() {
   const [loadingUnit, setLoadingUnit] = useState(false);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
+  const [selectedUnits, setSelectedUnits] = useState({});
+  const [selectedProfiles, setSelectedProfiles] = useState({});
 
   useEffect(() => {
     loadUsers();
@@ -71,9 +73,10 @@ function AdminPageContent() {
   const alterarPerfil = async (email, novoPerfil) => {
     try {
       const response = await fetch('http://localhost:5148/api/auth/alterar-perfil', {
-        method: 'POST',
+        method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'adminEmail' : user.email
         },
         body: JSON.stringify({
           Email: email,
@@ -92,6 +95,34 @@ function AdminPageContent() {
       showMessage('Erro ao alterar perfil', 'error');
     }
   };
+
+  const alterarUnidade = async (email, unidadeId) => {
+    try {
+        const response = await fetch('http://localhost:5148/api/Auth/modificar-unidade', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'adminEmail': user.email
+            },
+            body: JSON.stringify({
+                email: email,
+                unidadeId: unidadeId
+            })
+        });
+
+        if (response.ok) {
+            showMessage('Unidade do usuário alterada com sucesso!', 'success');
+            loadUsers();
+        } else {
+            const errorData = await response.json();
+            const errorMessage = errorData.message || 'Erro ao alterar unidade do usuário';
+            showMessage(errorMessage, 'error');
+        }
+    } catch (error) {
+        console.error('Erro ao alterar unidade do usuário:', error);
+        showMessage('Erro ao alterar unidade do usuário', 'error');
+    }
+};
 
   const cadastrarUnidade = async (e) => {
     e.preventDefault();
@@ -248,31 +279,68 @@ function AdminPageContent() {
                     <div className="flex justify-between items-start mb-2">
                       <div>
                         <h3 className="font-medium text-gray-900">{user.Nome}</h3>
-                        <p className="text-sm text-gray-600">{user.Email}</p>
-                        {user.Unidade && (
-                          <p className="text-sm text-gray-500">
-                            Unidade: {user.Unidade.Nome}
-                          </p>
-                        )}
+                        <p className="text-sm text-gray-500">{user.Email}</p>
+                        <p className="text-sm text-gray-500">
+                          Unidade Atual: <span className="font-semibold">{user.Unidade?.Nome || 'Não definida'}</span>
+                        </p>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <span className={`px-2 py-1 text-xs rounded-full ${
-                          user.Perfil === 'admin' 
-                            ? 'bg-purple-100 text-purple-800' 
-                            : 'bg-gray-100 text-gray-800'
+                      <div className="flex-shrink-0">
+                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          user.Perfil === 'Admin' ? 'bg-red-100 text-red-800' :
+                          user.Perfil === 'Dir' ? 'bg-yellow-100 text-yellow-800' :
+                          user.Perfil === 'User' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                         }`}>
                           {user.Perfil}
                         </span>
                       </div>
                     </div>
-                    
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => alterarPerfil(user.Email, user.Perfil === 'admin' ? 'basico' : 'admin')}
-                        className="text-sm bg-blue-600 text-white py-1 px-3 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      >
-                        Alterar para {user.Perfil === 'admin' ? 'Básico' : 'Admin'}
-                      </button>
+
+                    <div className="mt-4 pt-4 border-t border-gray-200 space-y-4">
+                      {/* Alterar Perfil */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Alterar Perfil</label>
+                        <div className="flex items-center space-x-2">
+                          <select
+                            value={selectedProfiles[user.Id] || user.Perfil}
+                            onChange={(e) => setSelectedProfiles({ ...selectedProfiles, [user.Id]: e.target.value })}
+                            className="flex-grow w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            <option value="admin">admin</option>
+                            <option value="basico">básico</option>
+                          </select>
+                          <button
+                            onClick={() => alterarPerfil(user.Email, selectedProfiles[user.Id])}
+                            disabled={!selectedProfiles[user.Id] || selectedProfiles[user.Id] === user.Perfil}
+                            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+                          >
+                            Alterar
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Alterar Unidade */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Alterar Unidade</label>
+                        <div className="flex items-center space-x-2">
+                          <select
+                            value={selectedUnits[user.Id] || (user.unidade?.id || '')}
+                            onChange={(e) => setSelectedUnits({ ...selectedUnits, [user.Id]: e.target.value })}
+                            className="flex-grow w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            <option value="" disabled>Selecione uma unidade</option>
+                            {units.map(unit => (
+                              <option key={unit.id} value={unit.id}>{unit.Nome}</option>
+                            ))}
+                          </select>
+                          <button
+                            onClick={() => alterarUnidade(user.Email, selectedUnits[user.Id])}
+                            disabled={!selectedUnits[user.Id] || selectedUnits[user.Id] == user.unidade?.id}
+                            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+                          >
+                            Alterar
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
