@@ -11,7 +11,7 @@ const Login = () => {
   const [senha, setSenha] = useState("");
   const [mensagem, setMensagem] = useState(null);
   const [carregando, setCarregando] = useState(false);
-  const router = useRouter(); // Inicia o useRouter
+  const router = useRouter(); 
   
   const handleSubmit = async (e) => {
     e.preventDefault();

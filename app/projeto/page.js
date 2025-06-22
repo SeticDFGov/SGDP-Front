@@ -17,7 +17,6 @@ import { useAuth } from "../contexts/AuthContext";
 import { useEtapaApi } from "./hooks/etapaHook";
 
 
-// Registrando os componentes necessários do Chart.js
 ChartJS.register(
   CategoryScale,
   LinearScale,

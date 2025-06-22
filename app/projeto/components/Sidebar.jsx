@@ -8,11 +8,9 @@ import { useAuth } from "@/app/contexts/AuthContext";
 export default function Sidebar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const router = useRouter();
-  const [userInfo, setUserInfo] = useState({})
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { user, loading } = useAuth(); 
  
- console.log('Dados do usuário:', user);
+
  if (loading) {
     
     return <div>Carregando...</div>;
@@ -27,7 +25,6 @@ export default function Sidebar() {
 
   const handleLogout = () => {
     localStorage.removeItem("authenticated");
-    localStorage.removeItem("user_info");
     router.push("/auth");
   };
 

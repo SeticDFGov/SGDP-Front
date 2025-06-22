@@ -33,7 +33,7 @@ export default function SelecionarUnidade() {
 
     
 
-    router.push("/auth");
+    router.push("/");
   };
 
   if (loading) return <div>Carregando unidades...</div>;

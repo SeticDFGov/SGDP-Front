@@ -300,7 +300,7 @@ export default function ProductPage() {
                               <button
                                 onClick={() => {
                                   setEtapaSelecionada(item);
-                                  setShowModalInicio(true); // ou o que for para iniciar
+                                  setShowModalInicio(true); 
                                 }}
                                 className="px-4 py-2 rounded-md bg-green-500 text-white"
                                 title="Iniciar Etapa"
