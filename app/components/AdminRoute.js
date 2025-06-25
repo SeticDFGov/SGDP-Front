@@ -1,15 +1,16 @@
 'use client';
 
-import { useContext, useEffect, useState } from 'react';
+import { use, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/contexts/AuthContext';
+import { URL_AUTH_SERVICE } from '../consts/consts';
 
 export default function AdminRoute({ children }) {
   const router = useRouter();
   const { user, isAuthenticated, loading } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
   const [checkingAdmin, setCheckingAdmin] = useState(true);
-
+  console.log
   useEffect(() => {
     const checkAdminStatus = async () => {
       if (loading) return;
@@ -20,11 +21,10 @@ export default function AdminRoute({ children }) {
       }
 
       // Verificar se o usuário tem perfil admin
-      if (user && user.email) {
+      if (user && user.Email) {
         try {
-          const response = await fetch(`http://localhost:5148/api/auth/user/${user.email}`, {
+          const response = await fetch(`${URL_AUTH_SERVICE}/user/${user.Email}`, {
             headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`,
               'Content-Type': 'application/json'
             }
           });

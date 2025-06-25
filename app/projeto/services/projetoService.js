@@ -1,3 +1,4 @@
+import { URL_PROJETO_SERVICE } from "@/app/consts/consts";
 import { useContext } from "react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL_PROJETO || "http://localhost:5148/api/projeto";
@@ -7,11 +8,17 @@ const getAuthHeaders = (token) => ({
 });
 
 
-export const getAllItems = async (token) => {
+export const getAllItems = async (token, unidade = null) => {
   
   try {
+    let url = `${URL_PROJETO_SERVICE}`;
     
-    const response = await fetch(`${API_URL}`, {
+    // Adiciona a unidade como query parameter se fornecida
+    if (unidade) {
+      url += `?unidade=${encodeURIComponent(unidade)}`;
+    }
+    
+    const response = await fetch(url, {
       headers: getAuthHeaders(token),
     });
     if (!response.ok) throw new Error("Erro ao obter itens");
@@ -25,7 +32,7 @@ export const getAllItems = async (token) => {
 export const getItemById = async (id, token) => {
   console.log("token enviado?" + token)
   try {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${URL_PROJETO_SERVICE}/${id}`, {
       headers: getAuthHeaders(token),
     });
     if (!response.ok) throw new Error(`Erro ao obter item ${id}`);
@@ -38,7 +45,7 @@ export const getItemById = async (id, token) => {
 
 export const getQuantidade = async (token) => {
   try {
-    const response = await fetch(`${API_URL}/quantidade`, {
+    const response = await fetch(`${URL_PROJETO_SERVICE}/quantidade`, {
       headers: getAuthHeaders(token),
     });
     if (!response.ok) throw new Error(`Erro ao obter quantidade`);
@@ -51,7 +58,7 @@ export const getQuantidade = async (token) => {
 
 export const createItem = async (itemData, token) => {
   try {
-    const response = await fetch(`${API_URL}/template`, {
+    const response = await fetch(`${URL_PROJETO_SERVICE}/template`, {
       method: "POST",
       headers: getAuthHeaders(token),
       body: JSON.stringify(itemData),
@@ -71,7 +78,7 @@ export const createItem = async (itemData, token) => {
 
 export const updateItem = async (id, itemData, token) => {
   try {
-    const response = await fetch(`${API_URL}/items/${id}`, {
+    const response = await fetch(`${URL_PROJETO_SERVICE}/items/${id}`, {
       method: "PUT",
       headers: getAuthHeaders(token),
       body: JSON.stringify(itemData),

@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
-import { createItem } from "../services/apiService";
-import { getAllCategoria } from "../services/categoriaService";
-import { getAllDemandantes } from "../services/demandanteService";
+import { useDemandaApi } from "../hooks/demandaHook";
 import 'material-icons/iconfont/material-icons.css';
 import { FaTimes } from 'react-icons/fa';
-
 
 const CadastroDemanda = ({onClose}) => {
 
   if(!onClose) return null;
 
+  const demandaApi = useDemandaApi();
   const [categorias, setCategorias] = useState([])
   const [demandantes, setDemandantes] = useState([])
   const [formData, setFormData] = useState({
@@ -31,8 +29,8 @@ const CadastroDemanda = ({onClose}) => {
 
   const fetchItems = async () => {
     try {
-      const responseCategoria = await getAllCategoria();
-      const responseDemandante = await getAllDemandantes();
+      const responseCategoria = await demandaApi.getAllCategoria();
+      const responseDemandante = await demandaApi.getAllDemandantes();
       setCategorias(responseCategoria);
       setDemandantes(responseDemandante)
     } catch (error) {
@@ -79,7 +77,7 @@ const emptyToNull = (value) => (value === "" ? null : value);
   try {
     console.log("Categoria selecionada:", formData.categoria);
 
-    const response = await createItem(body);
+    const response = await demandaApi.createDemanda(body);
 
    
       alert("Demanda cadastrada com sucesso!");

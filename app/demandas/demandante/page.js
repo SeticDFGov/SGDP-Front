@@ -1,61 +1,45 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { deleteDemandante, getAllDemandantes } from "../services/demandanteService";
 import DemandanteForm from "../components/DemandanteForm";
 import 'material-icons/iconfont/material-icons.css';
 import Header from "../components/Header";
 import { useRouter } from "next/navigation";
 import Sidebar from "../components/SIdebar";
+import { useDemandaApi } from "../hooks/demandaHook";
 
 export default function Demandante() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [items, setItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const router = useRouter(); 
-  useEffect(() => {
-    // Verifica se o código está rodando no lado do cliente
-    if (typeof window !== "undefined") {
-      const authStatus = localStorage.getItem("authenticated");
-      setIsAuthenticated(authStatus === "true");
 
-      // Se o usuário não estiver autenticado, redireciona para a página de login
-      if (authStatus !== "true") {
-        router.push('/auth');
-      }
-    }
-  }, [router]); 
+  const demandaApi = useDemandaApi();
 
- 
   const handleDeleteItem = async (id) => {
-  // Exibe um alerta de confirmação
-  const confirmDelete = window.confirm("Tem certeza que deseja excluir esse demandante?");
-  
-  if (!confirmDelete) return;
+    const confirmDelete = window.confirm("Tem certeza que deseja excluir esse demandante?");
+    if (!confirmDelete) return;
 
-  try {
-    const response = await deleteDemandante(id);
-
-    if (response) {
-      alert("demandante excluída com sucesso!");
-      window.location.reload(); // Recarrega a página após a exclusão
-    } else {
-      alert("Erro ao excluir a demanda.");
+    try {
+      const response = await demandaApi.deleteDemandante(id);
+      if (response) {
+        alert("demandante excluída com sucesso!");
+        window.location.reload();
+      } else {
+        alert("Erro ao excluir a demanda.");
+      }
+    } catch (error) {
+      console.error("Erro ao excluir a demanda:", error);
+      alert("Falha ao excluir a demanda.");
     }
-  } catch (error) {
-    console.error("Erro ao excluir a demanda:", error);
-    alert("Falha ao excluir a demanda.");
-  }
-};
-  // Função para buscar demandantes
+  };
+
   const fetchItems = async () => {
     try {
-      const response = await getAllDemandantes();
+      const response = await demandaApi.getAllDemandantes();
       setItems(response);
     } catch (error) {
       console.error("Erro ao buscar demandantes:", error);
-      setItems([]); // Evita que a tabela quebre caso ocorra erro na API
+      setItems([]);
     }
   };
 

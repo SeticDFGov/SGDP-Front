@@ -3,36 +3,11 @@
 import { useState , useEffect} from "react";
 import { useRouter } from "next/navigation";
 import 'material-icons/iconfont/material-icons.css';
-
+import { useAuth } from "@/app/contexts/AuthContext";
 export default function Sidebar() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isSUBINFRA, setIsSUBINFRA] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const router = useRouter();
-  const [userInfo, setUserInfo] = useState({})
-  
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const authStatus = localStorage.getItem("authenticated") === "true";
- 
-      setIsAuthenticated(authStatus);
-
-      const user = localStorage.getItem("user_info");
-      if (user) {
-        try {
-          setUserInfo(JSON.parse(user));
-          setIsSUBINFRA(user?.SUBINFRA);
-        } catch (e) {
-          console.error("Erro ao fazer parse de user_info:", e);
-        }
-      }
-    }
-  }, []);
-
-  const userName = userInfo?.display_name || userInfo?.nome_completo || "Usuário";
-
-
-
+  const user = useAuth()
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
@@ -96,7 +71,7 @@ export default function Sidebar() {
       <div className="mt-auto p-4 border-t border-blue-700">
         <div className="mb-2">
           <p className="text-sm">Bem-vindo</p>
-          <p className="text-sm font-bold">{userName}</p>
+          <p className="text-sm font-bold">{user.Nome}</p>
         </div>
         <div className="flex flex-col space-y-2">
           <button

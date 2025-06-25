@@ -1,3 +1,5 @@
+import { URL_ETAPA_SERVICE } from "@/app/consts/consts";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL_ETAPA || "http://localhost:5148/api/etapa";
 
 
@@ -8,7 +10,7 @@ const getAuthHeaders = (token) => ({
 
 export const getAllEtapas = async (id, token) => {
   try {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${URL_ETAPA_SERVICE}/${id}`, {
       headers: getAuthHeaders(token),
     });
     return await response.json();
@@ -20,7 +22,7 @@ export const getAllEtapas = async (id, token) => {
 
 export const getSituacao = async (token) => {
   try {
-    const response = await fetch(`${API_URL}/situacao`, {
+    const response = await fetch(`${URL_ETAPA_SERVICE}/situacao`, {
       headers: getAuthHeaders(token),
     });
     return await response.json();
@@ -32,7 +34,7 @@ export const getSituacao = async (token) => {
 
 export const getPercent = async (id, token) => {
   try {
-    const response = await fetch(`${API_URL}/percent/${id}`, {
+    const response = await fetch(`${URL_ETAPA_SERVICE}/percent/${id}`, {
       headers: getAuthHeaders(token),
     });
     return await response.json();
@@ -44,7 +46,7 @@ export const getPercent = async (id, token) => {
 
 export const getItemById = async (id, token) => {
   try {
-    const response = await fetch(`${API_URL}/api/byid/${id}`, {
+    const response = await fetch(`${URL_ETAPA_SERVICE}/api/byid/${id}`, {
       headers: getAuthHeaders(token),
     });
     if (!response.ok) throw new Error(`Erro ao obter item ${id}`);
@@ -57,7 +59,7 @@ export const getItemById = async (id, token) => {
 
 export const createEtapa = async (itemData, token) => {
   try {
-    const response = await fetch(`${API_URL}`, {
+    const response = await fetch(`${URL_ETAPA_SERVICE}`, {
       method: "POST",
       headers: getAuthHeaders(token),
       body: JSON.stringify(itemData),
@@ -77,7 +79,7 @@ export const createEtapa = async (itemData, token) => {
 
 export const updateItem = async (id, itemData, token) => {
   try {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${URL_ETAPA_SERVICE}/${id}`, {
       method: "PUT",
       headers: getAuthHeaders(token),
       body: JSON.stringify(itemData),
@@ -104,7 +106,7 @@ export const deleteItem = async (id, token) => {
 
 export const getTags = async (token) => {
   try {
-    const response = await fetch(`${API_URL}/tags`, {
+    const response = await fetch(`${URL_ETAPA_SERVICE}/tags`, {
       headers: getAuthHeaders(token),
     });
     return await response.json();
@@ -116,7 +118,7 @@ export const getTags = async (token) => {
 
 export const iniciarEtapa = async (itemData, token) => {
   try {
-    const response = await fetch(`${API_URL}/iniciar`, {
+    const response = await fetch(`${URL_ETAPA_SERVICE}/iniciar`, {
       method: "PUT",
       headers: getAuthHeaders(token),
       body: JSON.stringify(itemData),

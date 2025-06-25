@@ -1,3 +1,5 @@
+import { URL_PROJETO_SERVICE } from "@/app/consts/consts";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL_ANALISE || "http://localhost:5148/api/projeto/analise";
 
 
@@ -11,7 +13,7 @@ const getAuthHeaders = (token) => ({
 
 export const getLastAnalise = async (nome_projeto, token) => {
   try {
-    const response = await fetch(`${API_URL}/${nome_projeto}`, {
+    const response = await fetch(`${URL_PROJETO_SERVICE}/analise/${nome_projeto}`, {
       headers: getAuthHeaders(token),
     });
     if (!response.ok) {
@@ -28,7 +30,7 @@ export const getLastAnalise = async (nome_projeto, token) => {
 
 export const getItemById = async (id, token) => {
   try {
-    const response = await fetch(`${API_URL}/items/${id}`, {
+    const response = await fetch(`${URL_PROJETO_SERVICE}/items/${id}`, {
       headers: getAuthHeaders(token),
     });
     if (!response.ok) throw new Error(`Erro ao obter item ${id}`);
@@ -42,7 +44,7 @@ export const getItemById = async (id, token) => {
 export const createItem = async (itemData, id, token) => {
   try {
     console.log("Enviando dados:", JSON.stringify(itemData));
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${URL_PROJETO_SERVICE}/analise/${id}`, {
       method: "POST",
       headers: getAuthHeaders(token),
       body: JSON.stringify(itemData),

@@ -60,7 +60,7 @@ export default function Sidebar() {
       <div className="mt-auto p-4 border-t border-blue-700">
         <div className="mb-2">
           <p className="text-sm">Bem-vindo</p>
-          <p className="text-sm font-bold">{user.nome}</p>
+          <p className="text-sm font-bold">{user.Nome}</p>
         </div>
         <div className="flex flex-col space-y-2">
           <button

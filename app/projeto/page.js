@@ -31,16 +31,14 @@ ChartJS.register(
 );
 
 export default function Projetos () {
-  const { getAllItems, getQuantidade } = useProjetoApi();
-  const {getSituacao, getTags} = useEtapaApi();
-  const { isAuthenticated, loading, Token } = useAuth();
+  const { isAuthenticated, loading, Token, user } = useAuth();
   const [data, setData] = useState([]);
   const [modalOpen, setIsModalOpen] = useState(false);
   const [chartData, setChartData] = useState({});
   const [chartData2, setChartData2] = useState({});
   const [total, setTotal] = useState({});
   const router = useRouter();
-
+  const projetoApi = useProjetoApi()
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
@@ -55,8 +53,7 @@ export default function Projetos () {
 useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await getAllItems();
-        console.log(response)
+        const response = await projetoApi.getAllItems();
         setData(response);
       } catch (error) {
         console.error("Erro ao carregar projetos:", error);
@@ -66,7 +63,7 @@ useEffect(() => {
     if (!loading && isAuthenticated  && data.length === 0) {
       fetchItems();
     }
-  }, [loading, isAuthenticated]);
+  }, [loading, isAuthenticated, user?.unidade]);
   
   
 

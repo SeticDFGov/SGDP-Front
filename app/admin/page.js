@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import AdminRoute from '@/app/components/AdminRoute';
+import { URL_AUTH_SERVICE } from '../consts/consts';
 
 function AdminPageContent() {
   const { user } = useAuth();
@@ -26,10 +27,10 @@ function AdminPageContent() {
   const loadUsers = async () => {
     setLoadingUsers(true);
     try {
-      const response = await fetch('http://localhost:5148/api/auth/usuarios', {
+      const response = await fetch(`${URL_AUTH_SERVICE}/usuarios`, {
         headers: {
           'Content-Type': 'application/json',
-          'adminEmail': user.email
+          'adminEmail': user.Email
         }
       });
 
@@ -50,7 +51,7 @@ function AdminPageContent() {
   const loadUnits = async () => {
     setLoadingUnits(true);
     try {
-      const response = await fetch('http://localhost:5148/api/auth/unidades', {
+      const response = await fetch(`${URL_AUTH_SERVICE}/unidades`, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -72,11 +73,11 @@ function AdminPageContent() {
 
   const alterarPerfil = async (email, novoPerfil) => {
     try {
-      const response = await fetch('http://localhost:5148/api/auth/alterar-perfil', {
+      const response = await fetch(`${URL_AUTH_SERVICE}/alterar-perfil`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'adminEmail' : user.email
+          'adminEmail' : user.Email
         },
         body: JSON.stringify({
           Email: email,
@@ -98,11 +99,11 @@ function AdminPageContent() {
 
   const alterarUnidade = async (email, unidadeId) => {
     try {
-        const response = await fetch('http://localhost:5148/api/Auth/modificar-unidade', {
+        const response = await fetch(`${URL_AUTH_SERVICE}/modificar-unidade`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'adminEmail': user.email
+                'adminEmail': user.Email
             },
             body: JSON.stringify({
                 email: email,
@@ -133,7 +134,7 @@ function AdminPageContent() {
 
     setLoadingUnit(true);
     try {
-      const response = await fetch('http://localhost:5148/api/auth/unidade', {
+      const response = await fetch(`${URL_AUTH_SERVICE}/unidade`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

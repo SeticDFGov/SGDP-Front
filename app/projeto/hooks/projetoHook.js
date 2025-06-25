@@ -2,11 +2,10 @@ import { useAuth } from "@/app/contexts/AuthContext";
 import * as projetoService from "../services/projetoService"
 
 export const useProjetoApi = () => {
-  const { Token } = useAuth();
-  console.log(Token)
+  const { Token, user } = useAuth();
 
   return {
-    getAllItems: () => projetoService.getAllItems(Token),
+    getAllItems: () => projetoService.getAllItems(Token, user?.Unidade.Nome),
     getItemById: (id) => projetoService.getItemById(id, Token),
     getQuantidade: () => projetoService.getQuantidade(Token),
     createItem: (data) => projetoService.createItem(data, Token),

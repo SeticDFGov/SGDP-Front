@@ -1,15 +1,15 @@
 "use client";
 
-const URL_AUTH_SERVICE = process.env.NEXT_PUBLIC_API_URL_AUTH || "http://localhost:5148/api/Auth";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/contexts/AuthContext";
+import { URL_AUTH_SERVICE } from "@/app/consts/consts";
 
 export default function SelecionarUnidade() {
   const [unidades, setUnidades] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { user, setUser } = useAuth();
+  const { user} = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function SelecionarUnidade() {
     await fetch(`${URL_AUTH_SERVICE}/informar-unidade`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email:user.email, unidadeId: unidadeSelecionada }),
+      body: JSON.stringify({ email:user.Email, unidadeId: unidadeSelecionada }),
     });
 
     

@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation"; // Importa o useRouter do Next.js
 import { useAuth } from "../contexts/AuthContext";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL_AUTH || "http://localhost:8000/autenticar";
 
 const Login = () => {
   const { login } = useAuth();
@@ -11,7 +10,6 @@ const Login = () => {
   const [senha, setSenha] = useState("");
   const [mensagem, setMensagem] = useState(null);
   const [carregando, setCarregando] = useState(false);
-  const router = useRouter(); 
   
   const handleSubmit = async (e) => {
     e.preventDefault();

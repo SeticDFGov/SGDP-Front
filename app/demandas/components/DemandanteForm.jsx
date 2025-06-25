@@ -1,20 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
-import { createDemandante } from "../services/demandanteService";
+import { useDemandaApi } from "../hooks/demandaHook";
 
 const DemandanteForm = ({ onClose }) => {
+  const demandaApi = useDemandaApi();
   const [demandante, setDemandante] = useState({
-    nM_DEMANDANTE: "",
-    nM_SIGLA:""
+    NM_DEMANDANTE: "",
+    NM_SIGLA: ""
   });
 
   const [error, setError] = useState("");
 
   const handleSubmit = async () => {
     try {
-      await createDemandante(demandante);
-      setDemandante({ nM_DEMANDANTE: "", nM_SIGLA:"" });
+      await demandaApi.createDemandante(demandante);
+      setDemandante({ NM_DEMANDANTE: "", NM_SIGLA: "" });
       onClose(); // Fecha o modal após sucesso
     } catch {
       setError("Erro no momento do cadastro do demandante");
@@ -44,18 +45,18 @@ const DemandanteForm = ({ onClose }) => {
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <input
           type="text"
-          name="nM_DEMANDANTE"
+          name="NM_DEMANDANTE"
           placeholder="Nome da área demandante"
           className="w-full p-2 border border-gray-300 rounded mt-2"
-          value={demandante.nM_DEMANDANTE}
+          value={demandante.NM_DEMANDANTE}
           onChange={handleChange}
         />
         <input
           type="text"
-          name="nM_SIGLA"
+          name="NM_SIGLA"
           placeholder="Sigla"
           className="w-full p-2 border border-gray-300 rounded mt-2"
-          value={demandante.nM_SIGLA}
+          value={demandante.NM_SIGLA}
           onChange={handleChange}
         />
         <button
