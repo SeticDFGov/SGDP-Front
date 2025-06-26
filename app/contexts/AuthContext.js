@@ -9,7 +9,7 @@ import { URL_AUTH_SERVICE } from "../consts/consts";
 const AuthContext = createContext();
 
 async function fetchUserData(email) {
-  const res = await fetch(`http://localhost:5148/api/auth/user/${encodeURIComponent(email)}`, {
+  const res = await fetch(`${URL_AUTH_SERVICE}/user/${encodeURIComponent(email)}`, {
     headers: {
       "Content-Type": "application/json",
     
