@@ -2,11 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { getItemById } from "@/app/projeto/services/projetoService";
-import { getAllEtapas, getAllItems, getPercent } from "@/app/projeto/services/etapaSevice";
-import { getLastAnalise } from "@/app/projeto/services/analiseService";
 import 'material-icons/iconfont/material-icons.css';
-import Header from "@/app/demandas/components/Header";
 import { EtapaForm } from "@/app/projeto/components/EtapaForm";
 import AnaliseModal, { AnaliseForm } from "@/app/projeto/components/AnaliseForm";
 import { FaTrash, FaEdit, FaPlus, FaEye } from 'react-icons/fa';
@@ -19,36 +15,98 @@ import { useRouter } from "next/navigation";
 import dayjs from 'dayjs'
 import Sidebar from "../../components/Sidebar";
 import utc from 'dayjs/plugin/utc';
+import { useProjetoApi } from "../../hooks/projetoHook";
+import { useAnaliseApi } from "../../hooks/analiseHook";
+import { useAuth } from "@/app/contexts/AuthContext";
+import { useEtapaApi } from "../../hooks/etapaHook";
 dayjs.extend(utc);
 export default function ProductPage() {
-  const { id } = useParams();
+   const { id } = useParams();
+  const router = useRouter();
+  const { loading, isAuthenticated, Token } = useAuth();
+
   const [projeto, setProjeto] = useState({});
   const [etapas, setEtapas] = useState([]);
   const [etapaSelecionada, setEtapaSelecionada] = useState(null);
   const [ultimaAnalise, setUltimaAnalise] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [showDesempenho, setShowDesempenho] = useState(false)
-  const [showAnalise, setShowAnalise] = useState(false)
-  const [exec, setExec] = useState(0)
-  const [plan, setPlan] = useState(0)
+  const [showDesempenho, setShowDesempenho] = useState(false);
+  const [showAnalise, setShowAnalise] = useState(false);
+  const [exec, setExec] = useState(0);
+  const [plan, setPlan] = useState(0);
   const [ocupado, setOcupado] = useState(false);
   const [showModalInicio, setShowModalInicio] = useState(false);
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const router = useRouter();
-  useEffect(() => {
-    // Verifica se o código está rodando no lado do cliente
-    if (typeof window !== "undefined") {
-      const authStatus = localStorage.getItem("authenticated");
-      setIsAuthenticated(authStatus === "true");
+  const { getItemById } = useProjetoApi();
+  const { getLastAnalise } = useAnaliseApi();
+  const { getAllEtapas, getPercent } = useEtapaApi();
 
-      // Se o usuário não estiver autenticado, redireciona para a página de login
-      if (authStatus !== "true") {
-        router.push('/auth');
-      }
+  // Redireciona se não estiver autenticado
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      router.push("/auth");
     }
-  }, [router]);
+  }, [loading, isAuthenticated, router]);
+
+  // Carrega os dados do projeto e etapas
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!Token || !id || loading) return;
+
+      try {
+        const [projetoData, etapasData, percentData] = await Promise.all([
+          getItemById(id),
+          getAllEtapas(id),
+          getPercent(id),
+        ]);
+
+        if (projetoData) setProjeto(projetoData);
+        console.log(etapasData)
+        if (etapasData?.length) {
+          const ordenadas = etapasData.sort((a, b) => a.Order - b.Order);
+          setEtapas(ordenadas);
+          console.log(ordenadas)
+          const total = ordenadas.reduce(
+            (soma, etapa) => soma + (etapa.PERCENT_TOTAL_ETAPA || 0),
+            0
+          );
+          setOcupado(Math.round(total) > 99);
+        }
+
+        if (percentData) {
+          setExec(percentData.PERCENT_EXECUTADO);
+          setPlan(percentData.PERCENT_PLANEJADO);
+        }
+      } catch (error) {
+        console.error("Erro ao carregar dados do projeto:", error);
+      }
+    };
+
+    fetchData();
+  }, [id, Token, loading]);
+
+  // Carrega última análise
+  useEffect(() => {
+    const fetchAnalise = async () => {
+      if (!id || !Token || loading) return;
+
+      try {
+        const analise = await getLastAnalise(id);
+        if (analise) setUltimaAnalise(analise);
+      } catch (error) {
+        console.error("Erro ao buscar última análise:", error);
+      }
+    };
+
+    fetchAnalise();
+  }, [id, Token, loading]);
+
+  const handleCadastroEtapa = (novaEtapa) => {
+    setEtapas((prev) => [...prev, novaEtapa]);
+    setIsModalOpen(false);
+  };
+
   const dataGraph = {
     labels: ["Planejado", "Executado"],
     datasets: [
@@ -58,83 +116,17 @@ export default function ProductPage() {
         backgroundColor: ["#6366F1", "#0F9307"],
         borderColor: ["#4F46E5", "#D97706"],
         borderWidth: 1,
-        barThickness: 125, // Ajuste a largura da barra aqui
+        barThickness: 125,
       },
     ],
   };
 
-  // Configuração do gráfico
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-    },
-    scales: {
-      y: { beginAtZero: true },
-    },
+    plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: true } },
   };
-
-  useEffect(() => {
-    const fetchProjeto = async () => {
-      const response = await getItemById(id);
-
-      setProjeto(response);
-    };
-
-    const fetchEtapas = async () => {
-      const response = await getAllEtapas(id);
-      
-      const etapasOrdenadas = response.sort((a, b) => a.Order - b.Order);
-      console.log(etapasOrdenadas)
-      setEtapas(etapasOrdenadas);
-    
-      const total = etapasOrdenadas.reduce(
-        (soma, etapa) => soma + (etapa.PERCENT_TOTAL_ETAPA || 0),
-        0
-      );
-    
-      setOcupado(Math.round(total) > 99);
-    };
-     
-
-    const fectPercent = async () => {
-      const response = await getPercent(id)
-      setExec(response.PERCENT_EXECUTADO)
-      setPlan(response.PERCENT_PLANEJADO)
-    }
-
-    fectPercent();
-    fetchProjeto();
-    fetchEtapas();
-  }, [id]);
-
-
-
-  useEffect(() => {
-    const fetchAnalises = async () => {
-
-      const lastAnalise = await getLastAnalise(id);
-      setUltimaAnalise(lastAnalise)
-
-    };
-
-
-
-
-    if (id) {
-      fetchAnalises();
-    }
-  }, [id]);
-
-
-
-  const handleCadastroEtapa = (novaEtapa) => {
-    setEtapas((prevEtapas) => [...prevEtapas, novaEtapa]);
-    setIsModalOpen(false);
-  };
-
-
 
 
   return (
@@ -308,7 +300,7 @@ export default function ProductPage() {
                               <button
                                 onClick={() => {
                                   setEtapaSelecionada(item);
-                                  setShowModalInicio(true); // ou o que for para iniciar
+                                  setShowModalInicio(true); 
                                 }}
                                 className="px-4 py-2 rounded-md bg-green-500 text-white"
                                 title="Iniciar Etapa"

@@ -5,11 +5,14 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useRouter } from "next/navigation";
 import { Bar, Pie, Line, Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PointElement, LineElement } from "chart.js";
-import { getAllEtapas, getSituacao, getTags } from "../services/etapaSevice";
+
 import { getAllItems } from "../services/projetoService";
-import { getQuantidade } from "../services/projetoService";
+
 import { optionsGraph } from "../components/config/config";
 import Sidebar from "../components/Sidebar";
+import { useEtapaApi } from "../hooks/etapaHook";
+import { useProjetoApi } from "../hooks/projetoHook";
+import { useAuth } from "@/app/contexts/AuthContext";
 
 // Registrando os componentes necessários do Chart.js
 ChartJS.register(
@@ -27,98 +30,85 @@ ChartJS.register(
 
 export default function Projetos () {
 
-  const [data, setData] = useState([]);
+ const [data, setData] = useState([]);
   const [modalOpen, setIsModalOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const router = useRouter();
+
   const [chartData, setChartData] = useState({});
   const [chartData2, setChartData2] = useState({});
-  const [ total, setTotal] = useState({});
+  const [total, setTotal] = useState({});
+
+  const router = useRouter();
+  const { getSituacao, getTags } = useEtapaApi();
+  const { getQuantidade, getAllItems } = useProjetoApi();
+
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
+  const { Token, isAuthenticated, loading } = useAuth();
 
-  useEffect(() => {
-    // Verifica se o código está rodando no lado do cliente
-    if (typeof window !== "undefined") {
-      const authStatus = localStorage.getItem("authenticated");
-      setIsAuthenticated(authStatus === "true");
 
-      // Se o usuário não estiver autenticado, redireciona para a página de login
-      if (authStatus !== "true") {
-        router.push('/auth');
-      }
+useEffect(() => {
+  if (!loading && !isAuthenticated) {
+    router.push("/auth");
+  }
+}, [loading, isAuthenticated, router]);
+
+useEffect(() => {
+  if (loading || !Token) return;
+
+  const loadData = async () => {
+    try {
+      const [projetos, tags, quantidade, items] = await Promise.all([
+        getSituacao(Token),
+        getTags(Token),
+        getQuantidade(Token),
+        getAllItems(Token),
+      ]);
+      setChartData(projetos);
+      setChartData2(tags);
+      setTotal(quantidade);
+      setData(items);
+    } catch (error) {
+      console.error("Erro ao carregar os dados:", error);
     }
-  }, [router]);
-  useEffect(() => {
-      const handleItens = async () => {
-          const response = await getAllItems();
-          setData(response);
-        
-      };
-      handleItens();
-  }, []);
+  };
 
-
-  useEffect(() => {
-      const authStatus = localStorage.getItem("authenticated") === "true";
-      setIsAuthenticated(authStatus);
-  }, []);
-
-  // Dados fictícios para os gráficos
- useEffect(() => {
-        const fetchProjetos = async () => {
-          const data = await getSituacao();
-          const data2 = await getTags();
-          const data3 = await getQuantidade();
-          setTotal(data3)
-          setChartData(data)
-          setChartData2(data2)
-         };
-        fetchProjetos();
-    }, [data]);
-
-   const doughnutData = {
+  loadData();
+}, [Token, loading]);
+  const doughnutData = {
     labels: ["Concluído", "Em Andamento", "Atrasado", "Não iniciado"],
     datasets: [
-        {
-            label: "Projetos",
-            data: [
-                chartData.Concluido,
-                chartData.EmAndamento,
-                chartData.Atrasado,
-                chartData.NaoIniciado
-            ],
-            backgroundColor: ["#4CAF50", "#FFC107", "#F44336", "#000000"],
-        }
-    ]
-};
+      {
+        label: "Projetos",
+        data: [
+          chartData.Concluido || 0,
+          chartData.EmAndamento || 0,
+          chartData.Atrasado || 0,
+          chartData.NaoIniciado || 0,
+        ],
+        backgroundColor: ["#4CAF50", "#FFC107", "#F44336", "#000000"],
+      },
+    ],
+  };
 
+  const combinedData = [
+    { label: "PTD24/27", value: chartData2.PTD2427 || 0 },
+    { label: "PTDIC24/27", value: chartData2.PDTIC2427 || 0 },
+    { label: "PROFISCOII", value: chartData2.PROFISCOII || 0 },
+  ];
 
-    const combinedData = [
-    { label: "PTD24/27", value: chartData2.PTD2427 },
-    { label: "PTDIC24/27", value: chartData2.PDTIC2427 },
-    { label: "PROFISCOII", value: chartData2.PROFISCOII }
-];
+  combinedData.sort((a, b) => b.value - a.value);
 
-combinedData.sort((a, b) => b.value - a.value);
-
-const sortedLabels = combinedData.map(item => item.label);
-const sortedValues = combinedData.map(item => item.value);
-
-const barTags = {
-    labels: sortedLabels,
+  const barTags = {
+    labels: combinedData.map((item) => item.label),
     datasets: [
-        {
-            label: "Projetos",
-            data: sortedValues,
-            backgroundColor: ["#000000", "#000000", "#000000"]
-        }
-    ]
-};
-
-
-
+      {
+        label: "Projetos",
+        data: combinedData.map((item) => item.value),
+        backgroundColor: ["#000000", "#000000", "#000000"],
+      },
+    ],
+  };
 
   return (
 <>

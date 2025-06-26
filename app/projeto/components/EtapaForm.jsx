@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { createEtapa, createItem } from "../services/etapaSevice"; // Refira-se à função de criação de item
+import { useEtapaApi } from "../hooks/etapaHook";
 
 export const EtapaForm = ({ onClose, isOpen, id }) => {
+  const {createEtapa} = useEtapaApi()
   const [formData, setFormData] = useState({
     NM_PROJETO: id,
     NM_ETAPA: "",

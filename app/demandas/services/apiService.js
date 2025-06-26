@@ -1,8 +1,17 @@
+import { URL_DEMANDA_SERVICE } from "@/app/consts/consts";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5148/api/demanda";
 
-export const getAllItems = async () => {
+const getAuthHeaders = (token) => ({
+  Authorization: `Bearer ${token}`,
+  "Content-Type": "application/json",
+});
+
+export const getAllItems = async (token) => {
   try {
-    const response = await fetch(`${API_URL}`);
+    const response = await fetch(`${URL_DEMANDA_SERVICE}`, {
+      headers: getAuthHeaders(token),
+    });
     if (!response.ok) throw new Error("Erro ao obter itens");
     return await response.json();
   } catch (error) {
@@ -11,9 +20,11 @@ export const getAllItems = async () => {
   }
 };
 
-export const getItemById = async (id) => {
+export const getItemById = async (id, token) => {
   try {
-    const response = await fetch(`${API_URL}/${id}`);
+    const response = await fetch(`${URL_DEMANDA_SERVICE}/${id}`, {
+      headers: getAuthHeaders(token),
+    });
     if (!response.ok) throw new Error(`Erro ao obter item ${id}`);
     return await response.json();
   } catch (error) {
@@ -22,16 +33,12 @@ export const getItemById = async (id) => {
   }
 };
 
-export const createItem = async (itemData) => {
+export const createItem = async (itemData, token) => {
   try {
-    console.log("Enviando dados:", JSON.stringify(itemData)); // Log para debug
-
-    const response = await fetch(`${API_URL}/`, {
+    const response = await fetch(`${URL_DEMANDA_SERVICE}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(itemData), // Envia o objeto diretamente, sem "fields"
+      headers: getAuthHeaders(token),
+      body: JSON.stringify(itemData),
     });
 
     if (!response.ok) {
@@ -46,14 +53,11 @@ export const createItem = async (itemData) => {
   }
 };
 
-
-export const updateItem = async (id, itemData) => {
+export const updateItem = async (id, itemData, token) => {
   try {
-    console.log(id)
-    console.log(itemData)
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${URL_DEMANDA_SERVICE}/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: getAuthHeaders(token),
       body: JSON.stringify(itemData),
     });
     return response.ok;
@@ -63,9 +67,9 @@ export const updateItem = async (id, itemData) => {
   }
 };
 
-export const deleteItem = async (id) => {
+export const deleteItem = async (id, token) => {
   try {
-    const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+    const response = await fetch(`${URL_DEMANDA_SERVICE}/${id}`, { method: "DELETE", headers: getAuthHeaders(token) });
     return response.ok;
   } catch (error) {
     console.error(error);
@@ -73,9 +77,9 @@ export const deleteItem = async (id) => {
   }
 };
 
-export const tmpAVG = async () => {
+export const tmpAVG = async (token) => {
   try {
-    const response = await fetch(`${API_URL}/rank`, { method: "GET" });
+    const response = await fetch(`${URL_DEMANDA_SERVICE}/rank`, { method: "GET", headers: getAuthHeaders(token) });
     return await response.json();
   } catch (error) {
     console.error(error);

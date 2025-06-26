@@ -1,8 +1,26 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL_PROJETO || "http://localhost:5148/api/projeto";
+import { URL_PROJETO_SERVICE } from "@/app/consts/consts";
+import { useContext } from "react";
 
-export const getAllItems = async () => {
+const API_URL = process.env.NEXT_PUBLIC_API_URL_PROJETO || "http://localhost:5148/api/projeto";
+const getAuthHeaders = (token) => ({
+  Authorization: `Bearer ${token}`,
+  "Content-Type": "application/json",
+});
+
+
+export const getAllItems = async (token, unidade = null) => {
+  
   try {
-    const response = await fetch(`${API_URL}`);
+    let url = `${URL_PROJETO_SERVICE}`;
+    
+    // Adiciona a unidade como query parameter se fornecida
+    if (unidade) {
+      url += `?unidade=${encodeURIComponent(unidade)}`;
+    }
+    
+    const response = await fetch(url, {
+      headers: getAuthHeaders(token),
+    });
     if (!response.ok) throw new Error("Erro ao obter itens");
     return await response.json();
   } catch (error) {
@@ -11,9 +29,12 @@ export const getAllItems = async () => {
   }
 };
 
-export const getItemById = async (id) => {
+export const getItemById = async (id, token) => {
+  console.log("token enviado?" + token)
   try {
-    const response = await fetch(`${API_URL}/${id}`);
+    const response = await fetch(`${URL_PROJETO_SERVICE}/${id}`, {
+      headers: getAuthHeaders(token),
+    });
     if (!response.ok) throw new Error(`Erro ao obter item ${id}`);
     return await response.json();
   } catch (error) {
@@ -22,10 +43,12 @@ export const getItemById = async (id) => {
   }
 };
 
-export const getQuantidade = async () => {
+export const getQuantidade = async (token) => {
   try {
-    const response = await fetch(`${API_URL}/quantidade`);
-    if (!response.ok) throw new Error(`Erro ao obter item ${id}`);
+    const response = await fetch(`${URL_PROJETO_SERVICE}/quantidade`, {
+      headers: getAuthHeaders(token),
+    });
+    if (!response.ok) throw new Error(`Erro ao obter quantidade`);
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -33,16 +56,12 @@ export const getQuantidade = async () => {
   }
 };
 
-export const createItem = async (itemData) => {
+export const createItem = async (itemData, token) => {
   try {
-    console.log("Enviando dados:", JSON.stringify(itemData)); // Log para debug
-
-    const response = await fetch(`${API_URL}/template`, {
+    const response = await fetch(`${URL_PROJETO_SERVICE}/template`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(itemData), // Envia o objeto diretamente, sem "fields"
+      headers: getAuthHeaders(token),
+      body: JSON.stringify(itemData),
     });
 
     if (!response.ok) {
@@ -50,19 +69,18 @@ export const createItem = async (itemData) => {
       throw new Error(`Erro ao criar item: ${errorText}`);
     }
 
-    return await response.text()
+    return await response.text();
   } catch (error) {
     console.error("Erro na requisição:", error.message);
     return null;
   }
 };
 
-
-export const updateItem = async (id, itemData) => {
+export const updateItem = async (id, itemData, token) => {
   try {
-    const response = await fetch(`${API_URL}/items/${id}`, {
+    const response = await fetch(`${URL_PROJETO_SERVICE}/items/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: getAuthHeaders(token),
       body: JSON.stringify(itemData),
     });
     return response.ok;
@@ -72,14 +90,15 @@ export const updateItem = async (id, itemData) => {
   }
 };
 
-export const deleteItem = async (id) => {
+export const deleteItem = async (id, token) => {
   try {
-    const response = await fetch(`${API_URL}/items/${id}`, { method: "DELETE" });
+    const response = await fetch(`${API_URL}/items/${id}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(token),
+    });
     return response.ok;
   } catch (error) {
     console.error(error);
     return false;
   }
 };
-
-

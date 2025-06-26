@@ -1,14 +1,19 @@
+import { URL_DEMANDANTE_SERVICE } from "@/app/consts/consts";
+
 const API_URL =  process.env.NEXT_PUBLIC_API_URL_DEMANDANTE || "http://localhost:5148/api/demandante"
 
-export const createDemandante = async (itemData) => {
+const getAuthHeaders = (token) => ({
+  Authorization: `Bearer ${token}`,
+  "Content-Type": "application/json",
+});
+
+export const createDemandante = async (itemData, token) => {
   try {
     console.log("Enviando dados:", JSON.stringify(itemData)); // Log para debug
 
-    const response = await fetch(`${API_URL}`, {
+    const response = await fetch(`${URL_DEMANDANTE_SERVICE}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: getAuthHeaders(token),
       body: JSON.stringify(itemData), // Envia o objeto diretamente, sem "fields"
     });
 
@@ -24,10 +29,9 @@ export const createDemandante = async (itemData) => {
   }
 };
 
-
-export const getAllDemandantes = async () => {
+export const getAllDemandantes = async (token) => {
   try {
-    const response = await fetch(`${API_URL}`);
+    const response = await fetch(`${URL_DEMANDANTE_SERVICE}`, { headers: getAuthHeaders(token) });
     if (!response.ok) throw new Error("Erro ao obter itens");
     return await response.json();
   } catch (error) {
@@ -36,9 +40,9 @@ export const getAllDemandantes = async () => {
   }
 };
 
-export const deleteDemandante = async (id) => {
+export const deleteDemandante = async (id, token) => {
   try {
-    const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+    const response = await fetch(`${URL_DEMANDANTE_SERVICE}/${id}`, { method: "DELETE", headers: getAuthHeaders(token) });
     return response.ok;
   } catch (error) {
     console.error(error);

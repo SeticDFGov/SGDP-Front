@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getItemById, iniciarEtapa, updateItem } from "../services/etapaSevice"; // Importando a função correta
+import { getItemById, iniciarEtapa, updateItem } from "../services/etapaService"; // Importando a função correta
 
 export const InicioEtapa = ({ onClose, isOpen, etapa }) => {
   const [formData, setFormData] = useState({

@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import React, {useState, useEffect} from "react"
-import { login } from "../services/authService";
+
 
 export const Header = () => {
 

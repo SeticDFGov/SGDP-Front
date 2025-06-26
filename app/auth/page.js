@@ -1,46 +1,22 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation"; // Importa o useRouter do Next.js
+import { useAuth } from "../contexts/AuthContext";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL_AUTH || "http://localhost:8000/autenticar";
 
 const Login = () => {
-  const [login, setLogin] = useState("");
+  const { login } = useAuth();
+  const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [mensagem, setMensagem] = useState(null);
   const [carregando, setCarregando] = useState(false);
-  const router = useRouter(); // Inicia o useRouter
-
-  const autenticar = async (e) => {
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setMensagem(null);
-    setCarregando(true);
-
     try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ login, senha }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        // Armazena o estado de autenticação no localStorage com chave "authenticated"
-        localStorage.setItem("authenticated", "true"); // Estado de autenticação
-        localStorage.setItem("user_info", JSON.stringify(data.user_info)); // Armazenando as informações do usuário
-
-        setMensagem(`Bem-vindo(a), ${data.user_info.display_name || data.user_info.nome_completo}!`);
-
-        // Redireciona para a página principal após sucesso
-        router.push("/"); // Redireciona para a página principal
-      } else {
-        setMensagem("Falha na autenticação: " + (data.message || "Credenciais inválidas."));
-      }
-    } catch (error) {
-      setMensagem("Erro na requisição: " + error.message);
-    } finally {
-      setCarregando(false);
+      await login(email, senha);
+    } catch {
+      setError('Email ou senha inválidos.');
     }
   };
 
@@ -53,12 +29,12 @@ const Login = () => {
       <div className="w-1/3 min-h-screen bg-blue-900 bg-opacity-90 flex flex-col justify-center p-10">
         <h2 className="text-3xl font-bold text-white mb-8 text-center">Bem-Vindo</h2>
   
-        <form onSubmit={autenticar} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <input
             type="text"
             placeholder="E-mail"
-            value={login}
-            onChange={(e) => setLogin(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full p-3 rounded-lg bg-white text-black placeholder-gray-600"
             required
           />
@@ -94,7 +70,7 @@ const Login = () => {
         </form>
       </div>
   
-      {/* O espaço restante da imagem de fundo é automaticamente ocupado */}
+   
       <div className="w-1/2 hidden md:block" />
     </div>
   );

@@ -1,0 +1,8 @@
+export const URL_AUTH_SERVICE = process.env.NEXT_PUBLIC_API_URL_AUTH || "http://localhost:5148/api/auth"
+export const URL_CATEGORIA_SERVICE = process.env.NEXT_PUBLIC_API_URL_CATEGORIA || "http://localhost:5148/api/categoria"
+export const URL_DEMANDA_SERVICE = process.env.NEXT_PUBLIC_API_URL_DEMANDA || "http://localhost:5148/api/demanda"
+export const URL_DEMANDANTE_SERVICE = process.env.NEXT_PUBLIC_API_URL_DEMANDANTE || "http://localhost:5148/api/demandante"
+export const URL_DETALHAMENTO_SERVICE = process.env.NEXT_PUBLIC_API_URL_DETALHAMENTO || "http://localhost:5148/api/detalhamento"
+export const URL_ESTEIRA_SERVICE = process.env.NEXT_PUBLIC_API_URL_ESTEIRA || "http://localhost:5148/api/esteira"
+export const URL_ETAPA_SERVICE = process.env.NEXT_PUBLIC_API_URL_ETAPA || "http://localhost:5148/api/etapa"
+export const URL_PROJETO_SERVICE = process.env.NEXT_PUBLIC_API_URL_PROJETO || "http://localhost:5148/api/projeto"

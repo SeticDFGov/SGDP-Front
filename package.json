@@ -11,10 +11,12 @@
     "deploy": "gh-pages -d out"
   },
   "dependencies": {
+    "@types/jwt-decode": "^2.2.1",
     "axios": "^1.7.9",
     "chart.js": "^4.4.7",
     "chartjs-plugin-datalabels": "^2.2.0",
     "dayjs": "^1.11.13",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.475.0",
     "material-icons": "^1.13.14",
     "next": "15.1.6",

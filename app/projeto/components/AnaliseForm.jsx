@@ -1,12 +1,16 @@
 import { useState, useEffect } from "react";
-import { createItem, getLastAnalise } from "../services/analiseService";
+import {useApi } from "../services/analiseService";
+import { useAnaliseApi } from "../hooks/analiseHook";
 
 export const AnaliseModal = ({ isOpen, onClose, nomeProjeto }) => {
+  const { getLastAnalise, createItem } = useAnaliseApi(); 
+
   const [formData, setFormData] = useState({
-    NM_PROJETO: Number(nomeProjeto) || 0, // Garante que seja um número
+    NM_PROJETO: Number(nomeProjeto) || 0,
     ANALISE: "",
     ENTRAVE: ""
   });
+
   const [lastAnalise, setLastAnalise] = useState(null);
 
   useEffect(() => {
@@ -21,7 +25,7 @@ export const AnaliseModal = ({ isOpen, onClose, nomeProjeto }) => {
       setLastAnalise(data);
       setFormData((prev) => ({
         ...prev,
-        NM_PROJETO: Number(nomeProjeto), // Mantém como inteiro
+        NM_PROJETO: Number(nomeProjeto),
         ANALISE: "",
         ENTRAVE: "",
       }));
@@ -30,11 +34,7 @@ export const AnaliseModal = ({ isOpen, onClose, nomeProjeto }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    let newValue = value;
-    if (name === "ENTRAVE") {
-      newValue = value === "true"; // Converte string para booleano
-    }
+    const newValue = name === "ENTRAVE" ? value === "true" : value;
 
     setFormData((prev) => ({
       ...prev,
@@ -47,22 +47,17 @@ export const AnaliseModal = ({ isOpen, onClose, nomeProjeto }) => {
 
     const dataToSend = {
       ...formData,
-      NM_PROJETO: Number(formData.NM_PROJETO), 
+      NM_PROJETO: Number(formData.NM_PROJETO),
     };
 
-    
-    const response = await createItem(dataToSend);
-    if (response.ok) {
+    const response = await createItem(dataToSend, formData.NM_PROJETO); // 🔹 envia ID
+    if (response) {
       alert("Análise salva com sucesso!");
-      window.location.reload()
+      window.location.reload(); // ou uma abordagem mais controlada
       onClose();
-
     }
-
-    window.location.reload()
   };
-
-return (
+  return (
   isOpen && (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-8 rounded-lg shadow-xl w-[700px] h-auto max-h-[90vh] overflow-y-auto flex flex-col">
