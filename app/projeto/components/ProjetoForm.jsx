@@ -7,6 +7,12 @@ import { useDemandaApi } from "@/app/demandas/hooks/demandaHook";
 import { useAuth } from "@/app/contexts/AuthContext";
 import { URL_AUTH_SERVICE, URL_ESTEIRA_SERVICE } from "@/app/consts/consts";
 
+const templates = [
+  "Projeto",
+  "Contratação Pregão",
+  "Contratação direta SUAG"
+]
+
 const ProjetoForm = ({ onClose, isOpen }) => {
   if (!isOpen) return null;
   const { createItem } = useProjetoApi();
@@ -17,7 +23,7 @@ const ProjetoForm = ({ onClose, isOpen }) => {
     GERENTE_PROJETO: "",
     SITUACAO: "",
     NR_PROCESSO_SEI: "",
-    AreaDemandanteId: "",
+    NM_AREA_DEMANDANTE: "",
     ANO: "2025",
     TEMPLATE: "",
     PROFISCOII: false,
@@ -60,7 +66,7 @@ const ProjetoForm = ({ onClose, isOpen }) => {
         GERENTE_PROJETO: projeto.GERENTE_PROJETO,
         SITUACAO: projeto.SITUACAO,
         NR_PROCESSO_SEI: projeto.NR_PROCESSO_SEI,
-        AreaDemandanteId: Number(projeto.AreaDemandanteId),
+        NM_AREA_DEMANDANTE: Number(projeto.NM_AREA_DEMANDANTE),
         ANO: projeto.ANO,
         TEMPLATE: projeto.TEMPLATE,
         PROFISCOII: Boolean(projeto.PROFISCOII),
@@ -156,9 +162,9 @@ const ProjetoForm = ({ onClose, isOpen }) => {
           <div>
             <label className="block text-sm font-medium mb-1">Área Demandante</label>
             <select
-              name="AreaDemandanteId"
+              name="NM_AREA_DEMANDANTE"
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
-              value={projeto.AreaDemandanteId}
+              value={projeto.NM_AREA_DEMANDANTE}
               onChange={handleChange}
               required
             >
@@ -195,6 +201,21 @@ const ProjetoForm = ({ onClose, isOpen }) => {
               <option value="">Selecione uma Esteira</option>
               {esteiras.map((e) => (
                 <option key={e.EsteiraId} value={e.EsteiraId}>{e.Nome.trim()}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Template</label>
+            <select
+              name="TEMPLATE"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
+              value={projeto.TEMPLATE}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Selecione uma Esteira</option>
+              {templates.map((e) => (
+                <option key={e} value={e}>{e}</option>
               ))}
             </select>
           </div>
@@ -237,6 +258,7 @@ const ProjetoForm = ({ onClose, isOpen }) => {
               />
               <span>PTD 24/27</span>
             </label>
+            
           </div>
           <div className="w-full flex justify-center gap-4 pt-6 border-t border-gray-200 mt-auto">
             <button

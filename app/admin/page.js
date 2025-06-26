@@ -176,7 +176,7 @@ function AdminPageContent() {
           <div className="flex justify-between items-center py-4">
             <h1 className="text-2xl font-bold text-gray-900">Painel de Administração</h1>
             <div className="text-sm text-gray-600">
-              Logado como: <span className="font-medium">{user?.email}</span>
+              Logado como: <span className="font-medium">{user?.Email}</span>
             </div>
           </div>
         </div>

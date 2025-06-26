@@ -20,7 +20,6 @@ export default function AdminRoute({ children }) {
         return;
       }
 
-      // Verificar se o usuário tem perfil admin
       if (user && user.Email) {
         try {
           const response = await fetch(`${URL_AUTH_SERVICE}/user/${user.Email}`, {

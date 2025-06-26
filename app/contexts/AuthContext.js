@@ -8,17 +8,6 @@ import { URL_AUTH_SERVICE } from "../consts/consts";
 
 const AuthContext = createContext();
 
-function mapUserClaims(user) {
-  if (!user) return null;
-
-  return {
-    nome: user["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] || "",
-    email: user["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"] || "",
-    unidade: user["Unidade"] || "",
-    perfil: user["Perfil"]
-  };
-}
-
 async function fetchUserData(email) {
   const res = await fetch(`http://localhost:5148/api/auth/user/${encodeURIComponent(email)}`, {
     headers: {

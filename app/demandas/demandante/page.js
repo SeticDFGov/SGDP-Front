@@ -3,16 +3,16 @@
 import { useEffect, useState } from "react";
 import DemandanteForm from "../components/DemandanteForm";
 import 'material-icons/iconfont/material-icons.css';
-import Header from "../components/Header";
-import { useRouter } from "next/navigation";
 import Sidebar from "../components/SIdebar";
 import { useDemandaApi } from "../hooks/demandaHook";
+import PrivateRoute from "@/app/components/PrivateRoute";
+import { useAuth } from "@/app/contexts/AuthContext";
 
 export default function Demandante() {
-  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const [items, setItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const {Token } = useAuth()
   const demandaApi = useDemandaApi();
 
   const handleDeleteItem = async (id) => {
@@ -43,17 +43,20 @@ export default function Demandante() {
     }
   };
 
-  // Fechar modal e atualizar lista após cadastro
+  
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    fetchItems(); // Recarrega os dados
+    fetchItems(); 
   };
 
   useEffect(() => {
     fetchItems();
-  }, []);
+  }, [Token]);
 
   return (
+    <PrivateRoute>
+
+    
     <div className="text-black flex-1 flex flex-col ml-64">
      <Sidebar></Sidebar> 
 
@@ -87,7 +90,7 @@ export default function Demandante() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
           {items.map((item) => (
             <div
-              key={item.ID}
+              key={item.AreaDemandanteID}
               className="rounded-lg p-4 shadow bg-white flex flex-col gap-2"
             >
               <div>
@@ -102,7 +105,7 @@ export default function Demandante() {
                 <button
                   id="delete"
                   className="text-gray-500 hover:text-gray-700"
-                  onClick={() => handleDeleteItem(item.ID)}
+                  onClick={() => handleDeleteItem(item.AreaDemandanteID)}
                 >
                   <span className="material-icons">delete</span>
                 </button>
@@ -123,5 +126,6 @@ export default function Demandante() {
         </main>
       </div>
     </div>
+    </PrivateRoute>
   );
 }
