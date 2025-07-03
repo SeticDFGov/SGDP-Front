@@ -19,6 +19,7 @@ import { useProjetoApi } from "../../hooks/projetoHook";
 import { useAnaliseApi } from "../../hooks/analiseHook";
 import { useAuth } from "@/app/contexts/AuthContext";
 import { useEtapaApi } from "../../hooks/etapaHook";
+import DespachoModal from "../../components/DespachoModal";
 dayjs.extend(utc);
 export default function ProductPage() {
    const { id } = useParams();
@@ -37,6 +38,8 @@ export default function ProductPage() {
   const [plan, setPlan] = useState(0);
   const [ocupado, setOcupado] = useState(false);
   const [showModalInicio, setShowModalInicio] = useState(false);
+  const [showDespacho, setShowDespacho] = useState(false);
+  const [despachoEtapa, setDespachoEtapa] = useState(null);
 
   const { getItemById } = useProjetoApi();
   const { getLastAnalise } = useAnaliseApi();
@@ -158,6 +161,12 @@ export default function ProductPage() {
             isOpen={showAnalise}
             onClose={() => setShowAnalise(false)}
             nomeProjeto={id}
+          />
+          <DespachoModal
+            isOpen={showDespacho}
+            onClose={() => setShowDespacho(false)}
+            projetoId={id}
+            etapa={despachoEtapa}
           />
           {/* Conteúdo Principal */}
           <main className="overflow-x-auto">
@@ -300,12 +309,23 @@ export default function ProductPage() {
                               <button
                                 onClick={() => {
                                   setEtapaSelecionada(item);
-                                  setShowModalInicio(true); 
+                                  setShowModalInicio(true);
                                 }}
                                 className="px-4 py-2 rounded-md bg-green-500 text-white"
                                 title="Iniciar Etapa"
                               >
                                 <span className="material-icons">play_arrow</span>
+                              </button>
+                            ) : item.NM_ETAPA === "Despacho" ? (
+                              <button
+                                onClick={() => {
+                                  setDespachoEtapa(item);
+                                  setShowDespacho(true);
+                                }}
+                                className="px-4 py-2 rounded-md bg-yellow-500 text-white"
+                                title="Despacho"
+                              >
+                                <span className="material-icons">gavel</span>
                               </button>
                             ) : (
                               <button
