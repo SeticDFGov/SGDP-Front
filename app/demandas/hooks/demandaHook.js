@@ -7,7 +7,7 @@ import * as categoriaService from "../services/categoriaService";
 export const useDemandaApi = () => {
   const { Token } = useAuth();
 
-  console.log(`dentro od hook ${Token}`)
+  
   return {
     // Demandas
     getAllDemandas: () => apiService.getAllItems(Token),

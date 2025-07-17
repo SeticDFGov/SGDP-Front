@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { createCategoria } from "../services/categoriaService";
+import { useDemandaApi } from "../hooks/demandaHook";
 
 const CategoriaForm = ({ onClose }) => {
+  const demandaApi = useDemandaApi();
   const [categoria, setCategoria] = useState({
     Nome: "",
   });
@@ -12,7 +13,7 @@ const CategoriaForm = ({ onClose }) => {
 
   const handleSubmit = async () => {
     try {
-      await createCategoria(categoria);
+      await demandaApi.createCategoria(categoria);
       setCategoria({ Nome: "" });
       onClose(); // Fecha o modal após sucesso
     } catch {

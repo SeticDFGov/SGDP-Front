@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getItemById, updateItem } from '../services/apiService';
-import { getAllCategoria } from '../services/categoriaService';
-import { getAllDemandantes } from '../services/demandanteService';
+import { useDemandaApi } from "../hooks/demandaHook";
 import 'material-icons/iconfont/material-icons.css';
 import { FaTimes } from 'react-icons/fa';
 
@@ -40,10 +38,12 @@ const EditFormModal = ({ itemId, onSave , onClose}) => {
   PATROCINADOR: ""
 });
 
+  const demandaApi = useDemandaApi();
+
   const fetchItems = async () => {
     try {
-      const responseCategoria = await getAllCategoria();
-      const responseDemandante = await getAllDemandantes();
+      const responseCategoria = await demandaApi.getAllCategoria();
+      const responseDemandante = await demandaApi.getAllDemandantes();
       console.log(responseCategoria)
       console.log(responseDemandante)
       setDemandantes(responseDemandante)
@@ -62,7 +62,7 @@ const EditFormModal = ({ itemId, onSave , onClose}) => {
     const fetchItem = async () => {
       if (itemId) {
         try {
-          const response = await getItemById(itemId);
+          const response = await demandaApi.getDemandaById(itemId);
           if (response) {
             console.log(response.NM_DEMANDA)
             // Mapear os dados da API para os campos esperados no formulário
@@ -121,7 +121,7 @@ body.PERIODICIDADE = formData.PERIODICIDADE || '';
 body.PATROCINADOR = formData.PATROCINADOR || '';
 
   try {
-    const response = await updateItem(itemId, body);
+    const response = await demandaApi.updateDemanda(itemId, body);
     if (response) {
       alert("Item atualizado com sucesso!");
       onClose(); // Fecha o modal

@@ -1,16 +1,14 @@
 "use client"
 import { useState, useEffect, useRef } from "react";
 import 'material-icons/iconfont/material-icons.css';
-import { deleteItem, getAllItems, tmpAVG } from "./services/apiService";
 import { FaTrash, FaEdit , FaPlus, FaEye} from 'react-icons/fa';
 import Modal from "./components/Modal";
 import CadastroDemanda from "./components/DemandaForm";
 import EditFormModal from "./components/EditDemandaForm";
-import { useRouter } from "next/navigation";
-import Header from "./components/Header";
 import DemandDetailsModal from "./components/Detalhamento";
-import { getAllDemandantes } from "./services/demandanteService";
 import Sidebar from "./components/SIdebar";
+import { useDemandaApi } from "./hooks/demandaHook";
+import { useAuth } from "@/app/contexts/AuthContext";
 
 
 const Dashboard = () => {
@@ -27,6 +25,7 @@ const Dashboard = () => {
     const [detail, setDetail] = useState(null)
     const [demandante1, setDemandantes] = useState([])
     const [siglasMap, setSiglasMap] = useState([])
+    const { getAllDemandantes, getAllDemandas, deleteDemanda } = useDemandaApi();
    const handleOpenEditModal = (id) => {
     setSelectedItemId(id);
     setIsModalEditOpen(true);
@@ -93,7 +92,7 @@ const Dashboard = () => {
   if (!confirmDelete) return;
 
   try {
-    const response = await deleteItem(id);
+    const response = await deleteDemanda(id);
 
     if (response) {
       alert("demanda excluída com sucesso!");
@@ -110,7 +109,7 @@ const Dashboard = () => {
     const fetchItems = async () => {
     setIsLoading(true);
     try {
-        const data = await getAllItems();
+        const data = await getAllDemandas();
 
 
         if (!Array.isArray(data)) {
@@ -167,9 +166,10 @@ useEffect(() => {
   fetchDemandantes();
 }, []);
 
-
-
-
+const { Token } = useAuth();
+if (!Token) {
+  return <div>Carregando...</div>;
+}
 
 
 return (

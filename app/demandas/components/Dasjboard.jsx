@@ -13,6 +13,7 @@ import { getAllDemandantes } from "../services/demandanteService";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PointElement, LineElement } from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { optionsGraph } from "@/app/projeto/components/config/config";
+import { useDemandaApi } from "../hooks/demandaHook";
 
 ChartJS.register(
   CategoryScale,
@@ -118,7 +119,7 @@ const Dashboard = () => {
   if (!confirmDelete) return;
 
   try {
-    const response = await deleteItem(id);
+    const response = await deleteDemanda(id);
 
     if (response) {
       alert("demanda excluída com sucesso!");
@@ -135,7 +136,7 @@ const Dashboard = () => {
     const fetchItems = async () => {
     setIsLoading(true);
     try {
-        const data = await getAllItems();
+        const data = await getAllDemandas();
 
 
         if (!Array.isArray(data)) {

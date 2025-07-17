@@ -1,10 +1,11 @@
 import React from "react";
-import { createDetalhe, getAllDetalhes } from "../services/detalheSerive";
+import { useDemandaApi } from "../hooks/demandaHook";
 import { useState, useEffect } from "react";
 import 'material-icons/iconfont/material-icons.css';
 import { FaTimes } from 'react-icons/fa';
 
 const DemandDetailsModal = ({ isOpen, onClose, demandaId , item}) => {
+  const demandaApi = useDemandaApi();
   const [detailData, setDetailData] = useState([]);
   const [demandData, setDemandData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,7 +19,7 @@ const DemandDetailsModal = ({ isOpen, onClose, demandaId , item}) => {
       // Chamada para a API
       const fetchDemandDetails = async () => {
         try {
-          const response = await getAllDetalhes(item.ID);
+          const response = await demandaApi.getAllDetalhes(item.ID);
           console.log(response);
           setDetailData(response);  // Atualiza o estado com os dados da demanda
         } catch (error) {
@@ -42,7 +43,7 @@ const handleAddDetail = async () => {
     setSendDetail((prevDetails) => [...(prevDetails || []), newDetailEntry]);
 
     try {
-      await createDetalhe(newDetailEntry); // Envia apenas o novo detalhamento
+      await demandaApi.createDetalhe(newDetailEntry); // Envia apenas o novo detalhamento
       setNewDetail(""); // Limpa o campo após a adição
       setIsAddingDetail(false); // Fecha o campo de entrada
       window.location.reload()

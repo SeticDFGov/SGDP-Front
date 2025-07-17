@@ -12,10 +12,14 @@ export default function Demandante() {
 
   const [items, setItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const {Token } = useAuth()
+  const { Token } = useAuth();
   const demandaApi = useDemandaApi();
+  if (!Token) {
+    return <div>Carregando...</div>;
+  }
 
   const handleDeleteItem = async (id) => {
+    if (!Token) return;
     const confirmDelete = window.confirm("Tem certeza que deseja excluir esse demandante?");
     if (!confirmDelete) return;
 
@@ -34,6 +38,7 @@ export default function Demandante() {
   };
 
   const fetchItems = async () => {
+    if (!Token) return;
     try {
       const response = await demandaApi.getAllDemandantes();
       setItems(response);
@@ -50,7 +55,7 @@ export default function Demandante() {
   };
 
   useEffect(() => {
-    fetchItems();
+    if (Token) fetchItems();
   }, [Token]);
 
   return (
