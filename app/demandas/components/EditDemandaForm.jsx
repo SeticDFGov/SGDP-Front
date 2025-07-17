@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDemandaApi } from "../hooks/demandaHook";
+import { useAuth } from "@/app/contexts/AuthContext";
 import 'material-icons/iconfont/material-icons.css';
 import { FaTimes } from 'react-icons/fa';
 
 const EditFormModal = ({ itemId, onSave , onClose}) => {
   if(!onClose) return null;
+
+  const { Token } = useAuth();
+  if (!Token) return null;
 
    const responsaveis = [
     "Adriana Christina", "Ana Carolina", "Antônio Jr.", "Camila Rodrigues", "Daniel Cardoso",
@@ -104,7 +108,7 @@ const handleSubmit = async (e) => {
 
   const body = {};
 
-
+body.DemandaId = itemId;
 body.NM_DEMANDA = formData.NM_DEMANDA || '';
 body.DT_SOLICITACAO = formData.DT_SOLICITACAO;
 body.DT_ABERTURA = formData.DT_ABERTURA;
@@ -121,7 +125,7 @@ body.PERIODICIDADE = formData.PERIODICIDADE || '';
 body.PATROCINADOR = formData.PATROCINADOR || '';
 
   try {
-    const response = await demandaApi.updateDemanda(itemId, body);
+    const response = await demandaApi.updateDemanda(body);
     if (response) {
       alert("Item atualizado com sucesso!");
       onClose(); // Fecha o modal

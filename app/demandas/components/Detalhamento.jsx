@@ -19,13 +19,13 @@ const DemandDetailsModal = ({ isOpen, onClose, demandaId , item}) => {
       // Chamada para a API
       const fetchDemandDetails = async () => {
         try {
-          const response = await demandaApi.getAllDetalhes(item.ID);
+          const response = await demandaApi.getAllDetalhes(item.DemandaId);
           console.log(response);
-          setDetailData(response);  // Atualiza o estado com os dados da demanda
+          setDetailData(response);  
         } catch (error) {
           setError(error.message);
         } finally {
-          setLoading(false); // Finaliza o carregamento
+          setLoading(false); 
         }
       };
 
@@ -37,7 +37,7 @@ const DemandDetailsModal = ({ isOpen, onClose, demandaId , item}) => {
 
 const handleAddDetail = async () => {
   if (newDetail.trim()) {
-    const newDetailEntry = { DEMANDA: item.ID, DETALHAMENTO: newDetail };
+    const newDetailEntry = { DEMANDA: item.DemandaId, DETALHAMENTO: newDetail };
 
  
     setSendDetail((prevDetails) => [...(prevDetails || []), newDetailEntry]);
@@ -193,7 +193,7 @@ const handleAddDetail = async () => {
               </div>
               <div>
                 <p className="font-semibold">Área Demandante</p>
-                <p>{item.NM_AREA_DEMANDANTE}</p>
+                <p>{item.NM_AREA_DEMANDANTE.NM_SIGLA}</p>
               </div>
               <div>
                 <p className="font-semibold">Demandante</p>

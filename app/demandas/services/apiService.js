@@ -9,6 +9,7 @@ const getAuthHeaders = (token) => ({
 
 export const getAllItems = async (token) => {
   try {
+    console.log(token);
     const response = await fetch(`${URL_DEMANDA_SERVICE}`, {
       headers: getAuthHeaders(token),
     });
@@ -53,9 +54,9 @@ export const createItem = async (itemData, token) => {
   }
 };
 
-export const updateItem = async (id, itemData, token) => {
+export const updateItem = async (itemData, token) => {
   try {
-    const response = await fetch(`${URL_DEMANDA_SERVICE}/${id}`, {
+    const response = await fetch(`${URL_DEMANDA_SERVICE}`, {
       method: "PUT",
       headers: getAuthHeaders(token),
       body: JSON.stringify(itemData),

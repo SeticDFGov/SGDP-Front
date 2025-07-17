@@ -25,8 +25,10 @@ const Dashboard = () => {
     const [detail, setDetail] = useState(null)
     const [demandante1, setDemandantes] = useState([])
     const [siglasMap, setSiglasMap] = useState([])
-    const { getAllDemandantes, getAllDemandas, deleteDemanda } = useDemandaApi();
-   const handleOpenEditModal = (id) => {
+    const demandaApi = useDemandaApi();
+    const { Token } = useAuth();
+    
+    const handleOpenEditModal = (id) => {
     setSelectedItemId(id);
     setIsModalEditOpen(true);
     };
@@ -60,10 +62,7 @@ const Dashboard = () => {
     }
   };
 
-    useEffect(() => {
-    const authStatus = localStorage.getItem("authenticated") === "true";
-    setIsAuthenticated(authStatus);
-  }, []);
+   
 
 
 
@@ -72,7 +71,7 @@ const Dashboard = () => {
     const handleTmpAVG = async () => {
     setIsLoading(true);
     try {
-      const data = await tmpAVG();
+      const data = await demandaApi.tmpAVG();
 
       setTmp(data);
 
@@ -92,7 +91,7 @@ const Dashboard = () => {
   if (!confirmDelete) return;
 
   try {
-    const response = await deleteDemanda(id);
+    const response = await demandaApi.deleteDemanda(id);
 
     if (response) {
       alert("demanda excluída com sucesso!");
@@ -109,7 +108,7 @@ const Dashboard = () => {
     const fetchItems = async () => {
     setIsLoading(true);
     try {
-        const data = await getAllDemandas();
+        const data = await demandaApi.getAllDemandas();
 
 
         if (!Array.isArray(data)) {
@@ -128,7 +127,7 @@ const Dashboard = () => {
 
 useEffect(() => {
   fetchItems();
-}, []);
+}, [Token]);
 useEffect(() => {
     handleTmpAVG();
   }, []);
@@ -137,7 +136,7 @@ const [isDataLoaded, setIsDataLoaded] = useState(false);
 useEffect(() => {
   const fetchDemandantes = async () => {
     try {
-      const response = await getAllDemandantes();
+      const response = await demandaApi.getAllDemandantes();
   
 
       if (!Array.isArray(response)) {
@@ -166,10 +165,9 @@ useEffect(() => {
   fetchDemandantes();
 }, []);
 
-const { Token } = useAuth();
 if (!Token) {
-  return <div>Carregando...</div>;
-}
+      return <div>Carregando...</div>;
+    }
 
 
 return (
@@ -216,7 +214,7 @@ return (
                 </thead>
                 <tbody>
                   {items.map((item) => (
-                    <tr key={item.ID} className="border-b">
+                    <tr key={item.DemandaId} className="border-b">
                       <td className=" p-3">{item.NM_DEMANDA}</td>
                       <td className=" p-3">
                         {
@@ -234,8 +232,8 @@ return (
                         }
                       </td>
                       <td className=" p-3">{item.STATUS}</td>
-                      <td className=" p-3">{item.CATEGORIA}</td>
-                      <td className=" p-3">{item.NM_AREA_DEMANDANTE}</td>
+                      <td className=" p-3">{item.CATEGORIA.Nome}</td>
+                      <td className=" p-3">{item.NM_AREA_DEMANDANTE.NM_SIGLA}</td>
                       {isAuthenticated && <td className="p-3">{item.NM_PO_SUBTDCR}</td>
                       }
                       <td className="p-3">
@@ -258,31 +256,31 @@ return (
                         }
                       </td>
                       <td className="p-3">{item.UNIDADE}</td>
-                      {isAuthenticated && (
+                      
                         <td className="p-3 justify-center gap-2">
                           <div className="flex justify-center items-center gap-2">
                             <button
                               className="text-gray-500 hover:text-gray-700"
-                              onClick={() => { handleOpenDetailModal(item.ID, item); setNomeId(item.NM_DEMANDA); }}
+                              onClick={() => { handleOpenDetailModal(item.DemandaId, item); setNomeId(item.NM_DEMANDA); }}
                             >
                               <span className="material-icons">visibility</span>
                             </button>
                             <button
                               className="text-gray-500 hover:text-gray-700"
-                              onClick={() => handleDeleteItem(item.ID)}
+                              onClick={() => handleDeleteItem(item.DemandaId)}
                             >
                               <span className="material-icons">delete</span>
                             </button>
                             <button
                               className="text-gray-500 hover:text-gray-700"
-                              onClick={() => handleOpenEditModal(item.ID)}
+                              onClick={() => handleOpenEditModal(item.DemandaId)}
                             >
                               <span className="material-icons">arrow_forward_ios</span>
                             </button>
                           </div>
 
                         </td>
-                      )}
+                      
                     </tr>
                   ))}
                 </tbody>

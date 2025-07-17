@@ -13,7 +13,7 @@ export const useDemandaApi = () => {
     getAllDemandas: () => apiService.getAllItems(Token),
     getDemandaById: (id) => apiService.getItemById(id, Token),
     createDemanda: (data) => apiService.createItem(data, Token),
-    updateDemanda: (id, data) => apiService.updateItem(id, data, Token),
+    updateDemanda: (data) => apiService.updateItem(data, Token),
     deleteDemanda: (id) => apiService.deleteItem(id, Token),
 
     // Demandantes
