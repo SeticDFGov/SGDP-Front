@@ -5,6 +5,9 @@ import { useAuth } from '@/app/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import AdminRoute from '@/app/components/AdminRoute';
 import { URL_AUTH_SERVICE } from '../consts/consts';
+import TemplateCollapse from "./components/TemplateCollapse";
+import EditTemplateModal from "./components/EditTemplateModal";
+import { useTemplateApi } from "../projeto/hooks/templateHook";
 
 function AdminPageContent() {
   const { user } = useAuth();
@@ -18,10 +21,15 @@ function AdminPageContent() {
   const [messageType, setMessageType] = useState('');
   const [selectedUnits, setSelectedUnits] = useState({});
   const [selectedProfiles, setSelectedProfiles] = useState({});
+  const templateApi = useTemplateApi();
+  const [templates, setTemplates] = useState({});
+  const [editEtapa, setEditEtapa] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     loadUsers();
     loadUnits();
+    loadTemplates();
   }, []);
 
   const loadUsers = async () => {
@@ -69,6 +77,46 @@ function AdminPageContent() {
     } finally {
       setLoadingUnits(false);
     }
+  };
+
+  const loadTemplates = async () => {
+    const data = await templateApi.getAllTemplates();
+    setTemplates(data);
+  };
+
+  const handleEdit = (etapa) => {
+    setEditEtapa(etapa);
+    setModalOpen(true);
+  };
+
+  const handleCreate = () => {
+    setEditEtapa({
+      NM_TEMPLATE: "",
+      NM_ETAPA: "",
+      PERCENT_TOTAL: 0,
+      DIAS_PREVISTOS: 0,
+      ORDER: 0,
+    });
+    setModalOpen(true);
+  };
+
+  const handleSave = async (form) => {
+    console.log(form);
+    if (!editEtapa || !editEtapa.TemplateId) {
+      // Criação de novo template
+      await templateApi.createTemplate(form);
+    } else {
+      // Edição de template existente
+      await templateApi.updateTemplate(editEtapa.TemplateId, form);
+    }
+    setModalOpen(false);
+    setEditEtapa(null);
+    loadTemplates();
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+    setEditEtapa(null);
   };
 
   const alterarPerfil = async (email, novoPerfil) => {
@@ -356,6 +404,20 @@ function AdminPageContent() {
           </div>
         </div>
       </div>
+      <h2 className="text-2xl font-bold mt-8 mb-4">Templates</h2>
+      <button
+        className="mb-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-800"
+        onClick={handleCreate}
+      >
+        Criar Novo Template
+      </button>
+      <TemplateCollapse templates={templates} onEdit={handleEdit} />
+      <EditTemplateModal
+        etapa={editEtapa}
+        isOpen={modalOpen}
+        onSave={handleSave}
+        onClose={handleClose}
+      />
     </div>
   );
 }

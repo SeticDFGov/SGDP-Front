@@ -1,6 +1,6 @@
 import { URL_PROJETO_SERVICE } from "@/app/consts/consts";
 import { useContext } from "react";
-
+import { URL_TEMPLATE_SERVICE } from "@/app/consts/consts";
 const API_URL = process.env.NEXT_PUBLIC_API_URL_PROJETO || "http://localhost:5148/api/projeto";
 const getAuthHeaders = (token) => ({
   Authorization: `Bearer ${token}`,
@@ -100,5 +100,20 @@ export const deleteItem = async (id, token) => {
   } catch (error) {
     console.error(error);
     return false;
+  }
+};
+
+export const getTemplateNames = async (token) => {
+  try {
+    const response = await fetch(`${URL_TEMPLATE_SERVICE}/name`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) throw new Error("Erro ao obter nomes de templates");
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    return [];
   }
 };

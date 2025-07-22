@@ -11,6 +11,6 @@ export const useProjetoApi = () => {
     createItem: (data) => projetoService.createItem(data, Token),
     updateItem: (id, data) => projetoService.updateItem(id, data, Token),
     deleteItem: (id) => projetoService.deleteItem(id, Token),
-    
+    getTemplateNames: () => projetoService.getTemplateNames(Token),
   };
 };

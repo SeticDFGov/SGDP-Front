@@ -43,7 +43,7 @@ export default function ProductPage() {
 
   const { getItemById } = useProjetoApi();
   const { getLastAnalise } = useAnaliseApi();
-  const { getAllEtapas, getPercent } = useEtapaApi();
+  const { getAllEtapas, getPercent, iniciarEtapa } = useEtapaApi();
 
   // Redireciona se não estiver autenticado
   useEffect(() => {
@@ -108,6 +108,23 @@ export default function ProductPage() {
   const handleCadastroEtapa = (novaEtapa) => {
     setEtapas((prev) => [...prev, novaEtapa]);
     setIsModalOpen(false);
+  };
+
+  // Função para iniciar etapa com confirmação
+  const handleIniciarEtapa = async (etapa) => {
+    const confirmar = window.confirm("Deseja realmente iniciar esta etapa?");
+    if (!confirmar) return;
+    const ok = await iniciarEtapa(etapa.EtapaProjetoId);
+    if (ok) {
+      // Recarrega etapas
+      const etapasData = await getAllEtapas(id);
+      if (etapasData?.length) {
+        const ordenadas = etapasData.sort((a, b) => a.Order - b.Order);
+        setEtapas(ordenadas);
+      }
+    } else {
+      alert("Erro ao iniciar etapa.");
+    }
   };
 
   const dataGraph = {
@@ -307,10 +324,7 @@ export default function ProductPage() {
                           <td className=" p-3">
                             {item.DT_INICIO_PREVISTO === null ? (
                               <button
-                                onClick={() => {
-                                  setEtapaSelecionada(item);
-                                  setShowModalInicio(true);
-                                }}
+                                onClick={() => handleIniciarEtapa(item)}
                                 className="px-4 py-2 rounded-md bg-green-500 text-white"
                                 title="Iniciar Etapa"
                               >

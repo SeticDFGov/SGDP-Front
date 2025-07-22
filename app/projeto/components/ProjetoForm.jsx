@@ -15,7 +15,7 @@ const templates = [
 
 const ProjetoForm = ({ onClose, isOpen }) => {
   if (!isOpen) return null;
-  const { createItem } = useProjetoApi();
+  const { createItem, getTemplateNames } = useProjetoApi();
   const demandaAPI = useDemandaApi();
   const user = useAuth()
   const [projeto, setProjeto] = useState({
@@ -38,6 +38,7 @@ const ProjetoForm = ({ onClose, isOpen }) => {
   const [demandantes, setDemandantes] = useState([]);
   const [unidades, setUnidades] = useState([]);
   const [esteiras, setEsteiras] = useState([]);
+  const [templateNames, setTemplateNames] = useState([]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -55,6 +56,8 @@ const ProjetoForm = ({ onClose, isOpen }) => {
     })
       .then(res => res.json())
       .then(setEsteiras);
+    // Buscar nomes de templates
+    getTemplateNames().then(setTemplateNames);
   }, [isOpen]);
 
   const handleSubmit = async (e) => {
@@ -213,8 +216,8 @@ const ProjetoForm = ({ onClose, isOpen }) => {
               onChange={handleChange}
               required
             >
-              <option value="">Selecione uma Esteira</option>
-              {templates.map((e) => (
+              <option value="">Não se aplica</option>
+              {templateNames.map((e) => (
                 <option key={e} value={e}>{e}</option>
               ))}
             </select>

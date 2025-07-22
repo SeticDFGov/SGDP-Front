@@ -6,3 +6,4 @@ export const URL_DETALHAMENTO_SERVICE = process.env.NEXT_PUBLIC_API_URL_DETALHAM
 export const URL_ESTEIRA_SERVICE = process.env.NEXT_PUBLIC_API_URL_ESTEIRA || "http://localhost:5148/api/esteira"
 export const URL_ETAPA_SERVICE = process.env.NEXT_PUBLIC_API_URL_ETAPA || "http://localhost:5148/api/etapa"
 export const URL_PROJETO_SERVICE = process.env.NEXT_PUBLIC_API_URL_PROJETO || "http://localhost:5148/api/projeto"
+export const URL_TEMPLATE_SERVICE = process.env.NEXT_PUBLIC_API_URL_TEMPLATE || "http://localhost:5148/templates"
