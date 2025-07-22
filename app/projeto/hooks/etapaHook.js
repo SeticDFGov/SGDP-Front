@@ -15,6 +15,6 @@ export const useEtapaApi = () => {
     deleteItem: (id) => etapaService.deleteItem(id, Token),
     updateItem: (id, itemData) => etapaService.updateItem(id, itemData, Token),
     getTags: () => etapaService.getTags(Token),
-    iniciarEtapa: (id) => etapaService.iniciarEtapa(id, Token),
+    iniciarEtapa: (id, data) => etapaService.iniciarEtapa(id, data, Token),
   };
 };

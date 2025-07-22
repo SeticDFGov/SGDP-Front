@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import { getItemById, updateItem } from "../services/etapaService"; // Importando a função correta
+import { useAuth } from "@/app/contexts/AuthContext";
+import { useEtapaApi } from "../hooks/etapaHook";
 
 export const DesempenhoForm = ({ onClose, isOpen, etapa }) => {
+  const { Token, loading } = useAuth();
+  const etapaApi = useEtapaApi();
   const [formData, setFormData] = useState({
     DT_INICIO_REAL: "",
     DT_TERMINO_REAL: "",
@@ -20,7 +23,7 @@ export const DesempenhoForm = ({ onClose, isOpen, etapa }) => {
   const handleLoadItem = async () => {
     if (!etapa?.EtapaProjetoId) return; 
 
-    const data = await getItemById(etapa.EtapaProjetoId);
+    const data = await etapaApi.getItemById(etapa.EtapaProjetoId);
     console.log(data)
     if (data) {
       setFormData({
@@ -60,11 +63,13 @@ export const DesempenhoForm = ({ onClose, isOpen, etapa }) => {
     console.log(itemData) 
    
 
-    await updateItem(etapa.EtapaProjetoId, itemData);
+    await etapaApi.updateItem(etapa.EtapaProjetoId, itemData);
     alert("Etapa analisada com sucesso!");
     onClose();
     window.location.reload();
   };
+
+  if (!isOpen || !Token || loading) return null;
 
   return (
     isOpen && (

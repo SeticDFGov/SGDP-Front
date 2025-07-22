@@ -28,6 +28,8 @@ export default function ProductPage() {
 
   const [projeto, setProjeto] = useState({});
   const [etapas, setEtapas] = useState([]);
+  const [unidade, setUnidade] = useState({})
+  const [demandante, setDemandante] = useState({})
   const [etapaSelecionada, setEtapaSelecionada] = useState(null);
   const [ultimaAnalise, setUltimaAnalise] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -65,7 +67,10 @@ export default function ProductPage() {
         ]);
 
         if (projetoData) setProjeto(projetoData);
+        setDemandante(projetoData.AREA_DEMANDANTE)
+        setUnidade(projetoData.Unidade)
         console.log(etapasData)
+        console.log(projetoData)
         if (etapasData?.length) {
           const ordenadas = etapasData.sort((a, b) => a.Order - b.Order);
           setEtapas(ordenadas);
@@ -201,7 +206,7 @@ export default function ProductPage() {
                   </div>
                   <div>
                     <p className="text-gray-800 font-semibold">Unidade:</p>
-                    <p className="text-gray-600">{projeto.UNIDADE}</p>
+                    <p className="text-gray-600">{unidade.Nome}</p>
                   </div>
                   <div>
                     <p className="text-gray-800 font-semibold">Número do Processo SEI:</p>
@@ -209,7 +214,7 @@ export default function ProductPage() {
                   </div>
                   <div>
                     <p className="text-gray-800 font-semibold">Área Demandante:</p>
-                    <p className="text-gray-600">{projeto.NM_AREA_DEMANDANTE}</p>
+                    <p className="text-gray-600">{demandante.NM_DEMANDANTE}</p>
                   </div>
                   <div>
                     <p className="text-gray-800 font-semibold">Última Ánalise:</p>
@@ -324,7 +329,7 @@ export default function ProductPage() {
                           <td className=" p-3">
                             {item.DT_INICIO_PREVISTO === null ? (
                               <button
-                                onClick={() => handleIniciarEtapa(item)}
+                                onClick={() => { setEtapaSelecionada(item); setShowModalInicio(true); }}
                                 className="px-4 py-2 rounded-md bg-green-500 text-white"
                                 title="Iniciar Etapa"
                               >

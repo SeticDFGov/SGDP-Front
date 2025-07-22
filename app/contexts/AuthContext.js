@@ -31,6 +31,15 @@ export function AuthProvider({ children }) {
       setToken(token);
       try {
         const decoded = jwtDecode(token);
+
+        // Verifica expiração do token
+        const now = Date.now() / 1000;
+        if (decoded.exp && decoded.exp < now) {
+          logout();
+          setLoading(false);
+          return;
+        }
+
         fetchUserData(decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"])
           .then(setUser)
           .catch(() => {
@@ -47,6 +56,29 @@ export function AuthProvider({ children }) {
       setLoading(false);
     }
   }, []);
+
+  // Desloga automaticamente quando o token expirar durante a sessão
+  useEffect(() => {
+    if (!Token) return;
+    let decoded;
+    try {
+      decoded = jwtDecode(Token);
+    } catch {
+      logout();
+      return;
+    }
+    if (!decoded.exp) return;
+    const now = Date.now() / 1000;
+    const timeout = (decoded.exp - now) * 1000;
+    if (timeout > 0) {
+      const timer = setTimeout(() => {
+        logout();
+      }, timeout);
+      return () => clearTimeout(timer);
+    } else {
+      logout();
+    }
+  }, [Token]);
 
   const login = async (email, senha) => {
     try {

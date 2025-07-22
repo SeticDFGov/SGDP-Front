@@ -116,11 +116,12 @@ export const getTags = async (token) => {
   }
 };
 
-export const iniciarEtapa = async (id, token) => {
+export const iniciarEtapa = async (id, data, token) => {
   try {
     const response = await fetch(`${URL_ETAPA_SERVICE}/iniciar/${id}`, {
       method: "PUT",
       headers: getAuthHeaders(token),
+      body: JSON.stringify(data),
     });
     return response.ok;
   } catch (error) {

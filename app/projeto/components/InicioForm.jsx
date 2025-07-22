@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { getItemById, iniciarEtapa, updateItem } from "../services/etapaService"; // Importando a função correta
+import { useEtapaApi } from "../hooks/etapaHook";
 
 export const InicioEtapa = ({ onClose, isOpen, etapa }) => {
   const [formData, setFormData] = useState({
-    EtapaProjetoId : "",
+    
     DT_INICIO_PREVISTO: "",
-    DT_TERMINO_PREVISTO: "",
+ 
     
   });
+
+  const etapaApi = useEtapaApi();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -19,19 +22,20 @@ export const InicioEtapa = ({ onClose, isOpen, etapa }) => {
  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const itemData = {
-      EtapaProjetoId : etapa.EtapaProjetoId,
-      DT_INICIO_PREVISTO: formData.DT_INICIO_PREVISTO,
-      DT_TERMINO_PREVISTO: formData.DT_TERMINO_PREVISTO,
-   
-    };
-    console.log(itemData)
-
-    await iniciarEtapa(itemData);
-    alert("Etapa iniciada com sucesso!");
-    onClose();
-    window.location.reload();
+    // Enviar apenas a data de início prevista em formato ISO
+    const dataISO = formData.DT_INICIO_PREVISTO ;
+    if (!dataISO) {
+      alert("Informe a data de início prevista.");
+      return;
+    }
+    const ok = await etapaApi.iniciarEtapa(etapa.EtapaProjetoId, dataISO);
+    if (ok) {
+      alert("Etapa iniciada com sucesso!");
+      onClose();
+      window.location.reload();
+    } else {
+      alert("Erro ao iniciar etapa.");
+    }
   };
 
   return (
@@ -53,17 +57,7 @@ export const InicioEtapa = ({ onClose, isOpen, etapa }) => {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Data Término Previsto</label>
-            <input
-              type="date"
-              name="DT_TERMINO_PREVISTO"
-              value={formData.DT_TERMINO_PREVISTO}
-              onChange={handleInputChange}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
-              required
-            />
-          </div>
+       
 
           <div className="col-span-1 sm:col-span-2 flex justify-center gap-4 pt-6 border-t border-gray-200 mt-2">
             <button
