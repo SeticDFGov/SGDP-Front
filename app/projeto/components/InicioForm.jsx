@@ -44,7 +44,7 @@ export const InicioEtapa = ({ onClose, isOpen, etapa }) => {
       <div className="bg-white p-8 rounded-lg shadow-xl w-[700px] max-h-[90vh] overflow-y-auto flex flex-col">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Iniciar Etapa</h2>
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-gray-700">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1  gap-5 text-gray-700">
           <div>
             <label className="block text-sm font-medium mb-1">Data Início Previsto</label>
             <input

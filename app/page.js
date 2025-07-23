@@ -24,7 +24,7 @@ export default function HomePage() {
       h2: 'Sistema de Gestão de Demandas',
       color: 'text-white',
       path: '/demandas',
-      disabled: userInfo?.SUBINFRA, // desativa se SUBINFRA === true
+      disabled: true, // desativa se SUBINFRA === true
     },
     {
       icon: 'assignment',
