@@ -205,7 +205,7 @@ export default function ProductPage() {
                     <p className="text-gray-600">{projeto.GERENTE_PROJETO}</p>
                   </div>
                   <div>
-                    <p className="text-gray-800 font-semibold">Unidade:</p>
+                    <p className="text-gray-800 font-semibold">Subsecretaria:</p>
                     <p className="text-gray-600">{unidade.Nome}</p>
                   </div>
                   <div>
