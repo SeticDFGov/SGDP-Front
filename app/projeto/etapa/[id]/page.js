@@ -260,8 +260,8 @@ export default function ProductPage() {
                     <th className=" text-left text-gray-600 p-3">Ínicio Real</th>
                     <th className=" text-left text-gray-600 p-3">Termino Real</th>
                     <th className=" text-left text-gray-600 p-3">Situação</th>
-                    <th className=" text-left text-gray-600 p-3">% Planejado</th>
-                    <th className=" text-left text-gray-600 p-3">% Executado</th>
+                    <th className=" text-left text-gray-600 p-3">Planejado</th>
+                    <th className=" text-left text-gray-600 p-3">Executado</th>
                     <th className=" text-left text-gray-600 p-3">Ação</th>
                   </tr>
                 </thead>
@@ -318,12 +318,13 @@ export default function ProductPage() {
                           </td>
                           <td className=" p-3">
                             {
-                              item.PERCENT_PLANEJADO
+                              item.PERCENT_PLANEJADO.toFixed(2) + '%'
                             }
                           </td>
                           <td className=" p-3">
                             {
-                              item.PERCENT_EXEC_ETAPA
+                             (item.PERCENT_EXEC_ETAPA != null ? item.PERCENT_EXEC_ETAPA.toFixed(2) + '%' : '0.00%')
+
                             }
                           </td>
                           <td className=" p-3">

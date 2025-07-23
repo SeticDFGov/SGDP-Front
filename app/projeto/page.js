@@ -107,7 +107,7 @@ useEffect(() => {
                   <td className="p-3">{item.GERENTE_PROJETO}</td>
                   <td className="p-3">{item.NR_PROCESSO_SEI}</td>
                   <td className="p-3">{item.Unidade.Nome}</td>
-                  <td className="p-3">{item.AREA_DEMANDANTE?.NM_DEMANDANTE}</td>
+                  <td className="p-3">{item.AREA_DEMANDANTE?.NM_SIGLA}</td>
                   <td className="p-3">{item.ANO}</td>
                   {isAuthenticated && (
                     <td className=" p-3">

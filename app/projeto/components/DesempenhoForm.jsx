@@ -102,16 +102,20 @@ export const DesempenhoForm = ({ onClose, isOpen, etapa }) => {
   
             <div>
               <label className="block text-sm font-medium mb-1">Percentual Executado da Etapa</label>
-              <input
-                type="number"
+              <select
                 name="PERCENT_EXEC_ETAPA"
                 value={formData.PERCENT_EXEC_ETAPA}
                 onChange={handleInputChange}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
-                min={0}
-                max={100}
                 required
-              />
+              >
+                <option value="">Selecione o percentual</option>
+                <option value="20">20</option>
+                <option value="40">40</option>
+                <option value="60">60</option>
+                <option value="80">80</option>
+                <option value="100">100</option>
+              </select>
             </div>
   
             <div>
