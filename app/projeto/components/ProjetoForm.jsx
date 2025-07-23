@@ -178,7 +178,7 @@ const ProjetoForm = ({ onClose, isOpen }) => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Unidade</label>
+            <label className="block text-sm font-medium mb-1">Subsecretaria</label>
             <select
               name="UnidadeId"
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
