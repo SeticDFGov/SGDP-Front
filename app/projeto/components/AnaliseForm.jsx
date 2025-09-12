@@ -61,7 +61,7 @@ export const AnaliseModal = ({ isOpen, onClose, nomeProjeto }) => {
   isOpen && (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-8 rounded-lg shadow-xl w-[700px] h-auto max-h-[90vh] overflow-y-auto flex flex-col">
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Nova Análise</h2>
+        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Novo Report</h2>
 
         <div className="border-b pb-4 mb-6">
           <h3 className="text-sm font-medium text-gray-600">Última Análise</h3>
@@ -95,8 +95,35 @@ export const AnaliseModal = ({ isOpen, onClose, nomeProjeto }) => {
               <option value="false">Não</option>
             </select>
           </div>
-
-          <div className="w-full flex justify-center gap-4 pt-6 border-t border-gray-200 mt-2">
+<div>
+            <label className="block text-sm font-medium mb-1">Entrave</label>
+            <select
+              name="ENTRAVE"
+              value={formData.ENTRAVE.toString()}
+              onChange={handleInputChange}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
+              required
+            >
+              <option value="">Selecione um entrave</option>
+              <option value="true">Sim</option>
+              <option value="false">Não</option>
+            </select>
+          </div>
+    <div>
+            <label className="block text-sm font-medium mb-1">Entrave</label>
+            <select
+              name="ENTRAVE"
+              value={formData.ENTRAVE.toString()}
+              onChange={handleInputChange}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
+              required
+            >
+              <option value="">Selecione um entrave</option>
+              <option value="true">Sim</option>
+              <option value="false">Não</option>
+            </select>
+          </div>      
+    <div className="w-full flex justify-center gap-4 pt-6 border-t border-gray-200 mt-2">
             <button
               type="button"
               onClick={onClose}

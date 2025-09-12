@@ -214,7 +214,6 @@ const ProjetoForm = ({ onClose, isOpen }) => {
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
               value={projeto.TEMPLATE}
               onChange={handleChange}
-              required
             >
               <option value="">Não se aplica</option>
               {templateNames.map((e) => (
