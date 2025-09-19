@@ -20,6 +20,7 @@ import { useAnaliseApi } from "../../hooks/analiseHook";
 import { useAuth } from "@/app/contexts/AuthContext";
 import { useEtapaApi } from "../../hooks/etapaHook";
 import DespachoModal from "../../components/DespachoModal";
+import KanbanBoard from "../../components/kanban/KanbanBoard";
 dayjs.extend(utc);
 export default function ProductPage() {
    const { id } = useParams();
@@ -46,8 +47,12 @@ export default function ProductPage() {
   const { getItemById } = useProjetoApi();
   const { getLastAnalise } = useAnaliseApi();
   const { getAllEtapas, getPercent, iniciarEtapa } = useEtapaApi();
+  const [mostrarTabela, setMostrarTabela] = useState(false);
 
-  // Redireciona se não estiver autenticado
+  const handleToggle = () => {
+    setMostrarTabela(valorAtual => !valorAtual);
+  };
+ 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
       router.push("/auth");
@@ -239,8 +244,15 @@ export default function ProductPage() {
                 </div>
               </div>
             </div>
+            <button onClick={handleToggle}>
+              {mostrarTabela ? 'Ocultar Conteúdo' : 'Mostrar Conteúdo'}
+           </button>
+            {!mostrarTabela && (<div>
+              <KanbanBoard projetoId={projeto.projetoId} /> 
+            
+            </div>)}
             <div>
-              {!ocupado && (
+              {!ocupado && mostrarTabela && (
                 <div
                   onClick={() => setIsModalOpen(true)}
                   className="flex items-center space-x-2 bg-gray-100 p-4 rounded-lg shadow-md mt-4"
@@ -249,7 +261,7 @@ export default function ProductPage() {
                   <span className="text-gray-700">Inserir Etapa ao projeto</span>
                 </div>
               )}
-
+              {mostrarTabela&&(
               <table className="w-full border-collapse ">
                 <thead>
                   <tr className="bg-gray-100 border-b">
@@ -363,7 +375,7 @@ export default function ProductPage() {
                         </tr>
                       ))}
                 </tbody>
-              </table>
+              </table>)}
             </div>
           </main>
         </div>
