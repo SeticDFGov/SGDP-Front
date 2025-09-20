@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# SGPD Frontend
 
-## Getting Started
+Repositório para hospedar o código da interface de usuário do Sistema de Gestão de Demandas e Projetos.
 
-First, run the development server:
+### Pré-requisitos
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- [Node.js v18+](https://nodejs.org/en/download)
+- [Docker Compose](https://docs.docker.com/compose/install/) (instale na versão plugin como recomendado)
+
+## Executar a aplicação nativamente
+
+```sh
+git clone https://github.com/SeticDFGov/SGDP-Front.git
+cd SGDP-Front
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```sh
+npm
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Inicie o servidor de desenvolvimento
 
-## Learn More
+```sh
+npm install
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+No seu navegador, acesse o endereço: http://localhost:3000.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Para encerrar a aplicação, use Ctrl + C.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Executar a aplicação em container Docker
 
-## Deploy on Vercel
+Na primeira vez que for usar, ou após instalar uma nova dependencia.
+No terminal, dentro da raíz do projeto:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Rodar o comando `npm`
+- Rodar o comando `docker compose build`
+- Rodar o comando `docker compose up`
+   
+Nas vezes subsequentes, caso não tenha adicionado novas dependencias:
+- Rodar o comando `docker compose up`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+No seu navegador, acesse o endereço: http://localhost:3000.
+
+Para encerrar a aplicação, use Ctrl + C.
+
