@@ -248,7 +248,7 @@ export default function ProductPage() {
               {mostrarTabela ? 'Ocultar Conteúdo' : 'Mostrar Conteúdo'}
            </button>
             {!mostrarTabela && (<div>
-              <KanbanBoard projetoId={projeto.projetoId} /> 
+              <KanbanBoard projetoId={id} /> 
             
             </div>)}
             <div>

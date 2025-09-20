@@ -18,29 +18,38 @@ export default function KanbanBoard({ projetoId }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingAtividade, setEditingAtividade] = useState(null);
 
-  // 1. Função para verificar se o report existe
-  const checkReportExists = useCallback(async () => {
-    if (!projetoId) return;
-    setReportStatus('VERIFICANDO');
-    try {
-      const response = await fetch(`${API_BASE_URL}/reports/${projetoId}`);
-      if (response.ok) {
-        const report = await response.json();
-        setReportId(report.reportId); // Assumindo que a API retorna o report com seu ID
-        setReportStatus('EXISTENTE');
-      } else if (response.status === 404) {
-        setReportStatus('AUSENTE');
-      } else {
-        throw new Error('Falha ao verificar o report.');
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }, [projetoId]);
-
+  // 1. Efeito para verificar se o report existe
   useEffect(() => {
+    const checkReportExists = async () => {
+      if (!projetoId) {
+        setReportStatus('VERIFICANDO');
+        return;
+      }
+      setReportStatus('VERIFICANDO');
+      try {
+        const response = await fetch(`${API_BASE_URL}/reports/${projetoId}`);
+        if (response.ok) {
+          const report = await response.json();
+          if (report && report.ReportId) {
+            setReportId(report.ReportId);
+            setReportStatus('EXISTENTE');
+          } else {
+            console.error("Report data is invalid:", report);
+            setReportStatus('AUSENTE');
+          }
+        } else if (response.status === 404) {
+          setReportStatus('AUSENTE');
+        } else {
+          throw new Error('Falha ao verificar o report.');
+        }
+      } catch (error) {
+        console.error(error);
+        setReportStatus('AUSENTE');
+      }
+    };
+    
     checkReportExists();
-  }, [checkReportExists]);
+  }, [projetoId]);
 
   const fetchAtividades = useCallback(async () => {
     if (!reportId) return;
@@ -59,6 +68,8 @@ export default function KanbanBoard({ projetoId }) {
   useEffect(() => {
     if (reportStatus === 'EXISTENTE' && reportId) {
       fetchAtividades();
+    } else if (reportStatus !== 'VERIFICANDO' && reportStatus !== 'EXISTENTE') {
+      setLoadingAtividades(false);
     }
   }, [reportStatus, reportId, fetchAtividades]);
   
@@ -82,7 +93,7 @@ export default function KanbanBoard({ projetoId }) {
         if (!response.ok) throw new Error("Falha ao criar o report");
         
         const newReport = await response.json();
-        setReportId(newReport.reportId);
+        setReportId(newReport.ReportId);
         setReportStatus('EXISTENTE');
     } catch(error) {
         console.error(error);
@@ -95,9 +106,79 @@ export default function KanbanBoard({ projetoId }) {
       setNewReportData(prev => ({...prev, [name]: value}));
   };
 
+const handleDragStart = (e, atividadeId) => {
+    setDraggedAtividadeId(atividadeId);
+  };
 
-  if (reportStatus === 'VERIFICANDO') {
-    return <p>A verificar a existência do report...</p>;
+  const handleDrop = async (e, newStatus) => {
+    if (draggedAtividadeId === null) return;
+    
+    const atividadeToUpdate = atividades.find(a => a.atividadeId === draggedAtividadeId);
+    if (atividadeToUpdate && atividadeToUpdate.situacao !== newStatus) {
+        // Envia o objeto completo para a API
+        const updatedAtividade = { ...atividadeToUpdate, situacao: newStatus };
+        
+        try {
+            await fetch(`${API_BASE_URL}/atividades/${draggedAtividadeId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedAtividade)
+            });
+            // Atualiza o estado localmente para uma resposta visual instantânea
+            setAtividades(prev => prev.map(a => a.atividadeId === draggedAtividadeId ? updatedAtividade : a));
+        } catch(error) {
+            console.error("Falha ao atualizar situação", error);
+        }
+    }
+    setDraggedAtividadeId(null);
+  };
+
+  const handleDelete = async (atividadeId) => {
+    if (window.confirm("Tem a certeza que quer apagar esta atividade?")) {
+        try {
+            await fetch(`${API_BASE_URL}/atividades/${atividadeId}`, { method: 'DELETE' });
+            setAtividades(prev => prev.filter(a => a.atividadeId !== atividadeId));
+        } catch (error) {
+            console.error("Falha ao apagar atividade", error);
+        }
+    }
+  };
+  
+  const handleOpenModal = (atividade = null) => {
+      setEditingAtividade(atividade);
+      setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+      setIsModalOpen(false);
+      setEditingAtividade(null);
+  };
+
+  const handleSaveAtividade = async (atividadeData) => {
+      try {
+        if(editingAtividade) { // Atualizar
+            await fetch(`${API_BASE_URL}/atividades/${editingAtividade.atividadeId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(atividadeData)
+            });
+        } else { // Criar
+            await fetch(`${API_BASE_URL}/reports/${reportId}/atividades`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(atividadeData)
+            });
+        }
+        handleCloseModal();
+        fetchAtividades(); // Re-busca todas as atividades para mostrar a nova/atualizada
+      } catch (error) {
+          console.error("Falha ao salvar atividade", error);
+      }
+  };
+
+
+  if (reportStatus === 'VERIFICANDO' || loadingAtividades) {
+    return <p>A carregar atividades...</p>;
   }
 
   if (reportStatus === 'AUSENTE' || reportStatus === 'CRIANDO') {
@@ -127,8 +208,6 @@ export default function KanbanBoard({ projetoId }) {
       </div>
     );
   }
-
-  if (loadingAtividades) return <p>A carregar atividades...</p>;
   
   const STATUS = { PROXIMO: 'Proximo', ANDAMENTO: 'Andamento', CONCLUIDO: 'Concluido' };
 

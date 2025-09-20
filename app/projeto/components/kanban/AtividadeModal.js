@@ -2,19 +2,18 @@ import { useState, useEffect } from 'react';
 import styles from './Kanban.module.css';
 
 export default function AtividadeModal({ atividade, isOpen, onClose, onSave }) {
-  const [formData, setFormData] = useState({ categoria: '', descricao: '', data_fim: '' });
+  const [formData, setFormData] = useState({titulo:'', categoria: '', descricao: '', data_fim: '' });
 
   useEffect(() => {
     if (atividade) {
       // Formata a data para o formato YYYY-MM-DD que o input[type=date] espera
-      const formattedDate = atividade.dataTermino ? new Date(atividade.dataTermino).toISOString().split('T')[0] : '';
       setFormData({
         categoria: atividade.categoria || '',
         descricao: atividade.descricao || '',
-        data_fim: formattedDate,
+        data_fim: atividade.data_fim,
       });
     } else {
-      setFormData({ categoria: '', descricao: '', data_fim: '' });
+      setFormData({titulo:'', categoria: '', descricao: '', data_fim: '' });
     }
   }, [atividade, isOpen]);
 
@@ -36,6 +35,14 @@ export default function AtividadeModal({ atividade, isOpen, onClose, onSave }) {
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <h2>{atividade ? 'Editar Atividade' : 'Nova Atividade'}</h2>
         <form onSubmit={handleSubmit}>
+          <input
+            name="titulo"
+            value={formData.titulo}
+            onChange={handleChange}
+            placeholder="Categoria"
+            required
+          />
+ 
           <input
             name="categoria"
             value={formData.categoria}
