@@ -30,7 +30,7 @@ export default function KanbanColumn({ title, status, atividades, onEdit, onDele
       >
         {atividades.map((atividade) => (
           <AtividadeCard
-            key={atividade.atividadeId}
+            key={atividade.AtividadeId}
             atividade={atividade}
             onEdit={onEdit}
             onDelete={onDelete}

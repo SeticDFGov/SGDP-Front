@@ -8,6 +8,7 @@ export default function AtividadeModal({ atividade, isOpen, onClose, onSave }) {
     if (atividade) {
       // Formata a data para o formato YYYY-MM-DD que o input[type=date] espera
       setFormData({
+        titulo: atividade.titulo || '',
         categoria: atividade.categoria || '',
         descricao: atividade.descricao || '',
         data_fim: atividade.data_fim,
@@ -39,7 +40,7 @@ export default function AtividadeModal({ atividade, isOpen, onClose, onSave }) {
             name="titulo"
             value={formData.titulo}
             onChange={handleChange}
-            placeholder="Categoria"
+            placeholder="Titulo"
             required
           />
  

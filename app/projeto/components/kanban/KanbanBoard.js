@@ -56,6 +56,7 @@ export default function KanbanBoard({ projetoId }) {
     setLoadingAtividades(true);
     try {
       const response = await fetch(`${API_BASE_URL}/reports/${reportId}/atividades`);
+  
       const data = await response.json();
       setAtividades(data);
     } catch (error) {
@@ -106,14 +107,14 @@ export default function KanbanBoard({ projetoId }) {
       setNewReportData(prev => ({...prev, [name]: value}));
   };
 
-const handleDragStart = (e, atividadeId) => {
-    setDraggedAtividadeId(atividadeId);
+const handleDragStart = (e, AtividadeId) => {
+    setDraggedAtividadeId(AtividadeId);
   };
 
   const handleDrop = async (e, newStatus) => {
     if (draggedAtividadeId === null) return;
     
-    const atividadeToUpdate = atividades.find(a => a.atividadeId === draggedAtividadeId);
+    const atividadeToUpdate = atividades.find(a => a.AtividadeId === draggedAtividadeId);
     if (atividadeToUpdate && atividadeToUpdate.situacao !== newStatus) {
         // Envia o objeto completo para a API
         const updatedAtividade = { ...atividadeToUpdate, situacao: newStatus };
@@ -125,7 +126,7 @@ const handleDragStart = (e, atividadeId) => {
                 body: JSON.stringify(updatedAtividade)
             });
             // Atualiza o estado localmente para uma resposta visual instantânea
-            setAtividades(prev => prev.map(a => a.atividadeId === draggedAtividadeId ? updatedAtividade : a));
+            setAtividades(prev => prev.map(a => a.AtividadeId === draggedAtividadeId ? updatedAtividade : a));
         } catch(error) {
             console.error("Falha ao atualizar situação", error);
         }
@@ -137,7 +138,7 @@ const handleDragStart = (e, atividadeId) => {
     if (window.confirm("Tem a certeza que quer apagar esta atividade?")) {
         try {
             await fetch(`${API_BASE_URL}/atividades/${atividadeId}`, { method: 'DELETE' });
-            setAtividades(prev => prev.filter(a => a.atividadeId !== atividadeId));
+            setAtividades(prev => prev.filter(a => a.AtividadeId !== atividadeId));
         } catch (error) {
             console.error("Falha ao apagar atividade", error);
         }
@@ -157,7 +158,7 @@ const handleDragStart = (e, atividadeId) => {
   const handleSaveAtividade = async (atividadeData) => {
       try {
         if(editingAtividade) { // Atualizar
-            await fetch(`${API_BASE_URL}/atividades/${editingAtividade.atividadeId}`, {
+            await fetch(`${API_BASE_URL}/atividades/${editingAtividade.AtividadeId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(atividadeData)
@@ -209,7 +210,7 @@ const handleDragStart = (e, atividadeId) => {
     );
   }
   
-  const STATUS = { PROXIMO: 'Proximo', ANDAMENTO: 'Andamento', CONCLUIDO: 'Concluido' };
+  const STATUS = { PROXIMO: 2, ANDAMENTO: 1, CONCLUIDO: 3 };
 
   return (
     <>
