@@ -197,8 +197,13 @@ export default function ProductPage() {
           />
           {/* Conteúdo Principal */}
           <main className="overflow-x-auto">
-            {/* Detalhes do Projeto */}
-            <div className="p-4">
+            <button onClick={handleToggle}>
+              {mostrarTabela ? 'Ocultar Conteúdo' : 'Mostrar Conteúdo'}
+           </button>
+ 
+              {/* Detalhes do Projeto */}
+
+              {mostrarTabela && (<div className="p-4">
               <h1 className="text-2xl font-bold mb-6">
                {projeto.NM_PROJETO}
               </h1>
@@ -243,11 +248,8 @@ export default function ProductPage() {
                   <Bar className={"pt-10"} data={dataGraph} options={options} />
                 </div>
               </div>
-            </div>
-            <button onClick={handleToggle}>
-              {mostrarTabela ? 'Ocultar Conteúdo' : 'Mostrar Conteúdo'}
-           </button>
-            {!mostrarTabela && (<div>
+            </div>)}
+           {!mostrarTabela && (<div>
               <KanbanBoard projetoId={id} /> 
             
             </div>)}
