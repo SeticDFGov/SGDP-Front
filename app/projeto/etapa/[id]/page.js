@@ -21,6 +21,7 @@ import { useAuth } from "@/app/contexts/AuthContext";
 import { useEtapaApi } from "../../hooks/etapaHook";
 import DespachoModal from "../../components/DespachoModal";
 import KanbanBoard from "../../components/kanban/KanbanBoard";
+import ExportManager from "../../components/kanban/Export";
 dayjs.extend(utc);
 export default function ProductPage() {
    const { id } = useParams();
@@ -251,7 +252,7 @@ export default function ProductPage() {
             </div>)}
            {!mostrarTabela && (<div>
               <KanbanBoard projetoId={id} /> 
-            
+              <ExportManager projectId={id} />             
             </div>)}
             <div>
               {!ocupado && mostrarTabela && (
